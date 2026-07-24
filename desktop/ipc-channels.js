@@ -16,6 +16,9 @@ module.exports = {
   PREFS_PERF_MODE: 'prefs:perf-mode',   // main -> renderer (push)  : mode changed
   PREFS_SET_MODE:  'prefs:set-mode',    // renderer -> main (async) : in-app Settings changed it
 
+  // Misc
+  APP_OPEN_LICENSES: 'app:open-licenses', // renderer -> main : reveal THIRD-PARTY-LICENSES.txt
+
   // Journal store
   STORE_READ_SYNC: 'store:read-sync',   // renderer -> main (sync)  : whole store as JSON
   STORE_WRITE: 'store:write',           // renderer -> main (async) : persist whole store

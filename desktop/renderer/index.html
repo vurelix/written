@@ -1203,7 +1203,7 @@ button:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-vis
               <svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="{{accent}}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="filter:drop-shadow(0 0 9px {{acc44}})"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20V4H6.5A2.5 2.5 0 0 0 4 6.5v13z"></path><path d="M4 19.5A2.5 2.5 0 0 0 6.5 22H20v-5"></path><path d="M15.5 7.5l1.8 1.8-5.3 5.3-2.5.7.7-2.5 5.3-5.3z"></path></svg>
               <div>
                 <div style="font-size:23px;font-weight:700;line-height:1">Written<span style="color:{{accent}}">.</span></div>
-                <div style="font-family:'Manrope',system-ui,sans-serif;font-size:9.5px;letter-spacing:1.4px;color:var(--tx-faint);margin-top:5px">V2.2 · LOCAL BUILD · JUL 2026</div>
+                <div style="font-family:'Manrope',system-ui,sans-serif;font-size:9.5px;letter-spacing:1.4px;color:var(--tx-faint);margin-top:5px">V1.0.0 · LOCAL BUILD · JUL 2026</div>
               </div>
             </div>
             <div style="font-size:13px;color:var(--tx-mid);line-height:1.65;margin-top:20px">A futures trading journal that treats journaling as part of the trade. Log the numbers, the mood, the setup, the session and the rules — then let the dashboard connect what you <i>did</i> to what you <i>made</i>.</div>
@@ -1211,11 +1211,18 @@ button:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-vis
             <div style="height:1px;background:var(--grid);margin:20px 0"></div>
             <div style="font-family:'Manrope',system-ui,sans-serif;font-size:9.5px;letter-spacing:1.6px;color:var(--tx-faint)">CHANGELOG</div>
             <div style="display:flex;flex-direction:column;gap:9px;margin-top:12px">
-              <div style="display:grid;grid-template-columns:52px 1fr;gap:12px"><span style="font-family:'Manrope',system-ui,sans-serif;font-size:11px;font-weight:600;color:{{accent}}">v2.2</span><span style="font-size:12px;color:var(--tx-mid);line-height:1.5">risk sizing, plan scorecards, time and weekly insights, quick capture, tilt radar, chart markup</span></div>
-              <div style="display:grid;grid-template-columns:52px 1fr;gap:12px"><span style="font-family:'Manrope',system-ui,sans-serif;font-size:11px;font-weight:600;color:var(--tx-dim)">v2.1</span><span style="font-size:12px;color:var(--tx-mid);line-height:1.5">install wizard, session tags, password lock, macOS shell, Help &amp; About</span></div>
-              <div style="display:grid;grid-template-columns:52px 1fr;gap:12px"><span style="font-family:'Manrope',system-ui,sans-serif;font-size:11px;font-weight:600;color:var(--tx-dim)">v2.0</span><span style="font-size:12px;color:var(--tx-mid);line-height:1.5">light theme, profiles &amp; login, custom assets, grouped settings</span></div>
-              <div style="display:grid;grid-template-columns:52px 1fr;gap:12px"><span style="font-family:'Manrope',system-ui,sans-serif;font-size:11px;font-weight:600;color:var(--tx-dim)">v1.0</span><span style="font-size:12px;color:var(--tx-mid);line-height:1.5">P&amp;L calendar, equity curve, day journal, insights</span></div>
+              <div style="display:grid;grid-template-columns:52px 1fr;gap:12px"><span style="font-family:'Manrope',system-ui,sans-serif;font-size:11px;font-weight:600;color:{{accent}}">v1.0.0</span><span style="font-size:12px;color:var(--tx-mid);line-height:1.5">first official release &mdash; P&amp;L calendar, equity curve, day journal and insights; profiles, light theme and custom assets; risk sizing, plan scorecards, tilt radar, chart markup and quick capture; native macOS &amp; Windows builds with local file storage</span></div>
+                        </div>
+            <div style="height:1px;background:var(--grid);margin:20px 0"></div>
+            <div style="font-family:'Manrope',system-ui,sans-serif;font-size:9.5px;letter-spacing:1.6px;color:var(--tx-faint)">OPEN SOURCE</div>
+            <div style="display:flex;flex-direction:column;gap:8px;margin-top:12px">
+              <div style="display:grid;grid-template-columns:1fr auto;gap:12px;align-items:baseline"><span style="font-size:12.5px;color:var(--tx-mid)">React &amp; ReactDOM 18.3.1</span><span style="font-size:10.5px;letter-spacing:.6px;color:var(--tx-faint)">MIT</span></div>
+              <div style="display:grid;grid-template-columns:1fr auto;gap:12px;align-items:baseline"><span style="font-size:12.5px;color:var(--tx-mid)">Electron 31</span><span style="font-size:10.5px;letter-spacing:.6px;color:var(--tx-faint)">MIT</span></div>
+              <div style="display:grid;grid-template-columns:1fr auto;gap:12px;align-items:baseline"><span style="font-size:12.5px;color:var(--tx-mid)">Manrope typeface</span><span style="font-size:10.5px;letter-spacing:.6px;color:var(--tx-faint)">OFL 1.1</span></div>
             </div>
+            <sc-if value="{{licensesAvailable}}" hint-placeholder-val="{{true}}">
+              <button onClick="{{openLicenses}}" style="margin-top:13px;border:1px solid var(--bd2);background:transparent;color:var(--tx-dim);font-size:11.5px;font-weight:600;padding:7px 13px;border-radius:9px;cursor:pointer;transition:all .15s" style-hover="border-color:var(--bd3);color:var(--tx)">View full license texts</button>
+            </sc-if>
             <div style="height:1px;background:var(--grid);margin:20px 0"></div>
             <div style="font-family:'Manrope',system-ui,sans-serif;font-size:10px;letter-spacing:1px;color:var(--tx-faint);text-align:center">made with intent — trade the plan, then write it down</div>
           </div>
@@ -3357,7 +3364,9 @@ class Component extends DCLogic {
       glowOp:({off:'0',soft:'0.55',medium:'0.8',strong:'1'})[st.glow||'soft']||'0.55',
       auroraOp:({off:'0',soft:'0.85',medium:'1',strong:'1'})[st.glow||'soft']||'0.85',
       glowA:acc+'2E',glowB:acc+'1C',glowC:acc+'22',accentGlow:acc+'44',accentSoft:acc+'22',
-      booting:S.booting,appVersion:'v2.2',
+      booting:S.booting,appVersion:'v1.0.0',
+      licensesAvailable:typeof window!=='undefined'&&!!(window.desktopApp&&window.desktopApp.openLicenses),
+      openLicenses:()=>{const a=typeof window!=='undefined'&&window.desktopApp;if(a&&a.openLicenses)a.openLicenses()},
       userName:uname||'Personal Ledger.',userInitials:this.initials(uname),
       logout:()=>this.logout(),goProfile:()=>this.setState({tab:'profile'}),
       activeProfile,profileOptions,loginProfiles,profileMenuOpen:!!S.profileMenuOpen,toggleProfileMenu:()=>this.setState({profileMenuOpen:!S.profileMenuOpen}),closeProfileMenu:()=>this.setState({profileMenuOpen:false}),createProfile:()=>this.beginProfileSetup(),lockJournal:()=>this.logout(),

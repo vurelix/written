@@ -33,6 +33,7 @@ const ITEMS = [
   'ipc-channels.js',
   'package.json',
   'README.md',
+  'THIRD-PARTY-LICENSES.txt',
   'build',
   'scripts',
   'renderer'

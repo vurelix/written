@@ -213,6 +213,7 @@ kept in `release/` for convenience.
 
 - [ ] 🎨 App icons (currently the default Electron icon)
 - [ ] ✅ Code signing + notarization, to drop the first-launch warnings
+- [x] ⚖️ Third-party license attribution (About → Open Source)
 - [ ] 🖼️ Move screenshots to content-addressed files so the JSON store stays small
 - [ ] 📤 Export / import for moving a journal between machines
 - [ ] 🔄 Auto-update

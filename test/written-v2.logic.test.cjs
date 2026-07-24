@@ -5,11 +5,11 @@ const path = require('node:path');
 const vm = require('node:vm');
 
 // Resolve the app whether it sits at the repo root (original working folder) or
-// under app/ (this repository's layout).
+// under app/ (the git repository's layout).
 const htmlPath = [
   path.join(__dirname, '..', 'app', 'Written v2.dc.html'),
   path.join(__dirname, '..', 'Written v2.dc.html')
-].find(p => fs.existsSync(p)) || path.join(__dirname, '..', 'app', 'Written v2.dc.html');
+].find(p => fs.existsSync(p)) || path.join(__dirname, '..', 'Written v2.dc.html');
 const plain = value => JSON.parse(JSON.stringify(value));
 
 function loadComponent(overrides = {}) {
@@ -2094,12 +2094,13 @@ test('trade table view rows show canonical times and restrained dashes for legac
   assert.equal(rows[1].time, '—');
 });
 
-test('v2.2 release copy documents all action tools while retaining prior history', () => {
+test('v1.0.0 release copy documents all action tools in a single changelog entry', () => {
   const html = fs.readFileSync(htmlPath, 'utf8');
-  assert.match(html, /appVersion:'v2\.2'/);
-  assert.match(html, /V2\.2 · LOCAL BUILD · JUL 2026/);
-  assert.match(html, />v2\.2<\/span>/);
-  assert.match(html, />v2\.1<\/span>/);
+  assert.match(html, /appVersion:'v1\.0\.0'/);
+  assert.match(html, /V1\.0\.0 · LOCAL BUILD · JUL 2026/);
+  assert.match(html, />v1\.0\.0<\/span>/);
+  // first official release: prior pre-release versions are merged, not listed
+  assert.doesNotMatch(html, />v2\.[0-9]<\/span>/);
   for (const heading of ['Risk sizing', 'Time edge and weekly review', 'Search', 'Chart markup']) {
     assert.match(html, new RegExp(`>${heading}<`));
   }

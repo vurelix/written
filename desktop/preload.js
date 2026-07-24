@@ -7,6 +7,11 @@ const CH = require('./ipc-channels');
 // renderer only needs to know the platform in order to reserve traffic-light space.
 contextBridge.exposeInMainWorld('desktopPlatform', process.platform);
 
+// Opens the bundled THIRD-PARTY-LICENSES.txt in the OS default text viewer.
+contextBridge.exposeInMainWorld('desktopApp', {
+  openLicenses: () => ipcRenderer.send(CH.APP_OPEN_LICENSES)
+});
+
 // Desktop preferences. getPerfMode() is synchronous so perf.js can apply the mode
 // before first paint; onPerfMode fires when the View menu changes it.
 // `defaultMode` is forwarded from the shared contract so the renderer's fallback

@@ -146,6 +146,16 @@ ipcMain.on(CH.PREFS_SET_MODE, (_e, mode) => {
   buildMenu();
 });
 
+// Open the bundled third-party licenses. Packaged builds place it in Resources via
+// `extraResources`; in dev it sits next to package.json.
+ipcMain.on(CH.APP_OPEN_LICENSES, () => {
+  const packaged = path.join(process.resourcesPath || '', 'THIRD-PARTY-LICENSES.txt');
+  const dev = path.join(__dirname, 'THIRD-PARTY-LICENSES.txt');
+  const target = fs.existsSync(packaged) ? packaged : dev;
+  if (fs.existsSync(target)) shell.openPath(target);
+  else console.error('[written] THIRD-PARTY-LICENSES.txt not found');
+});
+
 // --- Journal store IPC ---
 ipcMain.on(CH.STORE_READ_SYNC, (e) => {
   try {
