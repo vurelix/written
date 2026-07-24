@@ -1,0 +1,38 @@
+/*
+ * native-chrome.css — native window chrome.
+ *
+ * The app template already draws its own 44px header (`.app-titlebar`) containing
+ * decorative macOS-style dots (`.traffic-dot`). In the desktop build the OS draws the
+ * real controls, so:
+ *
+ *   - the decorative dots are hidden on BOTH platforms (they are meaningless on Windows
+ *     and duplicated on macOS);
+ *   - macOS uses titleBarStyle:'hiddenInset', so the real traffic lights float over the
+ *     page and land in the space the dots used to occupy — no extra strip, no body offset;
+ *   - Windows uses frame:true, so the system title bar sits above the page and this file
+ *     adds nothing beyond hiding the dots.
+ *
+ * This CSS only loads in the desktop build, so the original .html in a browser keeps its
+ * decorative chrome.
+ */
+
+/* Hide the template's decorative window dots but KEEP their space, so the real macOS
+   traffic lights sit exactly where the design intended. */
+.titlebar-traffic { visibility: hidden !important; }
+
+/* --- macOS only: make the app's own header the window drag handle --- */
+html.dc-mac .app-titlebar {
+  -webkit-app-region: drag;
+}
+
+/* Interactive controls inside the header must stay clickable, not draggable. */
+html.dc-mac .app-titlebar input,
+html.dc-mac .app-titlebar button,
+html.dc-mac .app-titlebar a,
+html.dc-mac .app-titlebar select,
+html.dc-mac .app-titlebar textarea,
+html.dc-mac .app-titlebar kbd,
+html.dc-mac .app-titlebar [role="button"],
+html.dc-mac .app-titlebar .global-search-wrap {
+  -webkit-app-region: no-drag;
+}

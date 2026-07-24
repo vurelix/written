@@ -1,0 +1,59 @@
+/*
+ * Performance modes — toggled at runtime from View → Performance Mode.
+ *
+ * Why this exists (all figures measured in Electron on a 120Hz ProMotion Mac):
+ *   The app composites ~18-20 `backdrop-filter` glass panels on top of large
+ *   continuously-animating layers (3x ~500px `aurora` divs with filter:blur(30px),
+ *   plus bgpan / glowpulse / pulse). Every animation frame forces all that glass to
+ *   re-blur, so the GPU compositor can only present every 3rd display frame:
+ *
+ *     full      -> 26-32 ms/frame   (~31-38 fps)
+ *     reduced   ->    8.3 ms/frame  (120 fps)   animations off, glass kept
+ *     max       ->    8.3 ms/frame  (120 fps)   animations off + blur off
+ *
+ *   This is NOT a JavaScript problem: with vsync disabled the renderer produced
+ *   frames in 0.4 ms and there were zero long tasks. It is purely GPU compositing.
+ *
+ * The app's own Glass/Glow settings do NOT fix this — many blurs are hardcoded
+ * (blur(6px), blur(9px)…) rather than driven by the --surface-fx variable.
+ */
+
+/* --- reduced: stop perpetual motion, keep the frosted-glass look --- */
+html[data-perf="reduced"] *,
+html[data-perf="reduced"] *::before,
+html[data-perf="reduced"] *::after {
+  animation-name: none !important;   /* kills the infinite aurora/bgpan/pulse loops */
+}
+
+/* --- max: also drop the expensive backdrop blur --- */
+html[data-perf="max"] *,
+html[data-perf="max"] *::before,
+html[data-perf="max"] *::after {
+  animation-name: none !important;
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+}
+
+/* Transitions are deliberately left alone in every mode — they are cheap
+   (measured: no effect on frame pacing) and keep the UI feeling responsive. */
+
+/*
+ * Scroll containers are the pathological case for backdrop-filter: the blur must be
+ * recomputed every frame as content moves beneath it. `.calendar-scroll` is itself a
+ * `glass-surface`, so scrolling it re-blurs continuously.
+ *
+ * This also fixes the lagging scrollbar. The app styles `::-webkit-scrollbar`
+ * (width:10px, custom thumb), which makes Chromium paint the scrollbar as part of the
+ * PAGE instead of using macOS's independently-composited overlay scrollbar. A page
+ * painting at 35fps therefore drags its scrollbar thumb along at 35fps.
+ *
+ * Applied in `reduced` too, where glass is otherwise kept — a scrolling surface is the
+ * one place the blur reliably costs more than it is worth.
+ */
+html[data-perf="reduced"] .calendar-scroll,
+html[data-perf="reduced"] [class*="-scroll"],
+html[data-perf="max"] .calendar-scroll,
+html[data-perf="max"] [class*="-scroll"] {
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+}

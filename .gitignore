@@ -1,0 +1,26 @@
+# Dependencies
+node_modules/
+
+# Build output
+desktop/dist/
+desktop/app-src/
+
+# ⚠️ Installers are NOT committed.
+# The Windows installer is ~153 MB, which exceeds GitHub's hard 100 MB per-file limit,
+# and binaries do not belong in git history regardless. Build them locally
+# (`npm run dist:mac` / `dist:win`) and attach them to a GitHub Release instead.
+release/
+
+# macOS
+.DS_Store
+.thumbnail
+*.icloud
+
+# Editors
+.vscode/
+.idea/
+*.swp
+
+# Logs
+*.log
+npm-debug.log*
