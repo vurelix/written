@@ -5,7 +5,7 @@
  * build-renderer.js — regenerates renderer/index.html from the app source.
  *
  * Why this exists: renderer/index.html used to be a hand-patched COPY of
- * `Written v2.dc.html`. Every time the app changed, someone had to rediscover and redo
+ * `Written.dc.html`. Every time the app changed, someone had to rediscover and redo
  * four separate edits by hand. This script makes that reproducible and self-verifying.
  *
  *   node scripts/build-renderer.js [--src <path to .dc.html>] [--check]
@@ -26,17 +26,13 @@ const OUT = path.join(ROOT, 'renderer', 'index.html');
 // Source resolution order. `app-src/` makes the synced build copy self-sufficient:
 // it lives outside iCloud and has no sibling app source, but packaging happens there,
 // so the staleness gate has to work there too.
-// Two names are accepted. `Written v2.dc.html` is checked FIRST on purpose: the
-// original working folder still contains a stale `Written.dc.html` from an older
-// build, and preferring the v2 name there avoids silently compiling the wrong app.
-// The repository has only `Written.dc.html`, so it resolves correctly either way.
-const APP_NAMES = ['Written v2.dc.html', 'Written.dc.html'];
+const APP_NAME = 'Written.dc.html';
 const SRC_DIRS = [
   path.join(ROOT, 'app-src'),        // synced build copy
   path.resolve(ROOT, '..', 'app'),   // git repo layout
   path.resolve(ROOT, '..')           // original working folder
 ];
-const SRC_CANDIDATES = SRC_DIRS.flatMap(d => APP_NAMES.map(n => path.join(d, n)));
+const SRC_CANDIDATES = SRC_DIRS.map(d => path.join(d, APP_NAME));
 
 const argv = process.argv.slice(2);
 const CHECK = argv.includes('--check');

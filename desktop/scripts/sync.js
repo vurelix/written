@@ -58,10 +58,8 @@ for (const item of ITEMS) {
 // The app source itself, so `npm run verify:renderer` works in the destination.
 // Packaging runs there, and that is exactly where a stale renderer must be caught.
 // It is build input only — `files` in package.json does not ship app-src/.
-const APP_SRC = ['Written v2.dc.html', 'Written.dc.html']
-  .map(n => path.resolve(ROOT, '..', n))
-  .find(p => fs.existsSync(p));
-if (APP_SRC) {
+const APP_SRC = path.resolve(ROOT, '..', 'Written.dc.html');
+if (fs.existsSync(APP_SRC)) {
   const dir = path.join(dest, 'app-src');
   fs.mkdirSync(dir, { recursive: true });
   fs.copyFileSync(APP_SRC, path.join(dir, path.basename(APP_SRC)));
