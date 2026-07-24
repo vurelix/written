@@ -211,7 +211,7 @@ kept in `release/` for convenience.
 
 ## 🗺️ Roadmap
 
-- [ ] 🎨 App icons (currently the default Electron icon)
+- [x] 🎨 App icon — the Written mark, generated for both platforms
 - [ ] ✅ Code signing + notarization, to drop the first-launch warnings
 - [x] ⚖️ Third-party license attribution (About → Open Source)
 - [ ] 🖼️ Move screenshots to content-addressed files so the JSON store stays small
