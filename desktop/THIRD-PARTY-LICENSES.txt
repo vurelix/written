@@ -2,7 +2,7 @@ WRITTEN — THIRD-PARTY LICENSES
 ==============================
 
 Written bundles the third-party components listed below. Each is reproduced here in
-full, as their licenses require. Written itself is proprietary — see LICENSE.
+full, as their licenses require. Written itself is MIT licensed — see LICENSE.
 
 Components:
   1. React and ReactDOM 18.3.1 .... MIT

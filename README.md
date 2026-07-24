@@ -9,7 +9,7 @@
 ![Platform](https://img.shields.io/badge/platform-macOS%20%7C%20Windows-0B0E13?style=for-the-badge)
 ![Electron](https://img.shields.io/badge/Electron-31-3DDC97?style=for-the-badge&logo=electron&logoColor=0B0E13)
 ![Tests](https://img.shields.io/badge/tests-123%20passing-3DDC97?style=for-the-badge)
-![License](https://img.shields.io/badge/license-proprietary-8B95A5?style=for-the-badge)
+![License](https://img.shields.io/badge/license-MIT-3DDC97?style=for-the-badge)
 
 </div>
 
