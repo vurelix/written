@@ -137,7 +137,7 @@ npx electron-builder --win --x64 --arm64 --config.directories.output=dist/Window
 ### Test
 
 ```bash
-node --test test/written-v2.logic.test.cjs     # 123 tests
+node --test test/written.logic.test.cjs     # 123 tests
 ```
 
 ---
@@ -150,7 +150,7 @@ plus a logic block in `<script type="text/x-dc">`. The Electron layer wraps *aro
 ```
 written-journal/
 ├── 📱 app/                     the application itself
-│   ├── Written v2.dc.html      template + logic (the whole app)
+│   ├── Written.dc.html      template + logic (the whole app)
 │   └── support.js              dc-runtime
 ├── 🖥️ desktop/                 the Electron wrapper
 │   ├── main.js                 window, menus, atomic file store
@@ -176,7 +176,7 @@ network requests at boot. Verified, not assumed.
 reaches the filesystem only through four named IPC channels.
 
 🧬 **The app stays the app.** `scripts/build-renderer.js` regenerates `renderer/index.html` from
-`app/Written v2.dc.html` and **refuses to write** if wrapping altered the app's logic block (verified
+`app/Written.dc.html` and **refuses to write** if wrapping altered the app's logic block (verified
 by sha256). Never edit `renderer/index.html` by hand:
 
 ```bash

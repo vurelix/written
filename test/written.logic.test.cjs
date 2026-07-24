@@ -6,10 +6,9 @@ const vm = require('node:vm');
 
 // Resolve the app whether it sits at the repo root (original working folder) or
 // under app/ (the git repository's layout).
-const htmlPath = [
-  path.join(__dirname, '..', 'app', 'Written v2.dc.html'),
-  path.join(__dirname, '..', 'Written v2.dc.html')
-].find(p => fs.existsSync(p)) || path.join(__dirname, '..', 'Written v2.dc.html');
+const htmlPath = ['Written.dc.html', 'Written v2.dc.html']
+  .flatMap(n => [path.join(__dirname, '..', 'app', n), path.join(__dirname, '..', n)])
+  .find(p => fs.existsSync(p));
 const plain = value => JSON.parse(JSON.stringify(value));
 
 function loadComponent(overrides = {}) {

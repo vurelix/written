@@ -1,6 +1,6 @@
 # Written — Desktop (macOS + Windows)
 
-Electron wrapper around the existing `Written v2.dc.html` app. Everything here wraps *around* it —
+Electron wrapper around the existing `Written.dc.html` app. Everything here wraps *around* it —
 the only edit ever made to the app itself is the **Performance** row in Settings (see below).
 `scripts/build-renderer.js` verifies by sha256 that wrapping never alters the app's
 `<script type="text/x-dc">` logic block.
@@ -121,7 +121,7 @@ mandatory on Apple Silicon, where arm64 binaries must carry a valid signature to
 ## `renderer/index.html` is GENERATED — do not hand-edit
 
 ```bash
-npm run build:renderer     # regenerate from ../Written v2.dc.html
+npm run build:renderer     # regenerate from ../Written.dc.html
 npm run verify:renderer    # fail if the committed copy is stale (runs before every dist)
 ```
 
@@ -248,7 +248,7 @@ file still works anywhere.
 | **Data survives a full app restart** (fresh process read it back) | ✅ |
 | Wrapping never alters the app's logic block (sha256, enforced by the build script) | ✅ |
 | In-app Settings → Performance renders, applies, and stays in sync with the menu | ✅ verified both directions |
-| Existing logic suite `node --test test/written-v2.logic.test.cjs` | ✅ 123/123 pass |
+| Existing logic suite `node --test test/written.logic.test.cjs` | ✅ 123/123 pass |
 | Wrapper files present inside the packaged `app.asar` | ✅ |
 | **Packaged `.app` boots and writes its own store on first run** | ✅ wrote a valid `{"version":2,…}` profile store |
 | Performance Mode reaches 120fps on a 120Hz display | ✅ `reduced`/`max` = 8.3 ms/frame, verified twice each |
