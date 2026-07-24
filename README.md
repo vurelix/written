@@ -189,26 +189,6 @@ last-chance flush on quit is *synchronous*, because `beforeunload` doesn't fire 
 
 ---
 
-## 🚢 Publishing a release
-
-Installers are **not** in git — the Windows one is ~153 MB, past GitHub's hard 100 MB per-file
-limit — so they ship as Release assets:
-
-```bash
-# build both platforms first, then:
-gh release create v1.0.0 \
-  desktop/dist/macOS/Written-1.0.0-arm64.dmg \
-  desktop/dist/macOS/Written-1.0.0.dmg \
-  "desktop/dist/Windows/Written Setup 1.0.0.exe" \
-  --title "Written 1.0.0" \
-  --notes "First public build 🎉"
-```
-
-Or drag them into **Releases → Draft a new release** in the GitHub UI. Locally built installers are
-kept in `release/` for convenience.
-
----
-
 ## 🗺️ Roadmap
 
 - [x] 🎨 App icon — the Written mark, generated for both platforms
