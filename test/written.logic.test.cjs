@@ -3674,6 +3674,15 @@ test('native symbol classes prefer the operating system glyph fonts', () => {
   assert.match(html, /class="[^"]*native-emoji[^"]*"/);
 });
 
+test('native glyph renderers cover mood, checklist, and onboarding values', () => {
+  const html = fs.readFileSync(htmlPath, 'utf8');
+  assert.match(html, /<(?:span|div) class="native-emoji"[^>]*>\{\{e\.ch\}\}<\/(?:span|div)>/);
+  assert.equal((html.match(/<(?:span|div) class="native-emoji"[^>]*>\{\{e\.ch\}\}<\/(?:span|div)>/g) || []).length, 3);
+  assert.match(html, /<button class="native-emoji" onClick="\{\{m\.set\}\}" aria-label="\{\{m\.label\}\}" title="\{\{m\.label\}\}"[^>]*>\{\{m\.ch\}\}<\/button>/);
+  assert.match(html, /<span class="native-symbol"[^>]*>\{\{ck\.mark\}\}<\/span>/);
+  assert.doesNotMatch(html, /class="native-symbol"[^>]*font-family:'Manrope'[^>]*>\{\{sp\.num\}\}<\/span>/);
+});
+
 test('searchHint is an exposed binding, not just a template reference', () => {
   // A {{name}} with no matching exposed binding renders empty and throws nothing —
   // the DC failure mode that has bitten this file before.

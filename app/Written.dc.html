@@ -445,7 +445,7 @@ html{--accent:#3DDC97;scrollbar-gutter:stable;scrollbar-color:var(--accent) tran
                     <div style="height:5px;border-radius:3px;background:var(--chip2);overflow:hidden;margin-top:11px"><div style="height:100%;border-radius:3px;width:{{checklistPct}};background:{{accent}};box-shadow:0 0 10px {{acc44}};transition:width .5s ease"></div></div>
                     <div style="display:flex;flex-direction:column;gap:9px;margin-top:14px">
                       <sc-for list="{{checklistItems}}" as="ck" hint-placeholder-count="7">
-                        <button onClick="{{ck.tog}}" style="display:flex;align-items:center;gap:11px;border:none;background:transparent;cursor:pointer;padding:2px;text-align:left"><span style="width:19px;height:19px;flex:none;border-radius:6px;border:1.5px solid {{ck.bd}};background:{{ck.bg}};color:var(--on-acc);font-size:11px;font-weight:700;display:flex;align-items:center;justify-content:center;transition:all .15s">{{ck.mark}}</span><span style="font-size:12.5px;color:{{ck.fg}}">{{ck.label}}</span></button>
+                        <button onClick="{{ck.tog}}" style="display:flex;align-items:center;gap:11px;border:none;background:transparent;cursor:pointer;padding:2px;text-align:left"><span class="native-symbol" style="width:19px;height:19px;flex:none;border-radius:6px;border:1.5px solid {{ck.bd}};background:{{ck.bg}};color:var(--on-acc);font-size:11px;font-weight:700;display:flex;align-items:center;justify-content:center;transition:all .15s">{{ck.mark}}</span><span style="font-size:12.5px;color:{{ck.fg}}">{{ck.label}}</span></button>
                       </sc-for>
                     </div>
                   </div>
@@ -617,7 +617,7 @@ html{--accent:#3DDC97;scrollbar-gutter:stable;scrollbar-color:var(--accent) tran
             <div style="display:flex;flex-direction:column;gap:12px;margin-top:16px">
               <sc-for list="{{byEmoji}}" as="e" hint-placeholder-count="5">
                 <div style="display:grid;grid-template-columns:34px 1fr 148px;gap:10px;align-items:center">
-                  <span style="font-size:19px;line-height:1">{{e.ch}}</span>
+                  <span class="native-emoji" style="font-size:19px;line-height:1">{{e.ch}}</span>
                   <div style="height:9px;border-radius:5px;background:var(--chip2);overflow:hidden"><div style="width:{{e.w}};height:100%;border-radius:5px;background:{{e.col}};box-shadow:0 0 10px {{e.col}};transition:width .5s ease"></div></div>
                   <div style="text-align:right"><span style="font-family:'Manrope',system-ui,sans-serif;font-size:12px;font-weight:600;color:{{e.col}}">{{e.valS}}</span> <span style="font-size:10.5px;color:var(--tx-faint)">{{e.cnt}}</span></div>
                 </div>
@@ -860,14 +860,14 @@ html{--accent:#3DDC97;scrollbar-gutter:stable;scrollbar-color:var(--accent) tran
             <div style="display:flex;align-items:flex-end;gap:5px;height:150px;margin-top:12px;overflow-x:auto;padding-bottom:4px">
               <sc-for list="{{emoTimeline}}" as="e" hint-placeholder-count="20">
                 <div style="flex:1;min-width:16px;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;height:100%">
-                  <div style="font-size:14px;margin-bottom:4px">{{e.ch}}</div>
+                  <div class="native-emoji" style="font-size:14px;margin-bottom:4px">{{e.ch}}</div>
                   <div style="width:70%;height:{{e.barH}}px;background:{{e.col}};border-radius:3px;transition:height .4s ease"></div>
                 </div>
               </sc-for>
             </div>
             <div style="display:flex;flex-wrap:wrap;gap:9px;margin-top:16px">
               <sc-for list="{{emoAgg}}" as="e" hint-placeholder-count="5">
-                <div style="display:flex;align-items:center;gap:8px;border:1px solid var(--bd);background:var(--chip);border-radius:999px;padding:6px 13px"><span style="font-size:16px">{{e.ch}}</span><span style="font-family:'Manrope',system-ui,sans-serif;font-size:12px;font-weight:600;color:{{e.col}}">{{e.avgS}}</span></div>
+                <div style="display:flex;align-items:center;gap:8px;border:1px solid var(--bd);background:var(--chip);border-radius:999px;padding:6px 13px"><span class="native-emoji" style="font-size:16px">{{e.ch}}</span><span style="font-family:'Manrope',system-ui,sans-serif;font-size:12px;font-weight:600;color:{{e.col}}">{{e.avgS}}</span></div>
               </sc-for>
             </div>
             </sc-if>
@@ -1328,7 +1328,7 @@ html{--accent:#3DDC97;scrollbar-gutter:stable;scrollbar-color:var(--accent) tran
       <div style="font-family:'Manrope',system-ui,sans-serif;font-size:9.5px;letter-spacing:1.6px;color:var(--tx-faint);margin-top:22px">HOW DID THE DAY FEEL?</div>
       <div style="display:flex;gap:9px;margin-top:10px">
         <sc-for list="{{eEmojis}}" as="m" hint-placeholder-count="5">
-          <button onClick="{{m.set}}" style="width:46px;height:46px;font-size:22px;border-radius:13px;border:1px solid {{m.bd}};background:{{m.bg}};cursor:pointer;transition:all .15s;box-shadow:{{m.sh}};padding:0" style-hover="transform:scale(1.12)">{{m.ch}}</button>
+          <button class="native-emoji" onClick="{{m.set}}" aria-label="{{m.label}}" title="{{m.label}}" style="width:46px;height:46px;font-size:22px;border-radius:13px;border:1px solid {{m.bd}};background:{{m.bg}};cursor:pointer;transition:all .15s;box-shadow:{{m.sh}};padding:0" style-hover="transform:scale(1.12)">{{m.ch}}</button>
         </sc-for>
       </div>
       <div class="glass-surface" style="margin-top:22px;border-radius:14px;padding:16px 17px">
@@ -1528,7 +1528,7 @@ html{--accent:#3DDC97;scrollbar-gutter:stable;scrollbar-color:var(--accent) tran
             </div>
             <sc-for list="{{obStepList}}" as="sp" hint-placeholder-count="5">
               <div style="display:flex;align-items:center;gap:10px;padding:8px 6px;border-radius:9px">
-                <span class="native-symbol" style="width:22px;height:22px;flex:none;border-radius:50%;border:1.5px solid {{sp.cbd}};background:{{sp.cbg}};color:{{sp.cfg}};font-family:'Manrope',system-ui,sans-serif;font-size:10px;font-weight:700;display:flex;align-items:center;justify-content:center;transition:all .3s">{{sp.num}}</span>
+                <span class="native-symbol" style="width:22px;height:22px;flex:none;border-radius:50%;border:1.5px solid {{sp.cbd}};background:{{sp.cbg}};color:{{sp.cfg}};font-size:10px;font-weight:700;display:flex;align-items:center;justify-content:center;transition:all .3s">{{sp.num}}</span>
                 <span style="font-size:12.5px;color:{{sp.tfg}};font-weight:{{sp.tw}};transition:all .3s">{{sp.t}}</span>
               </div>
             </sc-for>
@@ -3679,7 +3679,7 @@ class Component extends DCLogic {
       const dPnl=dr.trades.reduce((a,t)=>{const pnl=this.finiteNumber(t.pnl);return a+(pnl==null?0:pnl)},0);
       const p=(ed||'').split('-');
       eV={eTitle:this.MO[+p[1]-1]+' '+(+p[2])+', '+p[0],ePnlS:this.fk(dPnl),ePnlCol:this.col(dPnl),setEditorDialogRef:el=>this.captureSurfaceDialog('editor',el),onEditorDialogKeydown:e=>this.handleSurfaceDialogKeydown('editor',e,()=>this.closeEditor()),
-        eEmojis:this.EMO.map(ch=>({ch,bg:dr.emoji===ch?acc+'22':'var(--chip)',bd:dr.emoji===ch?acc+'88':'var(--bd)',sh:dr.emoji===ch?'0 0 18px '+acc+'33':'none',set:()=>this.setEmoji(ch)})),
+        eEmojis:this.EMO.map((ch,i)=>({ch,label:'Set mood to '+(['happy','content','neutral','sad','angry'][i]||'custom'),bg:dr.emoji===ch?acc+'22':'var(--chip)',bd:dr.emoji===ch?acc+'88':'var(--bd)',sh:dr.emoji===ch?'0 0 18px '+acc+'33':'none',set:()=>this.setEmoji(ch)})),
         eTrades:dr.trades.map((t,i)=>{const guide=this.riskGuideForTrade(t),riskShow=!guide.reason&&guide.qty>0,entering=i===S.addedTradeIndex;return {key:ed+'-'+i,sym:t.sym,side:t.side,qty:t.qty,time:t.time||'',entry:t.entry,stop:t.stop,tp:t.tp,exit:t.exit,pnl:t.pnl,dur:t.dur,
           sideCol:t.side==='LONG'?'var(--green)':'var(--red)',sideBd:t.side==='LONG'?'rgba(61,220,151,.4)':'rgba(255,92,122,.4)',
           calc:(()=>{const pts=this.tpts(t),r2=this.tr(t);if(pts==null)return'';let s2=(pts>=0?'+':'')+(Math.round(pts*100)/100)+' pts';if(r2!=null)s2+=' · '+r2.toFixed(1)+'R';return s2})(),
