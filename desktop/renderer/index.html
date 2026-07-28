@@ -3684,7 +3684,7 @@ class Component extends DCLogic {
         eRevGoal:(dr.review&&dr.review.goal)||'',onRevGoal:e=>this.setReview('goal',e.target.value),
         eTags:this.tags().map(name=>{const on=dr.tags.includes(name);return{name,bg:on?acc+'1E':'transparent',fg:on?acc:'var(--tx-dim)',bd:on?acc+'66':'var(--bd2)',tog:()=>this.togTag(name)}}),
         eTagsVisible:this.tags().length>0,
-        eRules:this.RULES.map(name=>{const on=!!dr.rules[name];return{name,bg:on?acc:'transparent',bd:on?acc:'var(--bd3)',mark:on?'✓':'',fg:on?accentInk:'var(--tx-dim)',tog:()=>this.togRule(name)}}),
+        eRules:this.RULES.map(name=>{const on=!!dr.rules[name];return{name,bg:on?acc:'transparent',bd:on?acc:'var(--bd3)',mark:on?'✓':'',fg:on?'var(--tx)':'var(--tx-dim)',tog:()=>this.togRule(name)}}),
         quickPresetDisabled:!(dr.trades[0]&&dr.trades[0].sym),quickPresetFg:dr.trades[0]&&dr.trades[0].sym?acc:'var(--tx-ghost)',quickPresetCursor:dr.trades[0]&&dr.trades[0].sym?'pointer':'not-allowed',saveQuickPreset:()=>this.saveDraftPreset(),
         addTrade:()=>this.addTrade(),saveDay:()=>this.saveDay(),clearDay:()=>this.clearDay()};
       Object.assign(eV,this.disciplineVals(dr,acc));
@@ -3765,7 +3765,7 @@ class Component extends DCLogic {
     const radarLabels=comps.map((c,i)=>{const p=rPt(rMax+17,i);return{lx:(p[0]/200*100).toFixed(2)+'%',ly:(p[1]/200*100).toFixed(2)+'%',label:rShort[c.label]||c.label,val:c.valS,col:compCol(c.score)}});
     const todayK=this.dk(new Date());
     const chkDay=(st.checklist||{})[todayK]||{};
-    const checklistItems=this.CHECK.map((t2,i)=>({label:t2,on:!!chkDay[i],mark:chkDay[i]?'\u2713':'',bg:chkDay[i]?acc:'transparent',bd:chkDay[i]?acc:'var(--bd3)',fg:chkDay[i]?accentInk:'var(--tx-dim)',tog:()=>this.togCheck(i)}));
+    const checklistItems=this.CHECK.map((t2,i)=>({label:t2,on:!!chkDay[i],mark:chkDay[i]?'\u2713':'',bg:chkDay[i]?acc:'transparent',bd:chkDay[i]?acc:'var(--bd3)',fg:chkDay[i]?'var(--tx)':'var(--tx-dim)',tog:()=>this.togCheck(i)}));
     const chkDone=this.CHECK.filter((_,i)=>chkDay[i]).length;
     const checklistPct=Math.round(chkDone/this.CHECK.length*100)+'%';
     const checklistCount=chkDone+' / '+this.CHECK.length;

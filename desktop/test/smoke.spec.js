@@ -179,6 +179,54 @@ test.describe('built renderer', () => {
     }
   });
 
+  test('a followed checklist rule stays readable on both themes', async ({ page }) => {
+    // Regression: the followed label took accentInk (#07130C for bright accents), which
+    // is the ink for text sitting ON an accent fill. The label sits on the page
+    // background, so on the dark theme it went effectively invisible.
+    //
+    // Asserted on contrast rather than on an exact colour, so any future mechanism that
+    // dims this text — a cascade override, a theme token change — still trips the test.
+    const today = (d => `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`)(new Date());
+
+    for (const theme of ['dark', 'light']) {
+      await boot(page, profileFixture({
+        widgets: { checklist: { on: 1, columns: 8, rows: 12 } },
+        extraSettings: { theme, checklist: { [today]: { 0: true } } },
+      }));
+      await page.waitForSelector('[data-widget-id="checklist"]', { timeout: 15000 });
+
+      const ratio = await page.evaluate(() => {
+        // sRGB relative luminance, WCAG 2.x.
+        const lum = c => {
+          const [r, g, b] = c.match(/[\d.]+/g).slice(0, 3)
+            .map(Number)
+            .map(v => (v /= 255) <= 0.03928 ? v / 12.92 : ((v + 0.055) / 1.055) ** 2.4);
+          return 0.2126 * r + 0.7152 * g + 0.0722 * b;
+        };
+        // Walk up for the first non-transparent backdrop the label actually sits on.
+        const backdrop = el => {
+          for (let n = el; n; n = n.parentElement) {
+            const bg = getComputedStyle(n).backgroundColor;
+            const a = bg.match(/[\d.]+/g);
+            if (a && (a.length < 4 || Number(a[3]) > 0.9)) return bg;
+          }
+          return getComputedStyle(document.body).backgroundColor;
+        };
+        const widget = document.querySelector('[data-widget-id="checklist"]');
+        const ticked = [...widget.querySelectorAll('button')]
+          .find(b => (b.textContent || '').includes('✓'));
+        if (!ticked) return null;
+        const label = ticked.lastElementChild;
+        const l1 = lum(getComputedStyle(label).color);
+        const l2 = lum(backdrop(label));
+        return (Math.max(l1, l2) + 0.05) / (Math.min(l1, l2) + 0.05);
+      });
+
+      expect(ratio, `a followed rule was found on ${theme}`).not.toBeNull();
+      expect(ratio, `followed rule label contrast on ${theme}`).toBeGreaterThanOrEqual(4.5);
+    }
+  });
+
   test('command palette owns focus and restores its titlebar trigger', async ({ page }) => {
     await boot(page, profileFixture());
     const trigger = page.getByRole('button', { name: 'Search this journal' });

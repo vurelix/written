@@ -2751,20 +2751,57 @@ test('the document scrollbar uses the active accent with an inset rounded thumb'
   assert.match(html, /::-webkit-scrollbar-track\{background:transparent\}/);
 });
 
-test('solid accent surfaces use accentInk instead of a theme-wide foreground', () => {
-  const component = loadComponent();
+// Seeds a profile with rule 0 and checklist item 0 both marked followed.
+function seedFollowedRules(component, theme) {
   const today = component.dk(new Date());
-  const settings = { onboarded: true, loggedOut: false, quickPresets: [], accent: '#3DDC97', theme: 'light', checklist: { [today]: { 0: true } } };
+  const settings = { onboarded: true, loggedOut: false, quickPresets: [], accent: '#3DDC97', theme, checklist: { [today]: { 0: true } } };
   seedActiveProfile(component, settings, {});
   const draft = component.draftForDay(today);
   draft.rules[component.RULES[0]] = true;
   component.state = Object.assign({}, component.state, { booting: false, editing: today, draft });
-  const bindings = component.renderVals();
-  assert.equal(bindings.eRules[0].fg, '#07130C');
-  assert.equal(bindings.checklistItems[0].fg, '#07130C');
+  return component.renderVals();
+}
 
+test('solid accent surfaces use accentInk instead of a theme-wide foreground', () => {
   const html = fs.readFileSync(htmlPath, 'utf8');
+  // --on-acc IS the solid-accent contract, and the rule/checklist CHECKBOX is a genuine
+  // solid-accent surface, so it correctly paints its tick with it.
   assert.match(html, /--on-acc:\{\{accentInk\}\}/);
+  assert.match(html, /border:1\.5px solid \{\{ru\.bd\}\};background:\{\{ru\.bg\}\};color:var\(--on-acc\)/);
+  assert.match(html, /border:1\.5px solid \{\{ck\.bd\}\};background:\{\{ck\.bg\}\};color:var\(--on-acc\)/);
+});
+
+test('a followed rule label stays readable instead of taking accent ink', () => {
+  // Regression: `fg` was accentInk, the ink meant for text sitting ON an accent fill.
+  // The label does not sit on the fill — it sits on the page background. accentInk
+  // resolves to #07130C for bright accents, so on the dark theme (--bg:#0B0E13) a rule
+  // went effectively invisible the moment you ticked it.
+  //
+  // This went unnoticed because the original test pinned theme:'light', where near-black
+  // text on a light background reads perfectly well. Both themes are asserted now.
+  for (const theme of ['dark', 'light']) {
+    const component = loadComponent();
+    const bindings = seedFollowedRules(component, theme);
+
+    for (const [label, row] of [['eRules', bindings.eRules[0]], ['checklistItems', bindings.checklistItems[0]]]) {
+      assert.equal(row.fg, 'var(--tx)', `${label} followed label on ${theme}`);
+      assert.notEqual(row.fg, component.accentInk('#3DDC97'), `${label} must not use accent ink on ${theme}`);
+      // Still visibly "on": the checkbox fills with the accent and shows a tick.
+      assert.equal(row.bg, '#3DDC97');
+      assert.ok(row.mark);
+    }
+
+    // An unfollowed rule stays dimmed, so the two states remain distinguishable.
+    assert.equal(bindings.eRules[1].fg, 'var(--tx-dim)');
+    assert.equal(bindings.eRules[1].bg, 'transparent');
+    assert.equal(bindings.eRules[1].mark, '');
+  }
+
+  // The label reads fg; only the checkbox may use the on-accent ink.
+  const html = fs.readFileSync(htmlPath, 'utf8');
+  assert.match(html, /<span style="font-size:13px;color:\{\{ru\.fg\}\}">\{\{ru\.name\}\}<\/span>/);
+  assert.doesNotMatch(html, /fg:on\?accentInk/);
+  assert.doesNotMatch(html, /fg:chkDay\[i\]\?accentInk/);
 });
 
 test('custom colour pickers use bounded fields and no redundant current-colour dot', () => {
