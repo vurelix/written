@@ -597,7 +597,14 @@ test.describe('built renderer', () => {
     await page.setViewportSize({ width: 720, height: 800 });
     await boot(page, profileFixture());
     await page.getByRole('button', { name: 'Help', exact: true }).click();
-    await page.getByRole('button', { name: 'Getting Started' }).click();
+    const gettingStarted = page.getByRole('button', { name: 'Getting Started' });
+    await gettingStarted.click();
+    await expect(gettingStarted).toHaveAttribute('aria-expanded', 'true');
+    const controlledPanelId = await gettingStarted.getAttribute('aria-controls');
+    expect(controlledPanelId).toBeTruthy();
+    const openPanel = page.locator(`#${controlledPanelId}`);
+    await expect(openPanel).toHaveAttribute('data-open', 'true');
+    await expect(openPanel).toHaveCSS('opacity', '1');
 
     const overflow = await page.locator('[data-screen-label="Help"]').evaluate(el => ({
       own: el.scrollWidth - el.clientWidth,
@@ -606,12 +613,13 @@ test.describe('built renderer', () => {
     expect(overflow.own).toBeLessThanOrEqual(1);
     expect(overflow.document).toBeLessThanOrEqual(1);
 
-    await expect(page.locator('.help-route-svg-mobile').first()).toBeVisible();
-    await expect(page.locator('.help-route-svg-wide').first()).toBeHidden();
-    const nodeGeometry = await page.$$eval('.help-route-node', elements =>
+    await expect(openPanel.locator('.help-route-svg-mobile')).toBeVisible();
+    await expect(openPanel.locator('.help-route-svg-wide')).toBeHidden();
+    const routeNodes = openPanel.locator('.help-route-node');
+    await expect(routeNodes).toHaveCount(3);
+    const nodeGeometry = await routeNodes.evaluateAll(elements =>
       elements.map(el => ({ height: el.getBoundingClientRect().height, width: el.getBoundingClientRect().width }))
     );
-    expect(nodeGeometry.length).toBeGreaterThan(0);
     expect(nodeGeometry.every(item => item.height > 0 && item.width > 0)).toBe(true);
   });
 
@@ -628,7 +636,12 @@ test.describe('built renderer', () => {
     await boot(page, profileFixture());
     await page.getByRole('button', { name: 'Edit layout' }).click();
 
-    const addWidgetControls = page.getByText('ADD A WIDGET', { exact: true }).locator('..');
+    const addWidgetHeading = page.getByText('ADD A WIDGET', { exact: true });
+    await expect(addWidgetHeading).toHaveCount(1);
+    await expect(addWidgetHeading).toBeVisible();
+    const addWidgetControls = addWidgetHeading.locator('..');
+    await expect(addWidgetControls).toBeVisible();
+    await expect(addWidgetControls.getByRole('button', { name: 'Consistency heatmap' })).toBeVisible();
     await expect(addWidgetControls.getByRole('button', { name: 'Economic calendar' })).toHaveCount(0);
     await expect(addWidgetControls.getByText('Economic calendar', { exact: true })).toHaveCount(0);
   });
