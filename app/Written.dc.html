@@ -1809,7 +1809,7 @@ class Component extends DCLogic {
   constructor(p){
     super(p);
     const t=new Date();
-    this.state={days:{},settings:{},profileStore:{version:2,activeProfileId:null,profiles:{}},selectedProfileId:null,pendingProfileId:null,pendingSearchResult:null,profileMenuOpen:false,storageWarning:'',tab:'dash',viewY:t.getFullYear(),viewM:t.getMonth(),range:'month',chartMode:null,symFilter:'ALL',lightbox:null,hov:null,editing:null,draft:null,annotation:null,markKind:'entry',markText:'',confirm:null,booting:true,ob:null,newTag:'',newSym:'',newPv:'',obSym:'',obPv:'',liPw:'',liErr:false,obStarted:false,obStep:0,obProg:0,obDemo:true,launching:false,newMist:'',toast:null,pickH:153,pickS:.72,pickV:.86,pickerOpen:false,bootTxt:'',dashEdit:false,searchOpen:false,searchQuery:'',searchSel:0,helpQuery:'',helpOpenId:null,tourOpen:false,tourStep:0,tourSpotlight:null,tourMotionReady:false,addedTradeIndex:null,editorRangesReady:false,insightsRangesReady:false,titlebarOffset:'44px'};
+    this.state={days:{},settings:{},profileStore:{version:2,activeProfileId:null,profiles:{}},selectedProfileId:null,pendingProfileId:null,pendingSearchResult:null,profileMenuOpen:false,storageWarning:'',tab:'dash',viewY:t.getFullYear(),viewM:t.getMonth(),range:'month',chartMode:null,symFilter:'ALL',lightbox:null,hov:null,editing:null,draft:null,annotation:null,markKind:'entry',markText:'',confirm:null,booting:true,ob:null,newTag:'',newSym:'',newPv:'',obSym:'',obPv:'',liPw:'',liErr:false,obStarted:false,obStep:0,obProg:0,obDemo:true,launching:false,newMist:'',toast:null,pickH:153,pickS:.72,pickV:.86,pickerOpen:false,bootTxt:'',dashEdit:false,searchOpen:false,searchQuery:'',searchSel:0,helpQuery:'',helpOpenCategoryId:null,helpOpenArticleId:null,helpReturnCategoryId:null,tourOpen:false,tourStep:0,tourSpotlight:null,tourMotionReady:false,addedTradeIndex:null,editorRangesReady:false,insightsRangesReady:false,titlebarOffset:'44px'};
     this._onGlobalKeydown=this.handleGlobalKeydown.bind(this);
     this._onWindowScroll=this.syncTitlebarOffset.bind(this);
     this.BOOTMSGS=['loading modules…','linking market symbols…','reading your ledger…','warming up charts…'];
@@ -2307,7 +2307,12 @@ class Component extends DCLogic {
   scheduleAfterCommit(callback){if(typeof callback!=='function')return false;this.cancelScheduledFocusRestore();const token=this._focusRestoreToken,run=()=>{if(token!==this._focusRestoreToken)return;this._focusRestoreTimer=null;this._focusRestoreFrame=null;callback()};if(typeof requestAnimationFrame==='function')this._focusRestoreFrame=requestAnimationFrame(run);else this._focusRestoreTimer=setTimeout(run,0);return true}
   setStateAfterCommit(patch,callback){if(typeof callback!=='function'){this.setState(patch);return true}if(typeof this.setState==='function'&&this.setState.length>=2){this.cancelScheduledFocusRestore();const token=this._focusRestoreToken;this.setState(patch,()=>{if(token===this._focusRestoreToken)callback()})}else{this.setState(patch);this.scheduleAfterCommit(callback)}return true}
   setTab(tab,extra=null){
-    this.setState(Object.assign({},extra&&typeof extra==='object'?extra:{},{tab,helpQuery:'',helpOpenId:null}));
+    if(tab!=='help'&&this.state.helpOpenArticleId)this.takeSurfaceFocus('helpArticle');
+    this.setState(Object.assign(
+      {},
+      extra&&typeof extra==='object'?extra:{},
+      {tab,helpQuery:'',helpOpenCategoryId:null,helpOpenArticleId:null,helpReturnCategoryId:null}
+    ));
     if(tab==='insights')this.armInsightsRanges();
     return true;
   }
@@ -2327,18 +2332,50 @@ class Component extends DCLogic {
     return true;
   }
   setHelpSearchRef(element){this._helpSearchInput=element||null}
-  setHelpQuery(rawQuery){
-    const helpQuery=String(rawQuery==null?'':rawQuery),result=this.filterHelpFaq(this.helpFaqData(),helpQuery);
-    this.setState({helpQuery,helpOpenId:result.normalized?result.firstId:null});
-    return result;
+  helpCategoryForArticle(articleId){
+    const group=this.helpFaqData().find(item=>item.questions.some(question=>question.id===articleId));
+    return group?group.key:null;
   }
-  toggleHelpFaq(id){
-    if(typeof id!=='string'||!id)return false;
-    this.setState({helpOpenId:this.state.helpOpenId===id?null:id});
+  toggleHelpCategory(categoryId){
+    if(typeof categoryId!=='string'||!this.helpFaqData().some(group=>group.key===categoryId))return false;
+    if(this.state.helpOpenArticleId)this.takeSurfaceFocus('helpArticle');
+    this.setState({
+      helpOpenCategoryId:this.state.helpOpenCategoryId===categoryId?null:categoryId,
+      helpOpenArticleId:null,
+    });
     return true;
   }
+  openHelpArticle(articleId,opener){
+    const categoryId=this.helpCategoryForArticle(articleId);
+    if(!categoryId)return false;
+    this.rememberSurfaceFocus('helpArticle',opener);
+    this.setState({helpOpenCategoryId:categoryId,helpOpenArticleId:articleId});
+    return true;
+  }
+  closeHelpArticle(restore=true){
+    return this.setStateAndRestoreSurface({helpOpenArticleId:null},'helpArticle',restore);
+  }
+  setHelpQuery(rawQuery){
+    const helpQuery=String(rawQuery==null?'':rawQuery);
+    const result=this.filterHelpFaq(this.helpFaqData(),helpQuery);
+    const entering=!this.normalizeHelpText(this.state.helpQuery)&&!!result.normalized;
+    const returnId=entering?this.state.helpOpenCategoryId:this.state.helpReturnCategoryId;
+    const validReturn=this.helpFaqData().some(group=>group.key===returnId);
+    const openId=result.normalized
+      ?(result.groups[0]?result.groups[0].key:null)
+      :(validReturn?returnId:(result.groups[0]?result.groups[0].key:null));
+    if(this.state.helpOpenArticleId)this.takeSurfaceFocus('helpArticle');
+    this.setState({
+      helpQuery,
+      helpOpenCategoryId:openId,
+      helpOpenArticleId:null,
+      helpReturnCategoryId:result.normalized?returnId:null,
+    });
+    return result;
+  }
   clearHelpSearch(){
-    return this.setStateAfterCommit({helpQuery:'',helpOpenId:null},()=>{
+    this.setHelpQuery('');
+    return this.setStateAfterCommit({},()=>{
       if(this._helpSearchInput&&typeof this._helpSearchInput.focus==='function')this._helpSearchInput.focus();
     });
   }
@@ -3835,27 +3872,33 @@ class Component extends DCLogic {
         })):[],
       };
     };
-    const helpGroups=helpFiltered.groups.map(group=>({
-      key:group.key,
-      categoryId:'help-faq-category-'+group.key,
-      label:group.label,
-      questions:group.questions.map(question=>{
-        const expanded=S.helpOpenId===question.id,action=question.action;
-        return{
+    const helpGroups=helpFiltered.groups.map(group=>{
+      const open=S.helpOpenCategoryId===group.key;
+      return{
+        key:group.key,
+        label:group.label,
+        buttonId:'help-category-button-'+group.key,
+        panelId:'help-category-panel-'+group.key,
+        open,
+        collapsed:!open,
+        caretTransform:open?'rotate(180deg)':'none',
+        toggle:()=>this.toggleHelpCategory(group.key),
+        questions:group.questions.map((question,index)=>({
           id:question.id,
+          number:String(index+1),
           question:question.question,
-          questionId:'help-faq-q-'+question.id,
-          answerId:'help-faq-a-'+question.id,
-          expanded,
-          hidden:!expanded,
-          caretTransform:expanded?'rotate(180deg)':'none',
-          toggle:()=>this.toggleHelpFaq(question.id),
+          open:event=>this.openHelpArticle(question.id,event),
           blocks:question.blocks.map(helpBlock),
-          hasAction:!!action,
-          action:action?{label:action.label,run:action.id==='tour'?replayTour:()=>false}:{label:'',run:()=>false},
-        };
-      }),
-    }));
+          hasAction:!!question.action,
+          action:question.action
+            ?{label:question.action.label,run:question.action.id==='tour'?replayTour:()=>false}
+            :{label:'',run:()=>false},
+        })),
+      };
+    });
+    const selectedHelpArticle=this.helpFaqData()
+      .flatMap(group=>group.questions)
+      .find(question=>question.id===S.helpOpenArticleId)||null;
     const helpMatchCount=helpFiltered.matchCount;
     const helpResultStatus=helpFiltered.normalized
       ?helpMatchCount+' '+(helpMatchCount===1?'result':'results')
@@ -3867,6 +3910,18 @@ class Component extends DCLogic {
       helpResultStatus,
       helpNoResults:helpMatchCount===0,
       helpClearDisabled:!helpFiltered.normalized,
+      helpArticleOpen:!!selectedHelpArticle,
+      helpArticleClosed:!selectedHelpArticle,
+      helpArticleTitle:selectedHelpArticle?selectedHelpArticle.question:'',
+      helpArticleBlocks:selectedHelpArticle?selectedHelpArticle.blocks.map(helpBlock):[],
+      helpArticleHasAction:!!(selectedHelpArticle&&selectedHelpArticle.action),
+      helpArticleAction:selectedHelpArticle&&selectedHelpArticle.action
+        ?{label:selectedHelpArticle.action.label,run:selectedHelpArticle.action.id==='tour'?replayTour:()=>false}
+        :{label:'',run:()=>false},
+      closeHelpArticle:()=>this.closeHelpArticle(),
+      setHelpArticleDialogRef:element=>this.captureSurfaceDialog('helpArticle',element),
+      onHelpArticleDialogKeydown:event=>this.handleSurfaceDialogKeydown('helpArticle',event,()=>this.closeHelpArticle()),
+      stopHelpArticleClick:event=>event.stopPropagation(),
       setHelpSearchRef:element=>this.setHelpSearchRef(element),
       onHelpQuery:event=>this.setHelpQuery(event&&event.target?event.target.value:''),
       clearHelpSearch:()=>this.clearHelpSearch(),

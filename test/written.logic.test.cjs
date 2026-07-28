@@ -3325,48 +3325,92 @@ test('Help FAQ copy preserves privacy, storage, risk, export, and destructive-ac
   assert.match(text('reset-clear'), /neither action deletes the profile or its settings/i);
 });
 
-test('Help query auto-opens only on query changes and one question remains open globally', () => {
+test('Help keeps one category open and one article modal open', () => {
   const component = loadComponent();
-  component.state.helpQuery = '';
-  component.state.helpOpenId = null;
+  component.state.helpOpenCategoryId = null;
+  component.state.helpOpenArticleId = null;
 
-  const result = component.setHelpQuery('journal');
-  assert.equal(component.state.helpQuery, 'journal');
-  assert.equal(component.state.helpOpenId, result.firstId);
+  assert.equal(component.toggleHelpCategory('getting-started'), true);
+  assert.equal(component.state.helpOpenCategoryId, 'getting-started');
+  assert.equal(component.toggleHelpCategory('dashboard-insights'), true);
+  assert.equal(component.state.helpOpenCategoryId, 'dashboard-insights');
 
-  const first = component.state.helpOpenId;
-  assert.equal(component.toggleHelpFaq(first), true);
-  assert.equal(component.state.helpOpenId, null);
-  assert.equal(component.state.helpQuery, 'journal');
+  const opener = { focus() {} };
+  assert.equal(component.openHelpArticle('quick-presets', opener), true);
+  assert.equal(component.state.helpOpenCategoryId, 'getting-started');
+  assert.equal(component.state.helpOpenArticleId, 'quick-presets');
 
-  component.renderVals();
-  assert.equal(component.state.helpOpenId, null, 'rendering does not reopen the first result');
+  assert.equal(component.toggleHelpCategory('dashboard-insights'), true);
+  assert.equal(component.state.helpOpenArticleId, null);
+  assert.equal(component.state.helpOpenCategoryId, 'dashboard-insights');
+});
 
-  assert.equal(component.toggleHelpFaq('quick-presets'), true);
-  assert.equal(component.state.helpOpenId, 'quick-presets');
-  assert.equal(component.toggleHelpFaq('journal-day'), true);
-  assert.equal(component.state.helpOpenId, 'journal-day');
+test('Help search opens only the first matching category and never a modal', () => {
+  const component = loadComponent();
+  component.state.helpOpenCategoryId = 'getting-started';
+  component.state.helpOpenArticleId = null;
+  component.state.helpReturnCategoryId = null;
 
-  component.setHelpQuery('active only in memory');
-  assert.equal(component.state.helpOpenId, 'storage-warning');
-  component.setHelpQuery('no matching help answer phrase');
-  assert.equal(component.state.helpOpenId, null);
+  const result = component.setHelpQuery('active only in memory');
+  assert.equal(result.groups[0].key, 'data-troubleshooting');
+  assert.equal(component.state.helpOpenCategoryId, 'data-troubleshooting');
+  assert.equal(component.state.helpOpenArticleId, null);
+  assert.equal(component.state.helpReturnCategoryId, 'getting-started');
+
+  component.setHelpQuery('');
+  assert.equal(component.state.helpOpenCategoryId, 'getting-started');
+  assert.equal(component.state.helpReturnCategoryId, null);
+});
+
+test('Help article modal reuses shared focus containment and restoration', () => {
+  let focused = '';
+  const component = loadComponent();
+  component.setState = function setState(patch, callback) {
+    this.state = Object.assign({}, this.state, patch);
+    if (callback) callback();
+  };
+  const opener = { isConnected: true, focus() { focused = 'opener'; } };
+  const close = { focus() { focused = 'close'; } };
+  const action = { focus() { focused = 'action'; } };
+  const dialog = {
+    focus() { focused = 'dialog'; },
+    querySelectorAll() { return [close, action]; },
+  };
+
+  assert.equal(component.openHelpArticle('journal-day', opener), true);
+  assert.equal(component.captureSurfaceDialog('helpArticle', dialog), true);
+  assert.equal(focused, 'close');
+  assert.equal(component.handleSurfaceDialogKeydown('helpArticle', {
+    key: 'Tab',
+    target: action,
+    preventDefault() {},
+    stopPropagation() {},
+  }, () => component.closeHelpArticle()), true);
+  assert.equal(focused, 'close');
+  component.closeHelpArticle();
+  assert.equal(focused, 'opener');
 });
 
 test('setTab resets Help state atomically and extra cannot override the reset', () => {
   const component = loadComponent();
   component.state.tab = 'help';
   component.state.helpQuery = 'risk';
-  component.state.helpOpenId = 'risk-sizing';
+  component.state.helpOpenCategoryId = 'trades-setups-risk';
+  component.state.helpOpenArticleId = 'risk-sizing';
+  component.state.helpReturnCategoryId = 'getting-started';
   assert.equal(component.setTab('cal', {
     tourStep: 1,
     helpQuery: 'override',
-    helpOpenId: 'override',
+    helpOpenCategoryId: 'override',
+    helpOpenArticleId: 'override',
+    helpReturnCategoryId: 'override',
   }), true);
   assert.equal(component.state.tab, 'cal');
   assert.equal(component.state.tourStep, 1);
   assert.equal(component.state.helpQuery, '');
-  assert.equal(component.state.helpOpenId, null);
+  assert.equal(component.state.helpOpenCategoryId, null);
+  assert.equal(component.state.helpOpenArticleId, null);
+  assert.equal(component.state.helpReturnCategoryId, null);
 });
 
 test('clearing Help search restores focus through the stable input ref after commit', () => {
@@ -3377,11 +3421,15 @@ test('clearing Help search restores focus through the stable input ref after com
     if (callback) callback();
   };
   component.state.helpQuery = 'risk';
-  component.state.helpOpenId = 'risk-sizing';
+  component.state.helpOpenCategoryId = 'trades-setups-risk';
+  component.state.helpOpenArticleId = 'risk-sizing';
+  component.state.helpReturnCategoryId = 'getting-started';
   component.setHelpSearchRef({ focus() { focused++; } });
   assert.equal(component.clearHelpSearch(), true);
   assert.equal(component.state.helpQuery, '');
-  assert.equal(component.state.helpOpenId, null);
+  assert.equal(component.state.helpOpenCategoryId, 'getting-started');
+  assert.equal(component.state.helpOpenArticleId, null);
+  assert.equal(component.state.helpReturnCategoryId, null);
   assert.equal(focused, 1);
 });
 
@@ -3391,7 +3439,9 @@ test('Help interactions remain transient and never write profile settings', () =
   component.setSettings = () => { writes++; return true; };
   component.state.settings = { name: 'Unchanged' };
   component.setHelpQuery('risk');
-  component.toggleHelpFaq('risk-sizing');
+  component.toggleHelpCategory('trades-setups-risk');
+  component.openHelpArticle('risk-sizing', { focus() {} });
+  component.closeHelpArticle(false);
   component.setTab('dash');
   assert.equal(writes, 0);
   assert.deepEqual(plain(component.state.settings), { name: 'Unchanged' });
@@ -3420,6 +3470,9 @@ test('Help render bindings expose a complete recursive view model', () => {
   for (const name of [
     'helpQuery','helpGroups','helpMatchCount','helpResultStatus',
     'helpNoResults','helpClearDisabled',
+    'helpArticleOpen','helpArticleClosed','helpArticleTitle','helpArticleBlocks',
+    'helpArticleHasAction','helpArticleAction','closeHelpArticle',
+    'setHelpArticleDialogRef','onHelpArticleDialogKeydown','stopHelpArticleClick',
     'setHelpSearchRef','onHelpQuery','clearHelpSearch','replayTour',
   ]) {
     assert.notEqual(values[name], undefined, `top-level Help binding ${name} exists`);
@@ -3428,16 +3481,20 @@ test('Help render bindings expose a complete recursive view model', () => {
   let questionCount = 0;
   for (const group of values.helpGroups) {
     assert.equal(typeof group.key, 'string');
-    assert.equal(group.categoryId, 'help-faq-category-' + group.key);
+    assert.equal(group.buttonId, 'help-category-button-' + group.key);
+    assert.equal(group.panelId, 'help-category-panel-' + group.key);
     assert.equal(typeof group.label, 'string');
+    assert.equal(group.open, false);
+    assert.equal(group.collapsed, true);
+    assert.equal(group.caretTransform, 'none');
+    assert.equal(typeof group.toggle, 'function');
     assert.ok(Array.isArray(group.questions));
     for (const question of group.questions) {
       questionCount++;
       for (const key of [
-        'id','question','questionId','answerId','expanded','hidden',
-        'caretTransform','toggle','blocks','hasAction',
+        'id','number','question','open','blocks','hasAction','action',
       ]) assert.notEqual(question[key], undefined, `question field ${key} exists`);
-      assert.equal(typeof question.toggle, 'function');
+      assert.equal(typeof question.open, 'function');
       for (const block of question.blocks) {
         assert.equal(typeof block.isPara, 'boolean');
         assert.equal(typeof block.isSteps, 'boolean');
@@ -3461,7 +3518,20 @@ test('Help render bindings expose a complete recursive view model', () => {
     }
   }
   assert.equal(questionCount, 21);
-  assert.ok(values.helpGroups.flatMap(group => group.questions).every(question => question.hidden));
+  assert.equal(values.helpArticleOpen, false);
+  assert.equal(values.helpArticleClosed, true);
+  assert.equal(values.helpArticleTitle, '');
+  assert.deepEqual(plain(values.helpArticleBlocks), []);
+
+  component.openHelpArticle('interactive-walkthrough', { focus() {} });
+  const modalValues = component.renderVals();
+  assert.equal(modalValues.helpArticleOpen, true);
+  assert.equal(modalValues.helpArticleClosed, false);
+  assert.equal(modalValues.helpArticleTitle, 'What does the interactive walkthrough cover?');
+  assert.equal(modalValues.helpArticleHasAction, true);
+  assert.equal(modalValues.helpArticleAction.label, 'Replay walkthrough');
+  assert.equal(modalValues.helpArticleAction.run, modalValues.replayTour);
+  assert.ok(modalValues.helpArticleBlocks.length > 0);
 });
 
 test('Help FAQ markup keeps answer IDREFs mounted and exposes search accessibility', () => {
