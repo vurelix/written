@@ -65,7 +65,7 @@ xattr -dr com.apple.quarantine /Applications/Written.app
 
 ### 🪟 Windows
 
-1. Download `Written Setup 1.0.1.exe` from **[Releases](../../releases)**
+1. Download `Written.Setup.1.0.1.exe` from **[Releases](../../releases)**
 2. Run it — SmartScreen will warn, click **More info → Run anyway**
 3. Pick your install folder and finish
 

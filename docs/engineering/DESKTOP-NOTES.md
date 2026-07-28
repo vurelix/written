@@ -70,7 +70,7 @@ npx electron-builder --win --x64 --arm64 --config.directories.output=dist/Window
 **`dist/Windows/`**
 | File | Size | For |
 |---|---|---|
-| `Written Setup 1.0.1.exe` | 154 MB | NSIS installer, contains **both** x64 and arm64 |
+| `Written Setup 1.0.1.exe` | 152 MB | NSIS installer, contains **both** x64 and arm64. GitHub rewrites the spaces on upload, so the released asset is `Written.Setup.1.0.1.exe` |
 
 Windows installers build fine from macOS — electron-builder downloads its own bundled Wine
 automatically. No manual Wine install needed.
