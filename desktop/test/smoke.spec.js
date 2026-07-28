@@ -518,18 +518,34 @@ test.describe('built renderer', () => {
       await page.getByRole('button', { name: questionName }).click();
       return page.locator('.help-answer:not([hidden])').evaluate(el => {
         const style = getComputedStyle(el);
+        // The question button is wrapped in an <h3>, so it is not a direct sibling.
+        const item = el.closest('.help-item');
+        const questionText = item && item.querySelector('.help-question span');
+        const answerText = el.firstElementChild;
         return {
+          paddingTop: style.paddingTop,
           paddingLeft: style.paddingLeft,
           paddingRight: style.paddingRight,
           paddingBottom: style.paddingBottom,
           fontSize: style.fontSize,
           lineHeight: style.lineHeight,
+          // The real visual gap: bottom of the question's text to top of the answer's
+          // first block. Padding alone does not describe it — the button's own bottom
+          // padding and the h3's margin are both in between.
+          textToText: questionText && answerText
+            ? answerText.getBoundingClientRect().top - questionText.getBoundingClientRect().bottom
+            : null,
         };
       });
     };
     const journal = await measure('How do I journal a trading day?');
     const metrics = await measure('What do the core trading metrics mean?');
     expect(metrics).toEqual(journal);
+
+    // Regression: .help-answer had padding-top:0, so the only thing separating the answer
+    // from the dropdown button was the button's own 13px bottom padding.
+    expect(parseFloat(journal.paddingTop), 'answer has padding below the button').toBeGreaterThanOrEqual(8);
+    expect(journal.textToText, 'answer text sits clear of the question text').toBeGreaterThanOrEqual(20);
 
     const questionGeometry = await page.$$eval('.help-question', elements =>
       elements.map(el => ({ height: el.getBoundingClientRect().height, width: el.getBoundingClientRect().width }))
