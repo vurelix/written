@@ -3168,6 +3168,34 @@ test('walkthrough has seven steps and completion persists only on the active pro
   assert.equal(component.state.settings.tourCompleted,true);
 });
 
+test('the packaged licence is present, self-contained, and matches the repo licence', () => {
+  const repoRoot = path.join(__dirname, '..');
+  const pkg = JSON.parse(fs.readFileSync(path.join(repoRoot, 'desktop', 'package.json'), 'utf8'));
+
+  assert.equal(pkg.license, 'MIT');
+  const extra = (pkg.build.extraResources || []).map(entry => entry.from);
+  assert.ok(extra.includes('LICENSE'), 'the licence ships inside the bundle');
+  assert.ok(extra.includes('THIRD-PARTY-LICENSES.txt'), 'third-party attributions ship too');
+
+  // Packaging only ever runs from the SYNCED build copy (Electron cannot be signed from
+  // inside iCloud), and that copy is `desktop/` standing alone — it has no parent repo.
+  // So every extraResources path has to resolve inside desktop/, never above it.
+  for (const from of extra) {
+    assert.doesNotMatch(from, /^\.\./, `extraResources "${from}" must not escape the app directory`);
+    assert.ok(
+      fs.existsSync(path.join(repoRoot, 'desktop', from)),
+      `extraResources "${from}" exists beside package.json`,
+    );
+  }
+
+  // Two copies of the licence would otherwise be free to drift apart.
+  assert.equal(
+    fs.readFileSync(path.join(repoRoot, 'desktop', 'LICENSE'), 'utf8'),
+    fs.readFileSync(path.join(repoRoot, 'LICENSE'), 'utf8'),
+    'desktop/LICENSE is identical to the repo licence',
+  );
+});
+
 test('the consistency heatmap generates 26 weeks and its markup agrees', () => {
   const component = loadComponent();
   assert.equal(component.HEATMAP_WEEKS, 26);

@@ -42,6 +42,11 @@ const ITEMS = [
   'playwright.config.js',
   'test',
   'README.md',
+  // Both licence files are electron-builder `extraResources`, so they must exist beside
+  // package.json in the SYNCED copy — that is where packaging actually runs. Omitting
+  // LICENSE here is why `extraResources: "../LICENSE"` looked fine in the repo and would
+  // have failed in the only tree that can produce a build.
+  'LICENSE',
   'THIRD-PARTY-LICENSES.txt',
   'build',
   'scripts',

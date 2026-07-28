@@ -59,7 +59,7 @@
         "to": "THIRD-PARTY-LICENSES.txt"
       },
       {
-        "from": "../LICENSE",
+        "from": "LICENSE",
         "to": "LICENSE"
       }
     ]
