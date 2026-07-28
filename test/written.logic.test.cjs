@@ -71,6 +71,27 @@ test('existing widget ordering preserves saved order and appends the registry', 
   assert.equal(new Set(order).size, component.WIDGETS.length);
 });
 
+test('Economic calendar is dormant and ignored by current and persisted widget layouts', () => {
+  const component = loadComponent();
+  seedActiveProfile(component, {
+    onboarded: true,
+    loggedOut: false,
+    order: ['econ', 'net'],
+    widgets: {
+      econ: { on: 1, columns: 4, rows: 9 },
+      net: { on: 1, columns: 3, rows: 4 },
+    },
+  });
+  component.state.booting = false;
+
+  assert.equal(component.widgetRegistry('econ'), null);
+  assert.equal(component.widgetOrder().includes('econ'), false);
+
+  const values = component.renderVals();
+  assert.equal(values.dashWidgets.some(widget => widget.id === 'econ'), false);
+  assert.equal(values.addableWidgets.some(widget => widget.id === 'econ'), false);
+});
+
 test('legacy widget spans migrate to clamped columns and default rows', () => {
   const component=loadComponent();
   assert.deepEqual(plain(component.normalizeWidgetConfig('net',{on:1,span:6})),{on:1,columns:6,rows:4});

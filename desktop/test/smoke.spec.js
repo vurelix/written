@@ -12,7 +12,7 @@ const STORE_KEY = 'written-profiles-v2';
 
 // Widgets that scroll their own content on purpose. A blanket clipping assertion
 // would flag these; anything NOT on this list must fit inside its card.
-const INTENTIONAL_SCROLLERS = new Set(['recent', 'econ', 'checklist']);
+const INTENTIONAL_SCROLLERS = new Set(['recent', 'checklist']);
 
 function profileFixture({ widgets, extraSettings } = {}) {
   const settings = {
