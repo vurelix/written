@@ -2762,6 +2762,40 @@ function seedFollowedRules(component, theme) {
   return component.renderVals();
 }
 
+test('the walkthrough coachmark is hidden until it has a measured position', () => {
+  const component = loadComponent();
+  component.state = Object.assign({}, component.state, { tourOpen: true, tourStep: 0, tourSpotlight: null });
+
+  // Unpositioned: the centring fallback is still what the panel would render at, so it
+  // must not be visible or clickable, and it must hide with no transition — a fade-out
+  // would spend its whole duration painting the panel at dead-centre.
+  const pending = component.renderVals();
+  assert.equal(pending.tourPanelTransform, 'translate(-50%,-50%)');
+  assert.equal(pending.tourPanelOpacity, '0');
+  assert.equal(pending.tourPanelEvents, 'none');
+  assert.equal(pending.tourPanelTransition, 'none');
+  assert.equal(pending.tourSpotlightReady, false);
+
+  component.state = Object.assign({}, component.state, {
+    tourSpotlight: { top: 40, left: 60, width: 200, height: 120, panelTop: 180, panelLeft: 300 },
+  });
+  const placed = component.renderVals();
+  assert.equal(placed.tourPanelTop, '180px');
+  assert.equal(placed.tourPanelLeft, '300px');
+  assert.equal(placed.tourPanelTransform, 'none');
+  assert.equal(placed.tourPanelOpacity, '1');
+  assert.equal(placed.tourPanelEvents, 'auto');
+  assert.equal(placed.tourPanelTransition, 'opacity .18s ease');
+
+  const html = fs.readFileSync(htmlPath, 'utf8');
+  // Bound on the element, and NOT behind sc-if: unmounting the dialog between steps
+  // would drop tour focus, so it stays mounted and merely invisible.
+  assert.match(html, /class="tour-coachmark[^"]*"[^>]*opacity:\{\{tourPanelOpacity\}\};pointer-events:\{\{tourPanelEvents\}\};transition:\{\{tourPanelTransition\}\}/);
+  // `rise` animates opacity, which would have overridden the inline binding outright
+  // (the same cascade trap as the background glow). It has to stay off this element.
+  assert.doesNotMatch(html, /class="tour-coachmark[^"]*"[^>]*animation:rise/);
+});
+
 test('solid accent surfaces use accentInk instead of a theme-wide foreground', () => {
   const html = fs.readFileSync(htmlPath, 'utf8');
   // --on-acc IS the solid-accent contract, and the rule/checklist CHECKBOX is a genuine

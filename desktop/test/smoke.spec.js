@@ -496,6 +496,60 @@ test.describe('built renderer', () => {
     expect(questionGeometry.every(item => item.height >= 44 && item.width > 0)).toBe(true);
   });
 
+  test('the walkthrough coachmark is never visible before it is positioned', async ({ page }) => {
+    // Regression: tourSpotlight is nulled on open AND on every step change, and the
+    // bindings fell back to top/left 50% + translate(-50%,-50%). Re-measurement is
+    // deliberately slow (target polling, scrollIntoView, waiting out ancestor
+    // animations, rect-stability polling), so the panel sat dead-centre for a long,
+    // very visible window and then jumped to its anchor.
+    //
+    // The invariant asserted here is simply: VISIBLE IMPLIES POSITIONED. Sampling every
+    // frame is what makes it meaningful — a poll or an awaited assertion would step
+    // straight over the offending frames, which is how the existing walkthrough test
+    // missed this.
+    await page.setViewportSize({ width: 1280, height: 800 });
+    await boot(page, profileFixture());
+
+    await page.evaluate(() => {
+      window.__tourSamples = [];
+      const tick = () => {
+        const el = document.querySelector('.tour-coachmark');
+        if (el) {
+          const cs = getComputedStyle(el);
+          // transform stays at the centring fallback until a real position lands,
+          // at which point the binding switches it to 'none'.
+          window.__tourSamples.push({ opacity: Number(cs.opacity), positioned: cs.transform === 'none' });
+        }
+        window.__tourRaf = requestAnimationFrame(tick);
+      };
+      tick();
+    });
+
+    await page.getByRole('button', { name: 'Help', exact: true }).click();
+    await page.getByRole('button', { name: 'What does the interactive walkthrough cover?' }).click();
+    await page.getByRole('button', { name: 'Replay walkthrough' }).click();
+
+    const dialog = page.getByRole('dialog', { name: 'Written walkthrough' });
+    await expect(dialog).toContainText('Read the dashboard');
+    for (const title of ['Log the trading day', 'Find repeated patterns', 'Grade each setup']) {
+      await dialog.getByRole('button', { name: 'Next' }).click();
+      await expect(dialog).toContainText(title);
+    }
+
+    const samples = await page.evaluate(() => {
+      cancelAnimationFrame(window.__tourRaf);
+      return window.__tourSamples;
+    });
+
+    const leaked = samples.filter(s => s.opacity > 0.01 && !s.positioned);
+    expect(leaked.length, `coachmark painted at the centred fallback on ${leaked.length} frame(s)`).toBe(0);
+
+    // Guard against the test passing because nothing was ever sampled: the unpositioned
+    // state must genuinely have occurred, and the panel must genuinely have been shown.
+    expect(samples.some(s => !s.positioned), 'the unpositioned state was exercised').toBe(true);
+    expect(samples.some(s => s.opacity > 0.9 && s.positioned), 'the panel became visible').toBe(true);
+  });
+
   test('walkthrough spotlights stable targets across four separately mounted tabs', async ({ page }) => {
     await page.setViewportSize({ width: 1280, height: 800 });
     await boot(page, profileFixture());
