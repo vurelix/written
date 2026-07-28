@@ -14,8 +14,16 @@
     "dist:mac": "npm run verify:renderer && electron-builder --mac --config.directories.output=dist/macOS",
     "dist:win": "npm run verify:renderer && electron-builder --win --config.directories.output=dist/Windows"
   },
-  "author": "",
-  "license": "UNLICENSED",
+  "author": "Kenneth Nguyen",
+  "license": "MIT",
+  "homepage": "https://github.com/vurelix/written",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/vurelix/written.git"
+  },
+  "bugs": {
+    "url": "https://github.com/vurelix/written/issues"
+  },
   "devDependencies": {
     "@playwright/test": "^1.62.0",
     "electron": "^31.0.0",
@@ -49,6 +57,10 @@
       {
         "from": "THIRD-PARTY-LICENSES.txt",
         "to": "THIRD-PARTY-LICENSES.txt"
+      },
+      {
+        "from": "../LICENSE",
+        "to": "LICENSE"
       }
     ]
   }
