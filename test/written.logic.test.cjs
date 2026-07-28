@@ -36,6 +36,11 @@ function loadComponent(overrides = {}) {
   return new context.__WrittenComponent({});
 }
 
+// A fixture that is meant to represent an ALREADY-CURRENT store has to track the real
+// version. Hardcoding it turns every future layout revision into a spurious failure —
+// or worse, quietly reclassifies the fixture as a migration case.
+const CURRENT_WIDGET_LAYOUT_VERSION = loadComponent().WIDGET_LAYOUT_VERSION;
+
 function seedActiveProfile(component, settings = {}, days = {}) {
   const profile = { id: 'test-profile', createdAt: 1, lastUsedAt: 1, settings, days };
   component.state.profileStore = {
@@ -481,7 +486,7 @@ test('valid version-two mount skips legacy reads and migration writes', () => {
             id: 'profile-one',
             createdAt: 1,
             lastUsedAt: 1,
-            settings: { name: 'One', onboarded: true, riskPct: 1, widgetLayoutVersion: 1 },
+            settings: { name: 'One', onboarded: true, riskPct: 1, widgetLayoutVersion: CURRENT_WIDGET_LAYOUT_VERSION },
             days: {},
           },
         },
@@ -551,11 +556,11 @@ test('widget layout migration upgrades every profile once and preserves custom d
   const one = result.store.profiles.one.settings;
   const two = result.store.profiles.two.settings;
 
-  assert.equal(one.widgetLayoutVersion, 1);
+  assert.equal(one.widgetLayoutVersion, component.WIDGET_LAYOUT_VERSION);
   assert.deepEqual(plain(one.widgets.score), { on: 1, columns: 6, rows: 8 });
   assert.deepEqual(plain(one.widgets.month), { on: 0, columns: 4, rows: 6 });
   assert.deepEqual(plain(one.widgets.expectancy), { on: 1, columns: 4, rows: 6 });
-  assert.equal(two.widgetLayoutVersion, 1);
+  assert.equal(two.widgetLayoutVersion, component.WIDGET_LAYOUT_VERSION);
   assert.deepEqual(plain(two.widgets.score), { on: 1, columns: 4, rows: 9 });
   assert.deepEqual(plain(two.widgets.month), { on: 1, columns: 4, rows: 7 });
   assert.deepEqual(plain(two.widgets.expectancy), { on: 1, columns: 6, rows: 5 });
@@ -869,7 +874,7 @@ test('legacy migration is idempotent and ignores createdAt-only storage', () => 
   assert.equal(migrated.activeProfileId, 'legacy-profile');
   assert.equal(migrated.profiles['legacy-profile'].settings.name, 'Alex');
   assert.equal(migrated.profiles['legacy-profile'].settings.tourCompleted, true);
-  assert.equal(migrated.profiles['legacy-profile'].settings.widgetLayoutVersion, 1);
+  assert.equal(migrated.profiles["legacy-profile"].settings.widgetLayoutVersion, component.WIDGET_LAYOUT_VERSION);
   assert.equal(migrated.profiles['legacy-profile'].settings.widgets.score.rows, 8);
   assert.equal(migrated.profiles['legacy-profile'].settings.widgets.expectancy.columns, 4);
   assert.equal(migrated.profiles['legacy-profile'].days['2026-07-22'].notes, 'legacy note');
@@ -884,8 +889,8 @@ test('new profile creation stamps the current widget layout version', () => {
 
   const profile = component.finishProfileSetup({ name: 'New', syms: [] }, false);
 
-  assert.equal(profile.settings.widgetLayoutVersion, 1);
-  assert.equal(component.state.settings.widgetLayoutVersion, 1);
+  assert.equal(profile.settings.widgetLayoutVersion, component.WIDGET_LAYOUT_VERSION);
+  assert.equal(component.state.settings.widgetLayoutVersion, component.WIDGET_LAYOUT_VERSION);
 });
 
 test('malformed v2 recovers legacy in memory without overwriting either source', () => {
@@ -2740,6 +2745,50 @@ test('document-level accent tokens mirror the active accent for root-owned contr
   assert.match(html, /componentDidMount\(\)\{[\s\S]*this\.applyDocumentAccentTokens\(settings\.accent\|\|'#3DDC97'\)/);
   assert.match(html, /componentDidUpdate\([^)]*\)\{[^}]*this\.applyDocumentAccentTokens\(this\.state\.settings\.accent\|\|'#3DDC97'\)/);
   assert.match(html, /componentWillUnmount\(\)\{[\s\S]*this\.clearDocumentAccentTokens\(\)/);
+});
+
+test('the consistency heatmap ships larger and existing profiles are migrated once', () => {
+  const component = loadComponent();
+  const heatmap = component.WIDGETS.find(w => w.id === 'heatmap');
+  assert.deepEqual(
+    { columns: heatmap.defaultColumns, rows: heatmap.defaultRows, maxRows: heatmap.maxRows },
+    { columns: 10, rows: 9, maxRows: 12 },
+  );
+  // Defaults must stay inside the resize bounds the UI enforces.
+  assert.ok(heatmap.defaultColumns >= heatmap.minColumns && heatmap.defaultColumns <= heatmap.maxColumns);
+  assert.ok(heatmap.defaultRows >= heatmap.minRows && heatmap.defaultRows <= heatmap.maxRows);
+
+  // DEFWIDGETS only seeds NEW profiles, so without a migration every existing user keeps
+  // the old 8x7 and never sees the change.
+  const untouched = component.migrateWidgetLayoutSettings({
+    widgetLayoutVersion: 1,
+    widgets: { heatmap: { on: 1, columns: 8, rows: 7 } },
+  });
+  assert.equal(untouched.changed, true);
+  assert.deepEqual(plain(untouched.settings.widgets.heatmap), { on: 1, columns: 10, rows: 9 });
+  assert.equal(untouched.settings.widgetLayoutVersion, component.WIDGET_LAYOUT_VERSION);
+
+  // A size the user chose is left exactly as-is.
+  const custom = component.migrateWidgetLayoutSettings({
+    widgetLayoutVersion: 1,
+    widgets: { heatmap: { on: 1, columns: 12, rows: 6 } },
+  });
+  assert.deepEqual(plain(custom.settings.widgets.heatmap), { on: 1, columns: 12, rows: 6 });
+
+  // A profile that never saw v1 gets both revisions in one pass.
+  const ancient = component.migrateWidgetLayoutSettings({
+    widgets: { heatmap: { on: 1, columns: 8, rows: 7 }, score: { on: 1, columns: 4, rows: 7 } },
+  });
+  assert.deepEqual(plain(ancient.settings.widgets.heatmap), { on: 1, columns: 10, rows: 9 });
+  assert.equal(ancient.settings.widgets.score.rows, 8, 'v1 revision still applies');
+
+  // Already current: no work, no write.
+  const current = component.migrateWidgetLayoutSettings({
+    widgetLayoutVersion: component.WIDGET_LAYOUT_VERSION,
+    widgets: { heatmap: { on: 1, columns: 8, rows: 7 } },
+  });
+  assert.equal(current.changed, false);
+  assert.deepEqual(plain(current.settings.widgets.heatmap), { on: 1, columns: 8, rows: 7 });
 });
 
 test('note tabs only carry a status dot when the tab has content', () => {

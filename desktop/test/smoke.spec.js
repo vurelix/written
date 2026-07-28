@@ -443,11 +443,12 @@ test.describe('built renderer', () => {
   });
 
   test('the consistency widget fits at every supported size extreme', async ({ page }) => {
+    // The four corners of the resize range declared in the widget registry.
     const sizes = [
       { columns: 6, rows: 6 },
       { columns: 12, rows: 6 },
-      { columns: 6, rows: 10 },
-      { columns: 12, rows: 10 },
+      { columns: 6, rows: 12 },
+      { columns: 12, rows: 12 },
     ];
     await boot(page, profileFixture({
       widgets: { heatmap: { on: 1, ...sizes[0] } },
@@ -468,6 +469,32 @@ test.describe('built renderer', () => {
       }));
       expect(overflow, `consistency fits at ${size.columns}x${size.rows}`).toEqual({ dx: 0, dy: 0 });
     }
+
+  });
+
+  test('the consistency heatmap is legible at its default size', async ({ page }) => {
+    // Reported as "too small". The grid CSS is fully responsive — the cause was the
+    // registry default of 8x7, which left cells at 19.8px. The size-extremes test above
+    // would never have caught it: it only ever asserts overflow, and only at the corners
+    // of the range. This asserts the DEFAULT, which is what users actually see.
+    //
+    // Its own test on a clean page, deliberately. Reusing the page above fails: the app
+    // flushes its own store on unload, so a localStorage write followed by reload gets
+    // clobbered and the widget comes back at the wrong size.
+    //
+    // Omitting columns/rows is also deliberate — normalizeWidgetConfig then falls back to
+    // the registry defaults, so this tracks them rather than restating them.
+    await page.setViewportSize({ width: 1440, height: 900 });
+    await boot(page, profileFixture({ widgets: { heatmap: { on: 1 } } }));
+    await page.waitForSelector('[data-widget-id="heatmap"] .consistency-cell', { timeout: 15000 });
+
+    const cell = await page.$eval('[data-widget-id="heatmap"] .consistency-cell', el => {
+      const r = el.getBoundingClientRect();
+      return { width: r.width, height: r.height };
+    });
+    // 19.8px at the old 8x7 default, 30.7px at 10x9.
+    expect(cell.width, 'heatmap cells are legible at the default size').toBeGreaterThanOrEqual(28);
+    expect(Math.abs(cell.width - cell.height), 'cells stay square').toBeLessThanOrEqual(1);
   });
 
   test('profile customization stretches to the all-time record row height', async ({ page }) => {

@@ -111,7 +111,7 @@ html{--accent:#3DDC97;scrollbar-gutter:stable;scrollbar-color:var(--accent) tran
 .score-radar>svg{width:100%;height:100%;display:block;overflow:visible}
 .consistency-card{display:flex;flex-direction:column;min-height:0}
 .consistency-grid-slot{flex:1;min-height:0;margin-top:14px;container-type:size;display:flex;align-items:center;justify-content:center}
-.consistency-grid{display:grid;grid-auto-flow:column;grid-template-columns:repeat(13,minmax(0,1fr));grid-template-rows:repeat(7,minmax(0,1fr));gap:4px}
+.consistency-grid{display:grid;grid-auto-flow:column;grid-template-columns:repeat(13,minmax(0,1fr));grid-template-rows:repeat(7,minmax(0,1fr));gap:5px}
 .consistency-cell{min-width:0;min-height:0;width:100%;max-height:100%;aspect-ratio:1;place-self:center}
 @container (min-aspect-ratio:13/7){.consistency-grid{height:100cqh;max-width:100cqw;aspect-ratio:13/7}}
 @container (max-aspect-ratio:13/7){.consistency-grid{width:100cqw;max-height:100cqh;aspect-ratio:13/7}}
@@ -414,7 +414,7 @@ html{--accent:#3DDC97;scrollbar-gutter:stable;scrollbar-color:var(--accent) tran
                   <div class="glass-surface consistency-card" style="flex:1;min-width:0;border-radius:16px;padding:20px 22px" style-hover="border-color:var(--bd3)">
                     <div style="font-size:15px;font-weight:700">Consistency</div>
                     <div class="widget-secondary" style="font-size:11.5px;color:var(--tx-faint);margin-top:3px">last 13 weeks · green = up day, red = down day</div>
-                    <div class="consistency-grid-slot"><div class="consistency-grid"><sc-for list="{{hmCells}}" as="hm" hint-placeholder-count="91"><div class="consistency-cell" title="{{hm.title}}" style="border-radius:3px;background:{{hm.bg}};border:1px solid var(--bd)"></div></sc-for></div></div>
+                    <div class="consistency-grid-slot"><div class="consistency-grid"><sc-for list="{{hmCells}}" as="hm" hint-placeholder-count="91"><div class="consistency-cell" title="{{hm.title}}" style="border-radius:4px;background:{{hm.bg}};border:1px solid var(--bd)"></div></sc-for></div></div>
                   </div>
                 </sc-if>
                 <sc-if value="{{w.isEcon}}" hint-placeholder-val="{{false}}">
@@ -1842,14 +1842,14 @@ class Component extends DCLogic {
       {id:'streak',label:'Day streak',minColumns:3,maxColumns:6,defaultColumns:4,minRows:4,maxRows:7,defaultRows:5},
       {id:'expectancy',label:'Expectancy',minColumns:3,maxColumns:6,defaultColumns:4,minRows:4,maxRows:7,defaultRows:5},
       {id:'best',label:'Best day',...kpi},{id:'worst',label:'Worst day',...kpi},{id:'drawdown',label:'Max drawdown',...kpi},{id:'hold',label:'Avg hold time',...kpi},
-      {id:'heatmap',label:'Consistency heatmap',minColumns:6,maxColumns:12,defaultColumns:8,minRows:6,maxRows:10,defaultRows:7},
+      {id:'heatmap',label:'Consistency heatmap',minColumns:6,maxColumns:12,defaultColumns:10,minRows:6,maxRows:12,defaultRows:9},
       {id:'econ',label:'Economic calendar',minColumns:4,maxColumns:8,defaultColumns:4,minRows:7,maxRows:12,defaultRows:9},
       {id:'checklist',label:'Daily checklist',minColumns:4,maxColumns:8,defaultColumns:4,minRows:7,maxRows:12,defaultRows:9},
       {id:'recent',label:'Recent trades',minColumns:6,maxColumns:12,defaultColumns:12,minRows:8,maxRows:15,defaultRows:11},
     ];
     this.DEFWIDGETS=Object.fromEntries(this.WIDGETS.map(widget=>[widget.id,{on:['heatmap','econ','checklist'].includes(widget.id)?0:1,columns:widget.defaultColumns,rows:widget.defaultRows}]));
-    this.WIDGET_LAYOUT_VERSION=1;
-    this.WIDGET_LAYOUT_V1_CHANGES={score:{rows:[7,8]},month:{rows:[5,6]},expectancy:{columns:[3,4]}};
+    this.WIDGET_LAYOUT_VERSION=2;
+    this.WIDGET_LAYOUT_CHANGES={1:{score:{rows:[7,8]},month:{rows:[5,6]},expectancy:{columns:[3,4]}},2:{heatmap:{columns:[8,10],rows:[7,9]}}};
     this.CHECK=['Followed my trading plan','Waited for A+ setups only','Respected every stop','Sized correctly for risk','No revenge / FOMO trades','Journaled every execution','Stopped at my daily limit'];
     this.ECON=[
       {t:'08:30',ccy:'USD',imp:3,name:'Non-Farm Payrolls'},
@@ -2032,12 +2032,18 @@ class Component extends DCLogic {
     const rawWidgets=settings.widgets;
     if(rawWidgets&&typeof rawWidgets==='object'&&!Array.isArray(rawWidgets)){
       const widgets=Object.assign({},rawWidgets);
-      Object.keys(this.WIDGET_LAYOUT_V1_CHANGES).forEach(id=>{
-        const raw=widgets[id];if(!raw||typeof raw!=='object'||Array.isArray(raw))return;
-        const next=Object.assign({},raw),changes=this.WIDGET_LAYOUT_V1_CHANGES[id];
-        Object.keys(changes).forEach(key=>{const [before,after]=changes[key];if(Number(next[key])===before)next[key]=after});
-        widgets[id]=next;
-      });
+      // Replay every layout revision this profile has not seen yet. Each entry is
+      // [oldDefault,newDefault] and only applies where the stored value IS still the old
+      // default, so a size the user set by hand is never overwritten.
+      for(let v=version+1;v<=this.WIDGET_LAYOUT_VERSION;v++){
+        const revision=this.WIDGET_LAYOUT_CHANGES[v];if(!revision)continue;
+        Object.keys(revision).forEach(id=>{
+          const raw=widgets[id];if(!raw||typeof raw!=='object'||Array.isArray(raw))return;
+          const next=Object.assign({},raw),changes=revision[id];
+          Object.keys(changes).forEach(key=>{const [before,after]=changes[key];if(Number(next[key])===before)next[key]=after});
+          widgets[id]=next;
+        });
+      }
       settings.widgets=widgets;
     }
     settings.widgetLayoutVersion=this.WIDGET_LAYOUT_VERSION;
