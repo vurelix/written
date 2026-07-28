@@ -2742,9 +2742,31 @@ test('document-level accent tokens mirror the active accent for root-owned contr
   assert.match(html, /componentWillUnmount\(\)\{[\s\S]*this\.clearDocumentAccentTokens\(\)/);
 });
 
+test('the focus ring is driven by the document accent, with no green fallback', () => {
+  const html = fs.readFileSync(htmlPath, 'utf8');
+
+  // One token, read straight from the document root — the same place the scrollbar rule
+  // already reads it. --focus-accent existed only on .app-main and .annotation-overlay,
+  // so every fixed-position overlay (Setup Wizard, Login, Splash, Launching) fell through
+  // to a hardcoded #3DDC97 and ignored the user's accent entirely.
+  assert.match(html, /:focus-visible\{outline:2px solid var\(--accent\);outline-offset:2px\}/);
+  assert.doesNotMatch(html, /--focus-accent/);
+
+  // A static default on html keeps the ring valid before componentDidMount writes the
+  // real accent. documentElement.style is an inline style, so it still wins at runtime.
+  assert.match(html, /html\{--accent:#3DDC97;scrollbar-gutter:stable/);
+
+  // No focus rule may reintroduce a literal colour — that is the whole failure mode.
+  const focusRules = html.match(/[^\n{}]*:focus[^{]*\{[^}]*\}/g) || [];
+  assert.ok(focusRules.length > 0, 'focus rules were found to inspect');
+  for (const rule of focusRules) {
+    assert.doesNotMatch(rule, /#[0-9a-fA-F]{3,8}\b/, `focus rule hardcodes a colour: ${rule}`);
+  }
+});
+
 test('the document scrollbar uses the active accent with an inset rounded thumb', () => {
   const html = fs.readFileSync(htmlPath, 'utf8');
-  assert.match(html, /html\{scrollbar-gutter:stable;scrollbar-color:var\(--accent\) transparent;scrollbar-width:thin\}/);
+  assert.match(html, /html\{--accent:#3DDC97;scrollbar-gutter:stable;scrollbar-color:var\(--accent\) transparent;scrollbar-width:thin\}/);
   assert.match(html, /::-webkit-scrollbar\{width:12px;height:12px\}/);
   assert.match(html, /::-webkit-scrollbar-thumb\{background:var\(--accent\);border:3px solid transparent;background-clip:padding-box;border-radius:999px\}/);
   assert.match(html, /::-webkit-scrollbar-thumb:hover\{background:var\(--accent\);background-clip:padding-box\}/);
@@ -2849,7 +2871,7 @@ test('custom colour pickers use bounded fields and no redundant current-colour d
 
 test('shared alignment primitives normalize page controls and dependent sections', () => {
   const html = fs.readFileSync(htmlPath, 'utf8');
-  assert.match(html, /html\{scrollbar-gutter:stable;scrollbar-color:var\(--accent\) transparent;scrollbar-width:thin\}/);
+  assert.match(html, /html\{--accent:#3DDC97;scrollbar-gutter:stable;scrollbar-color:var\(--accent\) transparent;scrollbar-width:thin\}/);
   assert.match(html, /\.section-header\{display:flex;align-items:center;gap:14px;min-height:48px;margin-bottom:26px;flex-wrap:wrap;animation:rise \.4s ease both\}/);
   assert.match(html, /class="section-header"/);
   assert.match(html, /Risk analytics[\s\S]*grid-template-columns:repeat\(2,minmax\(0,1fr\)\);gap:24px/);

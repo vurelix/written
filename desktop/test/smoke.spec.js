@@ -227,6 +227,47 @@ test.describe('built renderer', () => {
     }
   });
 
+  test('focus rings use the chosen accent on overlays outside the app shell', async ({ page }) => {
+    // Regression: the focus-visible rule read var(--focus-accent,#3DDC97), and
+    // --focus-accent was only ever declared on .app-main and .annotation-overlay. The
+    // Setup Wizard, Login, Splash and Launching screens are fixed-position SIBLINGS of
+    // .app-main, so they never inherited it and every focus ring there fell back to the
+    // hardcoded green — which is --green, not the user's accent.
+    //
+    // A purple accent is used deliberately: with the default green accent the bug is
+    // invisible, because the fallback happens to equal the correct answer.
+    const ACCENT = '#C29BFF';
+    const EXPECTED = 'rgb(194, 155, 255)';
+
+    const outlineOfFocused = () => page.evaluate(() => {
+      const el = document.activeElement;
+      if (!el || el === document.body) return null;
+      const cs = getComputedStyle(el);
+      return { color: cs.outlineColor, width: cs.outlineWidth, tag: el.tagName };
+    });
+
+    // 1) Outside the app shell — the surface that was broken.
+    await page.addInitScript(([key, value]) => {
+      window.localStorage.setItem(key, value);
+    }, [STORE_KEY, JSON.stringify(profileFixture({ extraSettings: { accent: ACCENT, loggedOut: true } }))]);
+    await page.goto(RENDERER);
+    await page.waitForSelector('[data-screen-label="Login"]', { timeout: 15000 });
+
+    await page.keyboard.press('Tab');
+    const onLogin = await outlineOfFocused();
+    expect(onLogin, 'keyboard focus landed on a Login control').not.toBeNull();
+    expect(onLogin.color, 'Login focus ring tracks the accent').toBe(EXPECTED);
+    expect(onLogin.width).toBe('2px');
+
+    // 2) Inside the app shell — the surface that always worked. Without this the test
+    // would still pass if the rule stopped producing an outline anywhere at all.
+    await boot(page, profileFixture({ extraSettings: { accent: ACCENT } }));
+    await page.keyboard.press('Tab');
+    const inApp = await outlineOfFocused();
+    expect(inApp, 'keyboard focus landed on an in-app control').not.toBeNull();
+    expect(inApp.color, 'in-app focus ring tracks the accent').toBe(EXPECTED);
+  });
+
   test('command palette owns focus and restores its titlebar trigger', async ({ page }) => {
     await boot(page, profileFixture());
     const trigger = page.getByRole('button', { name: 'Search this journal' });
