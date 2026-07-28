@@ -8,7 +8,7 @@
 
 ![Platform](https://img.shields.io/badge/platform-macOS%20%7C%20Windows-0B0E13?style=for-the-badge)
 ![Electron](https://img.shields.io/badge/Electron-31-3DDC97?style=for-the-badge&logo=electron&logoColor=0B0E13)
-![Tests](https://img.shields.io/badge/tests-191%20passing-3DDC97?style=for-the-badge)
+![Tests](https://img.shields.io/badge/tests-231%20passing-3DDC97?style=for-the-badge)
 ![License](https://img.shields.io/badge/license-MIT-3DDC97?style=for-the-badge)
 
 </div>
@@ -29,6 +29,17 @@ target, annotate your screenshots, and watch your edge take shape across the cal
 | 📈 **Insights** | Time-of-day edge, tag performance, mistake tracking |
 | 📕 **Playbook** | Your setups, written down and kept honest |
 | 👥 **Profiles** | Multiple journals, switchable, all local |
+| ❓ **Help** | Every feature documented in-app, as a searchable illustrated route map |
+
+A seven-step interactive walkthrough covers Dashboard, Calendar, Insights, Playbook, Profile,
+Settings and Help on first run — and can be replayed any time from **Help → What does the
+interactive walkthrough cover? → Replay walkthrough**.
+
+<div align="center">
+<img src="docs/assets/trades.png" alt="The Trades table — every execution with entry, stop, target, R and hold time" width="820">
+<br><br>
+<img src="docs/assets/about.png" alt="About — version, privacy and open-source credits" width="820">
+</div>
 
 ---
 
@@ -64,12 +75,16 @@ One installer covers both **x64** and **ARM64**.
 
 ## 💾 Where your data lives
 
-One JSON file, written atomically. Nothing else, nowhere else.
+Your entire journal is one JSON file, written atomically (tmp + rename).
 
 ```
 🍎 macOS    ~/Library/Application Support/Written/written-store.json
 🪟 Windows  %APPDATA%\Written\written-store.json
 ```
+
+The only other file Written writes is `desktop-prefs.json` beside it, holding your Performance
+Mode choice. That is deliberately per-machine and carries no journal data, because it describes
+this display's capability rather than your trading.
 
 **That file is your entire journal** — so it's also your backup. Copy it to keep a snapshot, or drop
 it into the same path on another machine to bring your history with you. It survives app updates and
@@ -99,7 +114,7 @@ the design stays intact — you only lose the perpetual background drift. Both s
 setting; changing either updates the other.
 
 <div align="center">
-<img src="docs/settings-performance.png" alt="Performance setting in Settings" width="720">
+<img src="docs/assets/settings-performance.png" alt="Performance setting in Settings" width="720">
 </div>
 
 ---
@@ -139,15 +154,22 @@ npx electron-builder --win --x64 --arm64 --config.directories.output=dist/Window
 Logic suite — runs straight from the repo, no install needed:
 
 ```bash
-node --test test/written.logic.test.cjs     # 176 tests
+node --test test/written.logic.test.cjs
 ```
 
-End-to-end smoke suite — runs against the *built* renderer, so it has to run from the
-synced build copy (Electron cannot be packaged or signed from inside iCloud):
+198 tests. Loads the app's `x-dc` logic block into a Node `vm`, so it covers state, migrations
+and view-model shape — but no DOM, CSS or geometry.
+
+End-to-end smoke suite — drives the *built* renderer over `file://` in Chromium, which is the
+only check that sees layout, focus and geometry:
 
 ```bash
-cd desktop && npm run sync && cd ~/Developer/written-desktop && npm run test:smoke   # 15 tests
+cd desktop && npm install && npm run test:smoke
 ```
+
+33 tests. `test:smoke` verifies the committed renderer is not stale before it runs. This suite
+works in place; the iCloud restriction below applies to Electron **packaging and signing**, not
+to Playwright.
 
 ---
 
@@ -171,9 +193,17 @@ written-journal/
 │   │   ├── perf.*              Performance Mode
 │   │   ├── native-chrome.*     native traffic lights / title bar
 │   │   └── vendor/             offline React + self-hosted fonts
-│   └── scripts/build-renderer.js
-├── 🧪 test/
-└── 📦 release/                 built installers (gitignored)
+│   ├── build/
+│   │   ├── icon.png            1024² app mark; electron-builder derives .icns/.ico
+│   │   └── afterPack.js        ad-hoc codesign hook (do not remove)
+│   ├── test/smoke.spec.js      Playwright, against the built renderer
+│   ├── scripts/build-renderer.js
+│   └── dist/                   built installers (gitignored)
+├── 🧪 test/                    logic suite (Node vm, no DOM)
+└── 📚 docs/
+    ├── assets/                 screenshots used by this README
+    ├── engineering/            measurements, trade-offs, gotchas
+    └── releases/               per-version release notes
 ```
 
 ### Design notes
@@ -200,11 +230,14 @@ last-chance flush on quit is *synchronous*, because `beforeunload` doesn't fire 
 
 ## 🗺️ Roadmap
 
-- [x] 🎨 App icon — the Written mark, generated for both platforms
-- [ ] ✅ Code signing + notarization, to drop the first-launch warnings
+- [x] 🎨 App icon — the Written mark, from a single `build/icon.png` for both platforms
 - [x] ⚖️ Third-party license attribution (About → Open Source)
+- [x] 📤 CSV export — every saved trade and day field, minus screenshots and clips
+- [ ] 📥 Import, to move a journal between machines without copying the store by hand
+- [ ] ✅ Code signing + notarization, to drop the first-launch warnings
 - [ ] 🖼️ Move screenshots to content-addressed files so the JSON store stays small
-- [ ] 📤 Export / import for moving a journal between machines
+- [ ] 📅 Economic calendar — the widget is **withdrawn** in 1.0.1 and cannot be added to the
+      dashboard; it needs a real data source before it earns a place back
 - [ ] 🔄 Auto-update
 
 ---
@@ -214,6 +247,7 @@ last-chance flush on quit is *synchronous*, because `beforeunload` doesn't fire 
 **Built for traders who'd rather own their data.** 📈
 
 <sub>Detailed engineering notes — measurements, trade-offs, gotchas — live in
-<a href="docs/DESKTOP-NOTES.md">docs/DESKTOP-NOTES.md</a></sub>
+<a href="docs/engineering/DESKTOP-NOTES.md">docs/engineering/DESKTOP-NOTES.md</a><br>
+Release notes live in <a href="docs/releases/">docs/releases/</a></sub>
 
 </div>

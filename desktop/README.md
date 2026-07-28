@@ -77,8 +77,9 @@ automatically. No manual Wine install needed.
 
 ### Before a real release
 
-- **Icons.** `build/` is empty, so builds currently use the default Electron icon. Add
-  `build/icon.icns` and `build/icon.ico` (1024×1024 source) and rebuild.
+- **Icons.** ✅ Done. `build/icon.png` is the 1024×1024 Written mark, referenced by both the `mac`
+  and `win` targets in `package.json`; electron-builder derives the `.icns` and `.ico` from it at
+  pack time. No per-platform icon files are checked in, and none are needed.
 - **Signing.** macOS builds are **ad-hoc signed** by `build/afterPack.js` (see below). That is
   enough to run locally, but not for distribution — sending the DMG to someone else still needs a
   Developer ID + notarization. Windows is unsigned and shows a SmartScreen warning until you buy a
@@ -114,7 +115,7 @@ mandatory on Apple Silicon, where arm64 binaries must carry a valid signature to
 | `renderer/index.html` | The app, patched: vendored scripts + CSP + title bar. App logic untouched |
 | `renderer/support.js` | The dc-runtime, copied verbatim |
 | `renderer/store-shim.js` | Redirects the 3 journal keys from `localStorage` to the file store |
-| `renderer/native-chrome.{css,js}` | Hides the template's decorative `.traffic-dot`s and makes the app's own `.app-titlebar` the macOS drag region. Injects nothing |
+| `renderer/native-chrome.{css,js}` | Hides the template's decorative `.traffic-dot`s on both platforms (with `!important`, so it wins over the app's own platform binding) and makes the app's own `.app-titlebar` the macOS drag region. Injects nothing |
 | `renderer/perf.{css,js}` | Performance Mode rules + applier (see below) |
 | `renderer/vendor/` | Offline React 18.3.1, ReactDOM, self-hosted fonts (324 KB total) |
 
@@ -248,7 +249,8 @@ file still works anywhere.
 | **Data survives a full app restart** (fresh process read it back) | ✅ |
 | Wrapping never alters the app's logic block (sha256, enforced by the build script) | ✅ |
 | In-app Settings → Performance renders, applies, and stays in sync with the menu | ✅ verified both directions |
-| Existing logic suite `node --test test/written.logic.test.cjs` | ✅ 123/123 pass |
+| Logic suite `node --test test/written.logic.test.cjs` | ✅ 198/198 pass |
+| Render smoke suite `npm run test:smoke` (built renderer, Chromium over `file://`) | ✅ 33/33 pass |
 | Wrapper files present inside the packaged `app.asar` | ✅ |
 | **Packaged `.app` boots and writes its own store on first run** | ✅ wrote a valid `{"version":2,…}` profile store |
 | Performance Mode reaches 120fps on a 120Hz display | ✅ `reduced`/`max` = 8.3 ms/frame, verified twice each |
@@ -277,6 +279,7 @@ with the script tag removed the app renders fully and makes no CDN fallback requ
 |---|---|---|
 | Window controls | **Native traffic lights.** `titleBarStyle:'hiddenInset'` floats them over the page; they land in the left slot of the app's own 44px `.app-titlebar` where the decorative dots used to sit (`trafficLightPosition {x:16,y:15}`). That header is the drag region, with `no-drag` on its input/buttons | **Native system title bar** (`frame:true`). The renderer adds nothing — no strip, no body offset — so there is no double title bar |
 | Decorative dots | The template's `.traffic-dot` spans are hidden via `visibility:hidden` in `native-chrome.css` (keeps their space for the real lights) | Same rule hides them — macOS-style dots would be wrong on Windows |
+| Decorative dots *(browser preview, no `native-chrome.css`)* | Shown — they are the macOS affectation the design intends | Hidden as of 1.0.1, by the app's own `trafficDotsVisibility()` binding. `visibility`, not removal: `.app-titlebar` is a three-column grid and dropping the element would pull the search field off-centre |
 | Close vs quit | Closing does **not** quit (`window-all-closed` skips `app.quit()` on darwin); Dock re-open handled by `activate` | Closing the last window quits |
 | Menu | `appMenu` + `editMenu` + `windowMenu` registered so ⌘C/⌘V/⌘Z work | Same menu keeps Ctrl+C/V working |
 | Data path | `~/Library/Application Support/Written/` | `%APPDATA%\Written\` |
