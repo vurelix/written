@@ -64,13 +64,13 @@ npx electron-builder --win --x64 --arm64 --config.directories.output=dist/Window
 **`dist/macOS/`**
 | File | Size | For |
 |---|---|---|
-| `Written-1.0.0-arm64.dmg` | 92 MB | Apple Silicon |
-| `Written-1.0.0.dmg` | 98 MB | Intel Macs |
+| `Written-1.0.1-arm64.dmg` | 92 MB | Apple Silicon |
+| `Written-1.0.1.dmg` | 98 MB | Intel Macs |
 
 **`dist/Windows/`**
 | File | Size | For |
 |---|---|---|
-| `Written Setup 1.0.0.exe` | 154 MB | NSIS installer, contains **both** x64 and arm64 |
+| `Written Setup 1.0.1.exe` | 154 MB | NSIS installer, contains **both** x64 and arm64 |
 
 Windows installers build fine from macOS — electron-builder downloads its own bundled Wine
 automatically. No manual Wine install needed.

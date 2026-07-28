@@ -159,7 +159,7 @@ html{--accent:#3DDC97;scrollbar-gutter:stable;scrollbar-color:var(--accent) tran
       <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="{{accent}}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex:none;filter:drop-shadow(0 0 8px {{acc44}})"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20V4H6.5A2.5 2.5 0 0 0 4 6.5v13z"></path><path d="M4 19.5A2.5 2.5 0 0 0 6.5 22H20v-5"></path><path d="M15.5 7.5l1.8 1.8-5.3 5.3-2.5.7.7-2.5 5.3-5.3z"></path></svg>
       <div>
         <div style="font-size:21px;font-weight:700;letter-spacing:-.5px;line-height:1">Written<span style="color:{{accent}}">.</span></div>
-        <div class="sidebar-brand-version" style="font-family:'Manrope',system-ui,sans-serif;font-size:8px;letter-spacing:1px;color:var(--tx-ghost);margin-top:4px">v1.0.0</div>
+        <div class="sidebar-brand-version" style="font-family:'Manrope',system-ui,sans-serif;font-size:8px;letter-spacing:1px;color:var(--tx-ghost);margin-top:4px">{{appVersion}}</div>
       </div>
     </div>
     <div class="sidebar-section" style="padding:0 14px;margin-top:22px">JOURNAL</div>
@@ -1223,7 +1223,7 @@ html{--accent:#3DDC97;scrollbar-gutter:stable;scrollbar-color:var(--accent) tran
               <svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="{{accent}}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="filter:drop-shadow(0 0 9px {{acc44}})"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20V4H6.5A2.5 2.5 0 0 0 4 6.5v13z"></path><path d="M4 19.5A2.5 2.5 0 0 0 6.5 22H20v-5"></path><path d="M15.5 7.5l1.8 1.8-5.3 5.3-2.5.7.7-2.5 5.3-5.3z"></path></svg>
               <div>
                 <div style="font-size:23px;font-weight:700;line-height:1">Written<span style="color:{{accent}}">.</span></div>
-                <div style="font-family:'Manrope',system-ui,sans-serif;font-size:9.5px;letter-spacing:1.4px;color:var(--tx-faint);margin-top:5px">V1.0.0 · LOCAL BUILD · JUL 2026</div>
+                <div style="font-family:'Manrope',system-ui,sans-serif;font-size:9.5px;letter-spacing:1.4px;color:var(--tx-faint);margin-top:5px">{{appVersionUpper}} · LOCAL BUILD · {{buildMonth}}</div>
               </div>
             </div>
             <div style="font-size:13px;color:var(--tx-mid);line-height:1.65;margin-top:20px">A futures trading journal that treats journaling as part of the trade. Log the numbers, the mood, the setup, the session and the rules — then let the dashboard connect what you <i>did</i> to what you <i>made</i>.</div>
@@ -1231,6 +1231,7 @@ html{--accent:#3DDC97;scrollbar-gutter:stable;scrollbar-color:var(--accent) tran
             <div style="height:1px;background:var(--grid);margin:20px 0"></div>
             <div style="font-family:'Manrope',system-ui,sans-serif;font-size:9.5px;letter-spacing:1.6px;color:var(--tx-faint)">CHANGELOG</div>
             <div style="display:flex;flex-direction:column;gap:9px;margin-top:12px">
+              <div style="display:grid;grid-template-columns:72px 1fr;gap:12px"><span style="font-family:'Manrope',system-ui,sans-serif;font-size:11px;font-weight:600;color:{{accent}}">v1.0.1 &mdash;</span><span style="font-size:12px;color:var(--tx-mid);line-height:1.5">background glow now switches off properly; followed rules stay readable; the walkthrough no longer jumps into place and moves smoothly between steps; focus rings follow your accent everywhere; roomier help answers, evenly set note tabs and a larger consistency heatmap; the economic calendar can pull real data and be filtered by currency and impact</span></div>
               <div style="display:grid;grid-template-columns:72px 1fr;gap:12px"><span style="font-family:'Manrope',system-ui,sans-serif;font-size:11px;font-weight:600;color:{{accent}}">v1.0.0 &mdash;</span><span style="font-size:12px;color:var(--tx-mid);line-height:1.5">first official release: P&amp;L calendar, equity curve, day journal and insights; profiles, light theme and custom assets; risk sizing, plan scorecards, tilt radar, chart markup and quick capture; native macOS &amp; Windows builds with local file storage</span></div>
                         </div>
             <div style="height:1px;background:var(--grid);margin:20px 0"></div>
@@ -1816,6 +1817,13 @@ class Component extends DCLogic {
     this.ALLSYMS=[['ES','S&P 500 e-mini'],['MES','Micro S&P 500'],['NQ','Nasdaq e-mini'],['MNQ','Micro Nasdaq'],['YM','Dow e-mini'],['MYM','Micro Dow'],['RTY','Russell e-mini'],['M2K','Micro Russell'],['CL','Crude Oil'],['MCL','Micro Crude'],['GC','Gold'],['MGC','Micro Gold'],['SI','Silver'],['SIL','Micro Silver']];
     this.DEFSYMS=['ES','MES','NQ','MNQ','GC','SI'];
     this.BASE={ES:6480,MES:6480,NQ:23600,MNQ:23600,GC:3390,SI:39.8};
+    // Single source of truth for the app version. Everything user-visible derives from
+    // these two — the sidebar, the titlebar chip and the About header all used to carry
+    // their own literal, so a release meant finding four of them by hand.
+    // build-renderer.js asserts VERSION matches desktop/package.json and refuses to
+    // package a mismatch.
+    this.VERSION='1.0.1';
+    this.BUILD_MONTH='JUL 2026';
     this.EMO=['😄','🙂','😐','🙁','😡'];
     this.TAGS=['ORB','VWAP Fade','Breakout','Pullback','Scalp','News Play'];
     this.RULES=['Followed the plan','Respected my stop','No revenge trades','Proper position size'];
@@ -3845,7 +3853,7 @@ class Component extends DCLogic {
       // over the inline style. This class kills the animation too (see .bg-aurora.glow-off).
       glowOffClass:(st.glow||'soft')==='off'?'glow-off':'',
       glowA:acc+'2E',glowB:acc+'1C',glowC:acc+'22',accentGlow:acc+'44',accentSoft:acc+'22',
-      booting:S.booting,appVersion:'v1.0.0',searchHint:this.searchHintKey(),titlebarOffset:S.titlebarOffset||'44px',
+      booting:S.booting,appVersion:'v'+this.VERSION,appVersionUpper:'V'+this.VERSION,buildMonth:this.BUILD_MONTH,searchHint:this.searchHintKey(),titlebarOffset:S.titlebarOffset||'44px',
       setProfileMenuRef:el=>this.setDismissRef('profileMenu',el),
       setPickerRef:el=>this.setDismissRef('picker',el),
       setPickerSetupRef:el=>this.setDismissRef('pickerSetup',el),

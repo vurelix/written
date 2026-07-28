@@ -1,6 +1,6 @@
 {
   "name": "written-journal",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Written — futures trading journal, desktop edition (macOS + Windows)",
   "main": "main.js",
   "scripts": {

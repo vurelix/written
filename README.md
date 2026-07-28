@@ -41,8 +41,8 @@ target, annotate your screenshots, and watch your edge take shape across the cal
 ### 🍎 macOS
 
 1. Download the `.dmg` for your Mac from **[Releases](../../releases)**
-   - 🚀 **Apple Silicon** (M1/M2/M3/M4) → `Written-1.0.0-arm64.dmg`
-   - 💻 **Intel** → `Written-1.0.0.dmg`
+   - 🚀 **Apple Silicon** (M1/M2/M3/M4) → `Written-1.0.1-arm64.dmg`
+   - 💻 **Intel** → `Written-1.0.1.dmg`
 2. Open it and drag **Written** into **Applications**
 3. Launch it
 
@@ -54,7 +54,7 @@ xattr -dr com.apple.quarantine /Applications/Written.app
 
 ### 🪟 Windows
 
-1. Download `Written Setup 1.0.0.exe` from **[Releases](../../releases)**
+1. Download `Written Setup 1.0.1.exe` from **[Releases](../../releases)**
 2. Run it — SmartScreen will warn, click **More info → Run anyway**
 3. Pick your install folder and finish
 

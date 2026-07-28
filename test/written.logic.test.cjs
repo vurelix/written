@@ -2220,8 +2220,8 @@ test('trade table view rows show canonical times and restrained dashes for legac
 
 test('v1.0.0 release stays consolidated and Help documents the shipped action tools', () => {
   const html = fs.readFileSync(htmlPath, 'utf8');
-  assert.match(html, /appVersion:'v1\.0\.0'/);
-  assert.match(html, /V1\.0\.0 · LOCAL BUILD · JUL 2026/);
+  // The displayed version is derived now, not literal — see the version test below.
+  // What still matters here is that v1.0.0 remains a single consolidated changelog entry.
   assert.match(html, />v1\.0\.0 &mdash;<\/span><span[^>]*>first official release:/);
   // first official release: prior pre-release versions are merged, not listed
   assert.doesNotMatch(html, />v2\.[0-9]<\/span>/);
@@ -2742,6 +2742,36 @@ test('document-level accent tokens mirror the active accent for root-owned contr
   assert.match(html, /componentWillUnmount\(\)\{[\s\S]*this\.clearDocumentAccentTokens\(\)/);
 });
 
+test('every displayed version derives from one constant that matches package.json', () => {
+  const component = loadComponent();
+  assert.match(component.VERSION, /^\d+\.\d+\.\d+$/);
+
+  const vals = component.renderVals();
+  assert.equal(vals.appVersion, `v${component.VERSION}`);
+  assert.equal(vals.appVersionUpper, `V${component.VERSION}`);
+  assert.equal(vals.buildMonth, component.BUILD_MONTH);
+
+  const html = fs.readFileSync(htmlPath, 'utf8');
+  // Titlebar chip, sidebar and About header all read the binding — they used to carry
+  // three independent literals, so a bump meant finding each one by hand.
+  assert.match(html, /class="sidebar-brand-version"[^>]*>\{\{appVersion\}\}<\/div>/);
+  assert.match(html, /\{\{appVersionUpper\}\} · LOCAL BUILD · \{\{buildMonth\}\}/);
+  assert.equal((html.match(/\{\{appVersion\}\}/g) || []).length, 2);
+
+  // Outside the changelog (which is a historical record and stays literal), no version
+  // string may be hardcoded in the markup.
+  const withoutChangelog = html.replace(/>v\d+\.\d+\.\d+ &mdash;<\/span>/g, '');
+  assert.doesNotMatch(withoutChangelog, /[>"]V?\d+\.\d+\.\d+ · LOCAL BUILD/i);
+
+  // The app's version and the one electron-builder stamps must agree. build-renderer.js
+  // enforces this at package time; asserting it here fails far earlier and far cheaper.
+  const pkg = JSON.parse(fs.readFileSync(path.join(__dirname, '..', 'desktop', 'package.json'), 'utf8'));
+  assert.equal(component.VERSION, pkg.version);
+
+  // ...and the current release must actually be in the changelog.
+  assert.ok(html.includes(`>v${component.VERSION} &mdash;</span>`), 'changelog has an entry for the current version');
+});
+
 test('the focus ring is driven by the document accent, with no green fallback', () => {
   const html = fs.readFileSync(htmlPath, 'utf8');
 
@@ -2879,7 +2909,7 @@ test('shared alignment primitives normalize page controls and dependent sections
   assert.match(html, /class="expectancy-change"[^>]+width:72px;text-align:right/);
   assert.match(html, /\.risk-setting-field\{display:flex;flex-direction:column\}\.risk-setting-help\{flex:1\}/);
   assert.equal((html.match(/class="risk-setting-field"/g) || []).length, 2);
-  assert.match(html, /class="sidebar-brand-version"[^>]*>v1\.0\.0<\/div>/);
+  assert.match(html, /class="sidebar-brand-version"[^>]*>\{\{appVersion\}\}<\/div>/);
   assert.match(html, /onClick="\{\{openLicenses\}\}"[^>]+margin:13px auto 0;display:block/);
   assert.match(html, /class="quick-presets-list"[^>]+align-items:center;min-height:25px/);
 });

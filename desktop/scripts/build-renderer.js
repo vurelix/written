@@ -121,6 +121,17 @@ const ha = crypto.createHash('sha256').update(a).digest('hex');
 const hb = crypto.createHash('sha256').update(b).digest('hex');
 if (ha !== hb) fail('app logic block changed during wrapping — refusing to write');
 
+// The version the app SHOWS and the version electron-builder STAMPS have to agree.
+// They used to be independent literals in two files, so the About screen could claim a
+// version the installer had never heard of. This runs from prepack and dist, which means
+// a mismatch can no longer be packaged.
+const declared = /this\.VERSION\s*=\s*'([^']+)'/.exec(a);
+if (!declared) fail("could not find `this.VERSION='…'` in the app source");
+const pkgVersion = require(path.join(ROOT, 'package.json')).version;
+if (declared[1] !== pkgVersion) {
+  fail(`version mismatch: app says ${declared[1]}, package.json says ${pkgVersion}`);
+}
+
 // The dc-runtime ships alongside the app source and must match it.
 const RUNTIME_SRC = path.join(path.dirname(SRC), 'support.js');
 const RUNTIME_OUT = path.join(ROOT, 'renderer', 'support.js');
