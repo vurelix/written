@@ -579,7 +579,9 @@ test('widget layout migration upgrades every profile once and preserves custom d
 
   assert.equal(one.widgetLayoutVersion, component.WIDGET_LAYOUT_VERSION);
   assert.deepEqual(plain(one.widgets.score), { on: 1, columns: 6, rows: 8 });
-  assert.deepEqual(plain(one.widgets.month), { on: 0, columns: 4, rows: 6 });
+  // Chained: this profile never customised `month`, so it tracks the default through
+  // every revision it missed — v1 took 5 to 6, v3 takes 6 to 7.
+  assert.deepEqual(plain(one.widgets.month), { on: 0, columns: 4, rows: 7 });
   assert.deepEqual(plain(one.widgets.expectancy), { on: 1, columns: 4, rows: 6 });
   assert.equal(two.widgetLayoutVersion, component.WIDGET_LAYOUT_VERSION);
   assert.deepEqual(plain(two.widgets.score), { on: 1, columns: 4, rows: 9 });
@@ -2827,8 +2829,11 @@ test('the consistency heatmap ships larger and existing profiles are migrated on
   const heatmap = component.WIDGETS.find(w => w.id === 'heatmap');
   assert.deepEqual(
     { columns: heatmap.defaultColumns, rows: heatmap.defaultRows, maxRows: heatmap.maxRows },
-    { columns: 10, rows: 9, maxRows: 12 },
+    { columns: 12, rows: 9, maxRows: 12 },
   );
+  // v1.0.1 widened it to the full 12-column dashboard span. That is what buys the 26-week
+  // grid its cell size: at 12 columns the grid is height-bound, not width-bound.
+  assert.equal(heatmap.defaultColumns, heatmap.maxColumns, 'heatmap ships full width');
   // Defaults must stay inside the resize bounds the UI enforces.
   assert.ok(heatmap.defaultColumns >= heatmap.minColumns && heatmap.defaultColumns <= heatmap.maxColumns);
   assert.ok(heatmap.defaultRows >= heatmap.minRows && heatmap.defaultRows <= heatmap.maxRows);
@@ -2840,7 +2845,7 @@ test('the consistency heatmap ships larger and existing profiles are migrated on
     widgets: { heatmap: { on: 1, columns: 8, rows: 7 } },
   });
   assert.equal(untouched.changed, true);
-  assert.deepEqual(plain(untouched.settings.widgets.heatmap), { on: 1, columns: 10, rows: 9 });
+  assert.deepEqual(plain(untouched.settings.widgets.heatmap), { on: 1, columns: 12, rows: 9 });
   assert.equal(untouched.settings.widgetLayoutVersion, component.WIDGET_LAYOUT_VERSION);
 
   // A size the user chose is left exactly as-is.
@@ -2854,7 +2859,7 @@ test('the consistency heatmap ships larger and existing profiles are migrated on
   const ancient = component.migrateWidgetLayoutSettings({
     widgets: { heatmap: { on: 1, columns: 8, rows: 7 }, score: { on: 1, columns: 4, rows: 7 } },
   });
-  assert.deepEqual(plain(ancient.settings.widgets.heatmap), { on: 1, columns: 10, rows: 9 });
+  assert.deepEqual(plain(ancient.settings.widgets.heatmap), { on: 1, columns: 12, rows: 9 });
   assert.equal(ancient.settings.widgets.score.rows, 8, 'v1 revision still applies');
 
   // Already current: no work, no write.
@@ -3161,6 +3166,55 @@ test('walkthrough has seven steps and completion persists only on the active pro
   for(let i=0;i<7;i++)component.nextTour();
   assert.equal(component.state.tourOpen,false);
   assert.equal(component.state.settings.tourCompleted,true);
+});
+
+test('the consistency heatmap generates 26 weeks and its markup agrees', () => {
+  const component = loadComponent();
+  assert.equal(component.HEATMAP_WEEKS, 26);
+
+  // The week count lives in the component, but the grid that has to hold it lives in CSS
+  // and the placeholder hint lives in the markup. All three drift independently.
+  const html = fs.readFileSync(htmlPath, 'utf8');
+  const cells = component.HEATMAP_WEEKS * 7;
+  assert.match(html, /\.consistency-grid\{[^}]*grid-template-columns:repeat\(26,/, 'CSS grid is 26 columns');
+  assert.match(html, /\.consistency-grid\{[^}]*grid-template-rows:repeat\(7,/, 'one row per weekday');
+  assert.match(html, /@container \(min-aspect-ratio:26\/7\)/, 'height-bound branch tracks 26 weeks');
+  assert.match(html, /@container \(max-aspect-ratio:26\/7\)/, 'width-bound branch tracks 26 weeks');
+  assert.ok(
+    html.includes(`as="hm" hint-placeholder-count="${cells}"`),
+    `placeholder count is ${cells}`,
+  );
+  assert.match(html, /last 26 weeks/, 'the caption states the range it actually draws');
+  assert.doesNotMatch(html, /last 13 weeks/, 'no leftover 13-week caption');
+
+  // Cells stay square by construction — the grid is only legible because of it.
+  assert.match(html, /\.consistency-cell\{[^}]*aspect-ratio:1/);
+});
+
+test('decorative traffic lights follow the platform without disturbing the titlebar', () => {
+  // Browser preview: a macOS affectation, so macOS keeps them and nobody else does.
+  assert.equal(loadComponent({ window: { desktopPlatform: 'darwin' } }).trafficDotsVisibility(), 'visible');
+  assert.equal(loadComponent({ window: { desktopPlatform: 'win32' } }).trafficDotsVisibility(), 'hidden');
+  assert.equal(loadComponent({ navigator: { userAgentData: { platform: 'macOS' } } }).trafficDotsVisibility(), 'visible');
+  assert.equal(loadComponent({ navigator: { platform: 'Linux x86_64' } }).trafficDotsVisibility(), 'hidden');
+  assert.equal(loadComponent().trafficDotsVisibility(), 'hidden', 'unknown platform hides them');
+
+  const html = fs.readFileSync(htmlPath, 'utf8');
+  // `visibility`, not removal: `.app-titlebar` is a three-column grid and dropping the
+  // element would slide the search field out of the centre column.
+  assert.match(html, /class="titlebar-traffic"[^>]+style="visibility:\{\{trafficDots\}\}"/);
+  assert.match(html, /\.app-titlebar\{[^}]*grid-template-columns:minmax\(120px,1fr\) minmax\(260px,520px\)/);
+});
+
+test('the in-app changelog does not claim the withdrawn economic calendar works', () => {
+  // The widget was pulled from the registry, so a changelog promising live event data
+  // describes something the build cannot do.
+  const html = fs.readFileSync(htmlPath, 'utf8');
+  const entry = /v1\.0\.1 &mdash;<\/span><span[^>]*>([^<]*)</.exec(html);
+  assert.ok(entry, 'the v1.0.1 changelog entry is present');
+  assert.doesNotMatch(entry[1], /economic calendar can pull real data/);
+  assert.match(entry[1], /economic calendar is withdrawn/);
+  assert.match(entry[1], /26 weeks/);
 });
 
 test('walkthrough geometry waits for animation and two stable in-viewport frames', () => {

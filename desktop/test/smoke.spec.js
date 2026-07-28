@@ -979,4 +979,76 @@ test.describe('built renderer', () => {
     // than letting the retry loop run for the rest of the suite.
     await page.close();
   });
+
+  test('decorative traffic lights follow the platform and never move the search field', async ({ page }) => {
+    // The built renderer always loads native-chrome.css, which hides the dots with
+    // !important on both platforms so the real OS controls own that space. The binding
+    // is therefore asserted on the inline style, and the override asserted on top of it.
+    const read = async () => page.locator('.titlebar-traffic').evaluate(el => ({
+      inline: el.style.visibility,
+      computed: getComputedStyle(el).visibility,
+      width: el.getBoundingClientRect().width,
+    }));
+    const searchCentre = async () => page.locator('.global-search-wrap').evaluate(el => {
+      const box = el.getBoundingClientRect();
+      return Math.round((box.left + box.right) / 2 - window.innerWidth / 2);
+    });
+
+    await page.addInitScript(() => { window.desktopPlatform = 'darwin'; });
+    await boot(page, profileFixture());
+    const mac = await read();
+    expect(mac.inline, 'macOS keeps the decorative dots in the browser preview').toBe('visible');
+    expect(mac.computed, 'the desktop build still defers to the real traffic lights').toBe('hidden');
+    const macCentre = await searchCentre();
+
+    await page.addInitScript(() => { window.desktopPlatform = 'win32'; });
+    await boot(page, profileFixture());
+    const win = await read();
+    expect(win.inline, 'Windows hides the meaningless dots').toBe('hidden');
+    expect(win.width, 'the gutter is kept so the grid does not reflow').toBeGreaterThan(0);
+    expect(await searchCentre(), 'the search field stays centred on both platforms').toBe(macCentre);
+  });
+
+  test('the consistency heatmap ships full width with 26 legible weeks', async ({ page }) => {
+    await page.setViewportSize({ width: 1440, height: 900 });
+    await boot(page, profileFixture({ widgets: { heatmap: { on: 1 } } }));
+    await page.waitForSelector('[data-widget-id="heatmap"] .consistency-cell', { timeout: 15000 });
+
+    // 26 weeks x 7 weekdays. Omitting columns/rows above is deliberate: the widget falls
+    // back to the registry defaults, so this tracks them rather than restating them.
+    await expect(page.locator('[data-widget-id="heatmap"] .consistency-cell')).toHaveCount(182);
+
+    const widget = await page.$eval('[data-widget-id="heatmap"]', el => ({
+      span: getComputedStyle(el).gridColumn,
+      dx: el.scrollWidth - el.clientWidth,
+      dy: el.scrollHeight - el.clientHeight,
+    }));
+    expect(widget.span, 'the heatmap spans the full 12-column dashboard').toMatch(/span 12|1 \/ 13/);
+    expect({ dx: widget.dx, dy: widget.dy }, 'nothing is clipped').toEqual({ dx: 0, dy: 0 });
+
+    // Doubling the week count halves the cell width unless the widget also widens, so
+    // the legibility floor is what proves the two changes belong together.
+    const cell = await page.$eval('[data-widget-id="heatmap"] .consistency-cell', el => {
+      const r = el.getBoundingClientRect();
+      return { width: r.width, height: r.height };
+    });
+    expect(cell.width, '26 weeks stay legible at the default size').toBeGreaterThanOrEqual(28);
+    expect(Math.abs(cell.width - cell.height), 'cells stay square').toBeLessThanOrEqual(1);
+  });
+
+  test('This month ships one grid row taller', async ({ page }) => {
+    await page.setViewportSize({ width: 1440, height: 900 });
+    await boot(page, profileFixture({ widgets: { month: { on: 1 } } }));
+    await page.waitForSelector('[data-widget-id="month"]', { timeout: 15000 });
+
+    // .widget-grid is grid-auto-rows:24px with a 14px gap, so 7 rows is 7*24 + 6*14.
+    const height = await page.$eval('[data-widget-id="month"]', el => el.getBoundingClientRect().height);
+    expect(Math.round(height)).toBe(7 * 24 + 6 * 14);
+
+    const overflow = await page.$eval('[data-widget-id="month"]', el => ({
+      dx: el.scrollWidth - el.clientWidth,
+      dy: el.scrollHeight - el.clientHeight,
+    }));
+    expect(overflow, 'the taller card still fits its content').toEqual({ dx: 0, dy: 0 });
+  });
 });

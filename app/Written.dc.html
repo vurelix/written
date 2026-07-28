@@ -123,10 +123,10 @@ html{--accent:#3DDC97;scrollbar-gutter:stable;scrollbar-color:var(--accent) tran
 .score-radar>svg{width:100%;height:100%;display:block;overflow:visible}
 .consistency-card{display:flex;flex-direction:column;min-height:0}
 .consistency-grid-slot{flex:1;min-height:0;margin-top:14px;container-type:size;display:flex;align-items:center;justify-content:center}
-.consistency-grid{display:grid;grid-auto-flow:column;grid-template-columns:repeat(13,minmax(0,1fr));grid-template-rows:repeat(7,minmax(0,1fr));gap:5px}
+.consistency-grid{display:grid;grid-auto-flow:column;grid-template-columns:repeat(26,minmax(0,1fr));grid-template-rows:repeat(7,minmax(0,1fr));gap:5px}
 .consistency-cell{min-width:0;min-height:0;width:100%;max-height:100%;aspect-ratio:1;place-self:center}
-@container (min-aspect-ratio:13/7){.consistency-grid{height:100cqh;max-width:100cqw;aspect-ratio:13/7}}
-@container (max-aspect-ratio:13/7){.consistency-grid{width:100cqw;max-height:100cqh;aspect-ratio:13/7}}
+@container (min-aspect-ratio:26/7){.consistency-grid{height:100cqh;max-width:100cqw;aspect-ratio:26/7}}
+@container (max-aspect-ratio:26/7){.consistency-grid{width:100cqw;max-height:100cqh;aspect-ratio:26/7}}
 @container widget (max-width:360px){.widget-secondary{display:none}.score-components{margin-top:4px}.widget-toolbar{flex-wrap:wrap}}
 </style>
 </helmet>
@@ -139,7 +139,7 @@ html{--accent:#3DDC97;scrollbar-gutter:stable;scrollbar-color:var(--accent) tran
   <div style="position:fixed;inset:0;pointer-events:none;z-index:0;opacity:{{glowOp}};transition:opacity .5s;background:linear-gradient(118deg,{{glowB}} 0%,transparent 32%,transparent 55%,{{glowC}} 82%,transparent 100%);background-size:240% 240%;animation:bgpan 26s ease-in-out infinite alternate"></div>
 
   <div data-screen-label="Titlebar" class="app-titlebar glass-surface" inert="{{titlebarInert}}" aria-hidden="{{helpArticleOpen}}">
-    <div class="titlebar-traffic" aria-hidden="true"><span class="traffic-dot traffic-close"></span><span class="traffic-dot traffic-minimize"></span><span class="traffic-dot traffic-zoom"></span></div>
+    <div class="titlebar-traffic" aria-hidden="true" style="visibility:{{trafficDots}}"><span class="traffic-dot traffic-close"></span><span class="traffic-dot traffic-minimize"></span><span class="traffic-dot traffic-zoom"></span></div>
     <div class="global-search-wrap">
       <button class="global-search-trigger" onClick="{{openSearch}}" aria-label="Search this journal" aria-haspopup="dialog" aria-expanded="{{searchOpen}}">
         <svg class="search-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="11" cy="11" r="7"></circle><path d="m20 20-3.5-3.5"></path></svg>
@@ -425,8 +425,8 @@ html{--accent:#3DDC97;scrollbar-gutter:stable;scrollbar-color:var(--accent) tran
                 <sc-if value="{{w.isHeatmap}}" hint-placeholder-val="{{false}}">
                   <div class="glass-surface consistency-card" style="flex:1;min-width:0;border-radius:16px;padding:20px 22px" style-hover="border-color:var(--bd3)">
                     <div style="font-size:15px;font-weight:700">Consistency</div>
-                    <div class="widget-secondary" style="font-size:11.5px;color:var(--tx-faint);margin-top:3px">last 13 weeks · green = up day, red = down day</div>
-                    <div class="consistency-grid-slot"><div class="consistency-grid"><sc-for list="{{hmCells}}" as="hm" hint-placeholder-count="91"><div class="consistency-cell" title="{{hm.title}}" style="border-radius:4px;background:{{hm.bg}};border:1px solid var(--bd)"></div></sc-for></div></div>
+                    <div class="widget-secondary" style="font-size:11.5px;color:var(--tx-faint);margin-top:3px">last 26 weeks · green = up day, red = down day</div>
+                    <div class="consistency-grid-slot"><div class="consistency-grid"><sc-for list="{{hmCells}}" as="hm" hint-placeholder-count="182"><div class="consistency-cell" title="{{hm.title}}" style="border-radius:4px;background:{{hm.bg}};border:1px solid var(--bd)"></div></sc-for></div></div>
                   </div>
                 </sc-if>
                 <sc-if value="{{w.isEcon}}" hint-placeholder-val="{{false}}">
@@ -1231,7 +1231,7 @@ html{--accent:#3DDC97;scrollbar-gutter:stable;scrollbar-color:var(--accent) tran
             <div style="height:1px;background:var(--grid);margin:20px 0"></div>
             <div style="font-family:'Manrope',system-ui,sans-serif;font-size:9.5px;letter-spacing:1.6px;color:var(--tx-faint)">CHANGELOG</div>
             <div style="display:flex;flex-direction:column;gap:9px;margin-top:12px">
-              <div style="display:grid;grid-template-columns:72px 1fr;gap:12px"><span style="font-family:'Manrope',system-ui,sans-serif;font-size:11px;font-weight:600;color:{{accent}}">v1.0.1 &mdash;</span><span style="font-size:12px;color:var(--tx-mid);line-height:1.5">background glow now switches off properly; followed rules stay readable; the walkthrough no longer jumps into place and moves smoothly between steps; focus rings follow your accent everywhere; roomier help answers, evenly set note tabs and a larger consistency heatmap; the economic calendar can pull real data and be filtered by currency and impact</span></div>
+              <div style="display:grid;grid-template-columns:72px 1fr;gap:12px"><span style="font-family:'Manrope',system-ui,sans-serif;font-size:11px;font-weight:600;color:{{accent}}">v1.0.1 &mdash;</span><span style="font-size:12px;color:var(--tx-mid);line-height:1.5">background glow now switches off properly; followed rules stay readable; focus rings follow your accent everywhere; the walkthrough no longer jumps into place, moves smoothly between steps, and now covers Profile, Settings and Help as well, ending with how to replay it; Help is an illustrated route map whose labels stay clear of the card edges; the consistency heatmap fills the dashboard and shows a full 26 weeks; This month gained a row; installer step numbers sit properly centred; the decorative window dots now appear only on macOS; the economic calendar is withdrawn for now</span></div>
               <div style="display:grid;grid-template-columns:72px 1fr;gap:12px"><span style="font-family:'Manrope',system-ui,sans-serif;font-size:11px;font-weight:600;color:{{accent}}">v1.0.0 &mdash;</span><span style="font-size:12px;color:var(--tx-mid);line-height:1.5">first official release: P&amp;L calendar, equity curve, day journal and insights; profiles, light theme and custom assets; risk sizing, plan scorecards, tilt radar, chart markup and quick capture; native macOS &amp; Windows builds with local file storage</span></div>
                         </div>
             <div style="height:1px;background:var(--grid);margin:20px 0"></div>
@@ -1867,17 +1867,20 @@ class Component extends DCLogic {
       {id:'net',label:'Net P&L',...kpi},{id:'win',label:'Win rate',...kpi},{id:'pf',label:'Profit factor',...kpi},{id:'avg',label:'Avg win / loss',...kpi},
       {id:'score',label:'Trading score',minColumns:4,maxColumns:8,defaultColumns:4,minRows:6,maxRows:10,defaultRows:8},
       {id:'equity',label:'P&L chart',minColumns:6,maxColumns:12,defaultColumns:8,minRows:8,maxRows:14,defaultRows:10},
-      {id:'month',label:'This month',minColumns:3,maxColumns:6,defaultColumns:4,minRows:4,maxRows:7,defaultRows:6},
+      {id:'month',label:'This month',minColumns:3,maxColumns:6,defaultColumns:4,minRows:4,maxRows:7,defaultRows:7},
       {id:'streak',label:'Day streak',minColumns:3,maxColumns:6,defaultColumns:4,minRows:4,maxRows:7,defaultRows:5},
       {id:'expectancy',label:'Expectancy',minColumns:3,maxColumns:6,defaultColumns:4,minRows:4,maxRows:7,defaultRows:5},
       {id:'best',label:'Best day',...kpi},{id:'worst',label:'Worst day',...kpi},{id:'drawdown',label:'Max drawdown',...kpi},{id:'hold',label:'Avg hold time',...kpi},
-      {id:'heatmap',label:'Consistency heatmap',minColumns:6,maxColumns:12,defaultColumns:10,minRows:6,maxRows:12,defaultRows:9},
+      {id:'heatmap',label:'Consistency heatmap',minColumns:6,maxColumns:12,defaultColumns:12,minRows:6,maxRows:12,defaultRows:9},
       {id:'checklist',label:'Daily checklist',minColumns:4,maxColumns:8,defaultColumns:4,minRows:7,maxRows:12,defaultRows:9},
       {id:'recent',label:'Recent trades',minColumns:6,maxColumns:12,defaultColumns:12,minRows:8,maxRows:15,defaultRows:11},
     ];
     this.DEFWIDGETS=Object.fromEntries(this.WIDGETS.map(widget=>[widget.id,{on:['heatmap','econ','checklist'].includes(widget.id)?0:1,columns:widget.defaultColumns,rows:widget.defaultRows}]));
-    this.WIDGET_LAYOUT_VERSION=2;
-    this.WIDGET_LAYOUT_CHANGES={1:{score:{rows:[7,8]},month:{rows:[5,6]},expectancy:{columns:[3,4]}},2:{heatmap:{columns:[8,10],rows:[7,9]}}};
+    this.WIDGET_LAYOUT_VERSION=3;
+    this.WIDGET_LAYOUT_CHANGES={1:{score:{rows:[7,8]},month:{rows:[5,6]},expectancy:{columns:[3,4]}},2:{heatmap:{columns:[8,10],rows:[7,9]}},3:{heatmap:{columns:[10,12]},month:{rows:[6,7]}}};
+    // A full half-year of context. The grid is 7 rows (one per weekday), so the cell
+    // count and the CSS column count both derive from this.
+    this.HEATMAP_WEEKS=26;
     this.CHECK=['Followed my trading plan','Waited for A+ setups only','Respected every stop','Sized correctly for risk','No revenge / FOMO trades','Journaled every execution','Stopped at my daily limit'];
     this.ECON=[
       {t:'08:30',ccy:'USD',imp:3,name:'Non-Farm Payrolls'},
@@ -2489,6 +2492,14 @@ class Component extends DCLogic {
     this.setState({titlebarOffset:offset});
     return true;
   }
+  // The decorative dots are a macOS affectation; on Windows and Linux they are just three
+  // meaningless circles. Hidden rather than removed because `.app-titlebar` is a three
+  // column grid and dropping the element would pull the search field out of the centre.
+  //
+  // Only the BROWSER preview is affected. In the desktop build native-chrome.css hides
+  // these with !important on both platforms, so macOS still gets its real traffic lights
+  // floating in the reserved space and Windows still gets the system title bar.
+  trafficDotsVisibility(){return this.isMacPlatform()?'visible':'hidden'}
   searchHintKey(){return this.isMacPlatform()?'⌘K':'Ctrl K'}
   setSearchInputRef(element){this._searchInput=element||null}
   setAppMainFocusRef(element){this._appMainFocus=element||null}
@@ -3902,9 +3913,9 @@ class Component extends DCLogic {
     const impCols=['var(--tx-faint)','var(--amber)','var(--red)'];
     const econRows=this.ECON.map(e2=>({t:e2.t,ccy:e2.ccy,name:e2.name,dotCol:impCols[e2.imp-1]||impCols[0],impN:e2.imp}));
     const hmCells=[];const hmToday=new Date();hmToday.setHours(0,0,0,0);
-    const hmOff=(hmToday.getDay()+6)%7,hmStart=new Date(hmToday);hmStart.setDate(hmStart.getDate()-hmOff-12*7);
-    let hmMax=1;for(let i=0;i<13*7;i++){const dd2=new Date(hmStart);dd2.setDate(dd2.getDate()+i);const ent=days[this.dk(dd2)];if(ent&&ent.trades&&ent.trades.length){const p=Math.abs(this.dp(ent));if(p>hmMax)hmMax=p}}
-    for(let i=0;i<13*7;i++){const dd2=new Date(hmStart);dd2.setDate(dd2.getDate()+i);const key=this.dk(dd2),ent=days[key],fut=key>todayK;const nt=ent&&ent.trades?ent.trades.length:0;const p=nt?this.dp(ent):0;let bg='var(--chip)';if(!fut&&nt){const inten=(0.22+Math.min(1,Math.abs(p)/hmMax)*0.78).toFixed(2);bg=(p>=0?'rgba(61,220,151,':'rgba(255,92,122,')+inten+')'}hmCells.push({bg,title:fD(key)+(nt?'  '+this.fmt(p):'  no trades')})}
+    const hmWeeks=this.HEATMAP_WEEKS,hmOff=(hmToday.getDay()+6)%7,hmStart=new Date(hmToday);hmStart.setDate(hmStart.getDate()-hmOff-(hmWeeks-1)*7);
+    let hmMax=1;for(let i=0;i<hmWeeks*7;i++){const dd2=new Date(hmStart);dd2.setDate(dd2.getDate()+i);const ent=days[this.dk(dd2)];if(ent&&ent.trades&&ent.trades.length){const p=Math.abs(this.dp(ent));if(p>hmMax)hmMax=p}}
+    for(let i=0;i<hmWeeks*7;i++){const dd2=new Date(hmStart);dd2.setDate(dd2.getDate()+i);const key=this.dk(dd2),ent=days[key],fut=key>todayK;const nt=ent&&ent.trades?ent.trades.length:0;const p=nt?this.dp(ent):0;let bg='var(--chip)';if(!fut&&nt){const inten=(0.22+Math.min(1,Math.abs(p)/hmMax)*0.78).toFixed(2);bg=(p>=0?'rgba(61,220,151,':'rgba(255,92,122,')+inten+')'}hmCells.push({bg,title:fD(key)+(nt?'  '+this.fmt(p):'  no trades')})}
     const mkFlags=id=>({isNet:id==='net',isWin:id==='win',isPf:id==='pf',isAvg:id==='avg',isScore:id==='score',isEquity:id==='equity',isMonth:id==='month',isStreak:id==='streak',isExpectancy:id==='expectancy',isBest:id==='best',isWorst:id==='worst',isDrawdown:id==='drawdown',isHold:id==='hold',isHeatmap:id==='heatmap',isEcon:id==='econ',isChecklist:id==='checklist',isRecent:id==='recent'});
     const wOrder=this.widgetOrder();
     const orderedOnWidgets=this.WIDGETS.filter(w=>this.widgetCfg(w.id).on).sort((a,b)=>wOrder.indexOf(a.id)-wOrder.indexOf(b.id));
@@ -4010,7 +4021,7 @@ class Component extends DCLogic {
       // over the inline style. This class kills the animation too (see .bg-aurora.glow-off).
       glowOffClass:(st.glow||'soft')==='off'?'glow-off':'',
       glowA:acc+'2E',glowB:acc+'1C',glowC:acc+'22',accentGlow:acc+'44',accentSoft:acc+'22',
-      booting:S.booting,appVersion:'v'+this.VERSION,appVersionUpper:'V'+this.VERSION,buildMonth:this.BUILD_MONTH,searchHint:this.searchHintKey(),titlebarOffset:S.titlebarOffset||'44px',
+      booting:S.booting,appVersion:'v'+this.VERSION,appVersionUpper:'V'+this.VERSION,buildMonth:this.BUILD_MONTH,searchHint:this.searchHintKey(),titlebarOffset:S.titlebarOffset||'44px',trafficDots:this.trafficDotsVisibility(),
       setProfileMenuRef:el=>this.setDismissRef('profileMenu',el),
       setPickerRef:el=>this.setDismissRef('picker',el),
       setPickerSetupRef:el=>this.setDismissRef('pickerSetup',el),
