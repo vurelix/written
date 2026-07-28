@@ -3485,8 +3485,12 @@ test('Help route model orders nodes and handles one-node categories', () => {
     path: '',
     mobileViewBox: '0 0 72 100',
     mobilePath: '',
-    nodes: [{ left: '8%', top: '50%' }],
+    nodes: [{ left: '12%', top: '50%' }],
   });
+  assert.deepEqual(
+    plain(component.helpRouteModel(3).nodes.map(node => node.left)),
+    ['12%', '50%', '88%'],
+  );
   const route = component.helpRouteModel(4);
   assert.equal(route.nodes.length, 4);
   assert.match(route.path, /^M /);
@@ -3511,6 +3515,7 @@ test('Help CSS defines tweened dropdowns, treasure-map hover, modal exit, and re
   assert.match(html, /\.help-category-panel\[data-open="true"\]\{[^}]*grid-template-rows:1fr/);
   assert.match(html, /\.help-route-node:hover/);
   assert.match(html, /\.help-route-node:focus-visible/);
+  assert.match(html, /\.help-route-label\{[^}]*font-size:11px[^}]*font-weight:650[^}]*line-height:1\.45/);
   assert.match(html, /\.help-article-backdrop\{[^}]*visibility:hidden[^}]*opacity:0[^}]*transition:/);
   assert.match(html, /\.help-article-backdrop\[data-open="true"\]\{[^}]*visibility:visible[^}]*opacity:1/);
   assert.match(html, /body:has\(\.help-article-backdrop\[data-open="true"\]\)\{overflow:hidden\}/);

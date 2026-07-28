@@ -658,6 +658,34 @@ test.describe('built renderer', () => {
     expect(nodeGeometry.every(item => item.height > 0 && item.width > 0)).toBe(true);
   });
 
+  test('Help treasure map keeps compact article labels inside desktop card edges', async ({ page }) => {
+    await page.setViewportSize({ width: 1280, height: 800 });
+    await boot(page, profileFixture());
+    await page.getByRole('button', { name: 'Help', exact: true }).click();
+    const gettingStarted = page.getByRole('button', { name: 'Getting Started' });
+    await gettingStarted.click();
+    const panelId = await gettingStarted.getAttribute('aria-controls');
+    const openPanel = page.locator(`#${panelId}`);
+    const metrics = await openPanel.locator('.help-route-node').evaluateAll(elements => {
+      const route = elements[0].closest('.help-route').getBoundingClientRect();
+      return elements.map(element => {
+        const box = element.getBoundingClientRect();
+        const label = element.querySelector('.help-route-label');
+        const style = getComputedStyle(label);
+        return {
+          leftGap: box.left - route.left,
+          rightGap: route.right - box.right,
+          fontSize: style.fontSize,
+          fontWeight: style.fontWeight,
+          lineHeight: parseFloat(style.lineHeight),
+        };
+      });
+    });
+    expect(metrics.every(item => item.leftGap >= 0 && item.rightGap >= 0)).toBe(true);
+    expect(metrics.every(item => item.fontSize === '11px' && item.fontWeight === '650')).toBe(true);
+    expect(metrics.every(item => Math.abs(item.lineHeight - 15.95) <= 0.05)).toBe(true);
+  });
+
   test('Performance settings stay visible and update the renderer mode', async ({ page }) => {
     await boot(page, profileFixture());
     await page.getByRole('button', { name: 'Settings', exact: true }).click();
