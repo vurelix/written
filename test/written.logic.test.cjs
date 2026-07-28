@@ -3642,7 +3642,36 @@ test('Windows scroll hides the in-app titlebar through one shared dynamic offset
 test('the titlebar renders the shortcut hint from the binding, not a hardcoded symbol', () => {
   const html = fs.readFileSync(htmlPath, 'utf8');
   assert.doesNotMatch(html, /<kbd>⌘K<\/kbd>/, 'the Apple symbol is no longer hardcoded');
-  assert.match(html, /<kbd>\{\{searchHint\}\}<\/kbd>/);
+  assert.match(html, /<kbd class="native-symbol">\{\{searchHint\}\}<\/kbd>/);
+});
+
+test('Performance controls render with and without the desktop bridge', () => {
+  const html = fs.readFileSync(htmlPath, 'utf8');
+  assert.match(html, />Performance<\/div>[\s\S]*Full effects[\s\S]*Reduced motion[\s\S]*Maximum performance/);
+  assert.doesNotMatch(html, /<sc-if value="\{\{perfAvailable\}\}"[^>]*>[\s\S]*?>Performance<\/div>/);
+
+  const attrs = new Map([['data-perf', 'reduced']]);
+  const component = loadComponent({
+    document: {
+      documentElement: {
+        getAttribute(name) { return attrs.get(name) || null; },
+        setAttribute(name, value) { attrs.set(name, value); },
+      },
+    },
+    window: {},
+  });
+  component.syncPerfMode();
+  assert.equal(component.state.perfMode, 'reduced');
+  component.setPerfMode('max');
+  assert.equal(attrs.get('data-perf'), 'max');
+});
+
+test('native symbol classes prefer the operating system glyph fonts', () => {
+  const html = fs.readFileSync(htmlPath, 'utf8');
+  assert.match(html, /\.native-symbol\{[^}]*font-family:'Apple Color Emoji','Segoe UI Emoji','Segoe UI Symbol',system-ui,sans-serif/);
+  assert.match(html, /\.native-emoji\{[^}]*font-family:'Apple Color Emoji','Segoe UI Emoji','Segoe UI Symbol',system-ui,sans-serif/);
+  assert.match(html, /class="[^"]*native-symbol[^"]*"/);
+  assert.match(html, /class="[^"]*native-emoji[^"]*"/);
 });
 
 test('searchHint is an exposed binding, not just a template reference', () => {

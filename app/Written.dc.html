@@ -33,6 +33,7 @@ input,select,textarea,button{font-family:inherit}
 input::placeholder,textarea::placeholder{color:var(--tx-ghost)}
 input:focus,select:focus,textarea:focus{outline:none;border-color:var(--bd3)!important}
 button:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-visible,[tabindex]:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.native-symbol{font-family:'Apple Color Emoji','Segoe UI Emoji','Segoe UI Symbol',system-ui,sans-serif;font-style:normal;font-variant:normal;line-height:1}.native-emoji{font-family:'Apple Color Emoji','Segoe UI Emoji','Segoe UI Symbol',system-ui,sans-serif;font-style:normal;font-variant:normal;line-height:1}
 .insights-full{grid-column:1/-1}
 .section-header{display:flex;align-items:center;gap:14px;min-height:48px;margin-bottom:26px;flex-wrap:wrap;animation:rise .4s ease both}
 .risk-setting-field{display:flex;flex-direction:column}.risk-setting-help{flex:1}
@@ -137,7 +138,7 @@ html{--accent:#3DDC97;scrollbar-gutter:stable;scrollbar-color:var(--accent) tran
       <button class="global-search-trigger" onClick="{{openSearch}}" aria-label="Search this journal" aria-haspopup="dialog" aria-expanded="{{searchOpen}}">
         <svg class="search-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="11" cy="11" r="7"></circle><path d="m20 20-3.5-3.5"></path></svg>
         <span class="search-placeholder">Search journal, actions, or pages</span>
-        <kbd>{{searchHint}}</kbd>
+        <kbd class="native-symbol">{{searchHint}}</kbd>
       </button>
     </div>
     <div class="titlebar-status"><span class="local-status-dot"></span><span class="sidebar-section" style="font-size:9px;letter-spacing:1px;color:var(--tx-faint)">LOCAL</span><span>{{appVersion}}</span></div>
@@ -271,7 +272,7 @@ html{--accent:#3DDC97;scrollbar-gutter:stable;scrollbar-color:var(--accent) tran
                 <sc-if value="{{w.editing}}" hint-placeholder-val="{{false}}">
                   <button type="button" aria-label="Move widget" title="Move widget" style="position:absolute;top:8px;left:8px;z-index:6;display:flex;align-items:center;gap:5px;font-family:'Manrope',system-ui,sans-serif;font-size:9px;letter-spacing:1px;color:var(--tx-ghost);background:var(--panel-a);border:1px solid var(--bd2);border-radius:7px;padding:3px 8px;cursor:grab"><svg width="10" height="10" viewBox="0 0 24 24" fill="currentColor"><circle cx="8" cy="6" r="1.6"></circle><circle cx="8" cy="12" r="1.6"></circle><circle cx="8" cy="18" r="1.6"></circle><circle cx="16" cy="6" r="1.6"></circle><circle cx="16" cy="12" r="1.6"></circle><circle cx="16" cy="18" r="1.6"></circle></svg></button>
                   <div style="position:absolute;top:8px;right:8px;z-index:6;display:flex;gap:5px">
-                    <button onClick="{{w.remove}}" title="Remove" style="width:24px;height:24px;border-radius:7px;border:1px solid rgba(255,92,122,.4);background:var(--panel-a);color:var(--red);font-size:11px;cursor:pointer;display:flex;align-items:center;justify-content:center;padding:0" style-hover="background:rgba(255,92,122,.12)">✕</button>
+                    <button class="native-symbol" onClick="{{w.remove}}" title="Remove" style="width:24px;height:24px;border-radius:7px;border:1px solid rgba(255,92,122,.4);background:var(--panel-a);color:var(--red);font-size:11px;cursor:pointer;display:flex;align-items:center;justify-content:center;padding:0" style-hover="background:rgba(255,92,122,.12)">✕</button>
                   </div>
                   <div class="widget-resize widget-resize-right" role="separator" tabIndex="0" aria-orientation="vertical" aria-label="Resize width" data-resize-edge="right" onPointerDown="{{w.resizeRight}}" onKeyDown="{{w.resizeRightKey}}"></div>
                   <div class="widget-resize widget-resize-bottom" role="separator" tabIndex="0" aria-orientation="horizontal" aria-label="Resize height" data-resize-edge="bottom" onPointerDown="{{w.resizeBottom}}" onKeyDown="{{w.resizeBottomKey}}"></div>
@@ -502,7 +503,7 @@ html{--accent:#3DDC97;scrollbar-gutter:stable;scrollbar-color:var(--accent) tran
                       <div class="calendar-cell" onClick="{{d.open}}" style="overflow:hidden;border-radius:13px;border:1px solid {{d.bd}};background:{{d.bg}};padding:9px 11px;cursor:{{d.cur}};opacity:{{d.op}};transition:transform .18s,border-color .18s,box-shadow .18s;display:flex;flex-direction:column;min-width:0" style-hover="transform:translateY(-2px);border-color:var(--bd3);box-shadow:0 10px 24px var(--sh2)">
                         <div style="display:flex;align-items:center;justify-content:space-between">
                           <span style="font-family:'Manrope',system-ui,sans-serif;font-size:11px;color:{{d.numCol}}">{{d.n}}</span>
-                          <span style="font-size:16px;line-height:1">{{d.emoji}}</span>
+                          <span class="native-emoji" style="font-size:16px;line-height:1">{{d.emoji}}</span>
                         </div>
                         <div style="flex:1;display:flex;align-items:center;justify-content:center;font-family:'Manrope',system-ui,sans-serif;font-weight:600;font-size:15px;color:{{d.col}};text-shadow:{{d.glow}}">{{d.pnlS}}</div>
                         <div style="font-size:10.5px;color:var(--tx-faint);text-align:center;min-height:13px">{{d.sub}}</div>
@@ -575,7 +576,7 @@ html{--accent:#3DDC97;scrollbar-gutter:stable;scrollbar-color:var(--accent) tran
                   </div>
                 </sc-if>
                 <div style="display:flex;align-items:center;gap:8px;padding:11px 13px">
-                  <span style="font-size:15px;line-height:1">{{ph.emoji}}</span>
+                  <span class="native-emoji" style="font-size:15px;line-height:1">{{ph.emoji}}</span>
                   <span style="font-size:12px;color:var(--tx-dim)">{{ph.date}}</span>
                   <span style="font-family:'Manrope',system-ui,sans-serif;font-size:12px;font-weight:600;color:{{ph.col}}">{{ph.pnlS}}</span>
                   <div style="flex:1"></div>
@@ -1051,17 +1052,15 @@ html{--accent:#3DDC97;scrollbar-gutter:stable;scrollbar-color:var(--accent) tran
                 </sc-for>
               </div>
             </div>
-            <sc-if value="{{perfAvailable}}" hint-placeholder-val="{{true}}">
-              <div style="padding:16px 0 18px;border-bottom:1px solid var(--grid)">
-                <div style="font-size:13px;font-weight:600">Performance</div>
-                <div style="font-size:11.5px;color:var(--tx-faint);margin-top:2px">{{perfHint}}</div>
-                <div style="display:flex;gap:6px;margin-top:10px;flex-wrap:wrap">
-                  <sc-for list="{{perfOpts}}" as="pf" hint-placeholder-count="3">
-                    <button onClick="{{pf.set}}" style="border:1px solid {{pf.bd}};background:{{pf.bg}};color:{{pf.fg}};font-size:12px;font-weight:600;padding:8px 15px;border-radius:9px;cursor:pointer;transition:all .15s">{{pf.label}}</button>
-                  </sc-for>
-                </div>
+            <div style="padding:16px 0 18px;border-bottom:1px solid var(--grid)">
+              <div style="font-size:13px;font-weight:600">Performance</div>
+              <div style="font-size:11.5px;color:var(--tx-faint);margin-top:2px">{{perfHint}}</div>
+              <div style="display:flex;gap:6px;margin-top:10px;flex-wrap:wrap">
+                <sc-for list="{{perfOpts}}" as="pf" hint-placeholder-count="3">
+                  <button onClick="{{pf.set}}" style="border:1px solid {{pf.bd}};background:{{pf.bg}};color:{{pf.fg}};font-size:12px;font-weight:600;padding:8px 15px;border-radius:9px;cursor:pointer;transition:all .15s">{{pf.label}}</button>
+                </sc-for>
               </div>
-            </sc-if>
+            </div>
             <div style="padding:16px 0 4px">
               <div style="font-size:13px;font-weight:600">Default P&amp;L view</div>
               <div style="font-size:11.5px;color:var(--tx-faint);margin-top:2px">what the dashboard graph opens with</div>
@@ -1095,7 +1094,7 @@ html{--accent:#3DDC97;scrollbar-gutter:stable;scrollbar-color:var(--accent) tran
                 <sc-for list="{{tagList}}" as="tg" hint-placeholder-count="6">
                   <span style="display:inline-flex;align-items:center;gap:7px;border:1px solid var(--bd2);background:var(--chip);color:var(--tx-mid);font-size:11.5px;font-weight:600;padding:6px 8px 6px 12px;border-radius:999px">
                     {{tg.name}}
-                    <button onClick="{{tg.del}}" title="Remove tag" style="border:none;background:var(--chip2);color:var(--tx-dim);width:16px;height:16px;border-radius:50%;font-size:9px;cursor:pointer;line-height:16px;padding:0;transition:all .15s" style-hover="background:rgba(255,92,122,.25);color:var(--red)">✕</button>
+                    <button class="native-symbol" onClick="{{tg.del}}" title="Remove tag" style="border:none;background:var(--chip2);color:var(--tx-dim);width:16px;height:16px;border-radius:50%;font-size:9px;cursor:pointer;line-height:16px;padding:0;transition:all .15s" style-hover="background:rgba(255,92,122,.25);color:var(--red)">✕</button>
                   </span>
                 </sc-for>
               </div>
@@ -1111,7 +1110,7 @@ html{--accent:#3DDC97;scrollbar-gutter:stable;scrollbar-color:var(--accent) tran
                 <sc-for list="{{mistList}}" as="ml" hint-placeholder-count="8">
                   <span style="display:inline-flex;align-items:center;gap:7px;border:1px solid var(--bd2);background:var(--chip);color:var(--tx-mid);font-size:11.5px;font-weight:600;padding:6px 8px 6px 12px;border-radius:999px">
                     {{ml.name}}
-                    <button onClick="{{ml.del}}" title="Remove" style="border:none;background:var(--chip2);color:var(--tx-dim);width:16px;height:16px;border-radius:50%;font-size:9px;cursor:pointer;line-height:16px;padding:0;transition:all .15s" style-hover="background:rgba(255,92,122,.25);color:var(--red)">✕</button>
+                    <button class="native-symbol" onClick="{{ml.del}}" title="Remove" style="border:none;background:var(--chip2);color:var(--tx-dim);width:16px;height:16px;border-radius:50%;font-size:9px;cursor:pointer;line-height:16px;padding:0;transition:all .15s" style-hover="background:rgba(255,92,122,.25);color:var(--red)">✕</button>
                   </span>
                 </sc-for>
               </div>
@@ -1139,7 +1138,7 @@ html{--accent:#3DDC97;scrollbar-gutter:stable;scrollbar-color:var(--accent) tran
               <div style="font-size:11.5px;color:var(--tx-faint);margin-top:4px">saved from the day editor for repeatable setups</div>
               <div class="quick-presets-list" style="display:flex;flex-wrap:wrap;gap:7px;margin-top:11px;align-items:center;min-height:25px">
                 <sc-for list="{{quickPresetChips}}" as="qp" hint-placeholder-count="0">
-                  <span style="display:inline-flex;align-items:center;gap:8px;border:1px solid var(--bd2);background:var(--chip);border-radius:999px;padding:6px 7px 6px 11px"><span><span style="font-family:'Manrope',system-ui,sans-serif;font-size:10px;font-weight:700;color:var(--tx-mid)">{{qp.name}}</span><span style="font-family:'Manrope',system-ui,sans-serif;font-size:8.5px;color:var(--tx-faint);margin-left:6px">{{qp.meta}}</span></span><button onClick="{{qp.del}}" title="Remove preset" style="border:none;background:var(--chip2);color:var(--tx-dim);width:17px;height:17px;border-radius:50%;font-size:9px;cursor:pointer;line-height:17px;padding:0">✕</button></span>
+                  <span style="display:inline-flex;align-items:center;gap:8px;border:1px solid var(--bd2);background:var(--chip);border-radius:999px;padding:6px 7px 6px 11px"><span><span style="font-family:'Manrope',system-ui,sans-serif;font-size:10px;font-weight:700;color:var(--tx-mid)">{{qp.name}}</span><span style="font-family:'Manrope',system-ui,sans-serif;font-size:8.5px;color:var(--tx-faint);margin-left:6px">{{qp.meta}}</span></span><button class="native-symbol" onClick="{{qp.del}}" title="Remove preset" style="border:none;background:var(--chip2);color:var(--tx-dim);width:17px;height:17px;border-radius:50%;font-size:9px;cursor:pointer;line-height:17px;padding:0">✕</button></span>
                 </sc-for>
                 <sc-if value="{{quickPresetsEmpty}}" hint-placeholder-val="{{true}}"><span style="font-size:11.5px;color:var(--tx-ghost);padding:4px 0">No presets yet. Save one from a journal day.</span></sc-if>
               </div>
@@ -1261,7 +1260,7 @@ html{--accent:#3DDC97;scrollbar-gutter:stable;scrollbar-color:var(--accent) tran
 
   <sc-if value="{{lightboxOpen}}" hint-placeholder-val="{{false}}">
     <div class="lightbox-dialog" ref="{{setLightboxDialogRef}}" onKeyDown="{{onLightboxDialogKeydown}}" tabIndex="-1" role="dialog" aria-modal="true" aria-label="Chart media viewer" onClick="{{closeLightbox}}" style="position:fixed;inset:0;background:rgba(4,6,10,.86);backdrop-filter:blur(6px);z-index:130;display:flex;align-items:center;justify-content:center;padding:44px;cursor:zoom-out;animation:fadein .2s ease both">
-      <button onClick="{{closeLightbox}}" aria-label="Close chart media viewer" title="Close" style="position:absolute;top:58px;right:18px;width:34px;height:34px;border-radius:10px;border:1px solid rgba(255,255,255,.28);background:rgba(4,6,10,.7);color:#FFFFFF;font-size:15px;cursor:pointer;z-index:1">✕</button>
+      <button class="native-symbol" onClick="{{closeLightbox}}" aria-label="Close chart media viewer" title="Close" style="position:absolute;top:58px;right:18px;width:34px;height:34px;border-radius:10px;border:1px solid rgba(255,255,255,.28);background:rgba(4,6,10,.7);color:#FFFFFF;font-size:15px;cursor:pointer;z-index:1">✕</button>
       <sc-for list="{{lightboxImgs}}" as="lb" hint-placeholder-count="0">
         <div onClick="{{stopEvt}}" style="position:relative;display:inline-block;max-width:100%;max-height:100%;line-height:0;cursor:auto;border-radius:14px;overflow:hidden;box-shadow:0 30px 90px rgba(0,0,0,.7);animation:zoomin .25s ease both">
           <img ref="{{lb.setRef}}" alt="chart screenshot" style="display:block;width:auto;height:auto;max-width:100%;max-height:calc(100vh - 88px);object-fit:contain">
@@ -1284,7 +1283,7 @@ html{--accent:#3DDC97;scrollbar-gutter:stable;scrollbar-color:var(--accent) tran
       <div class="annotation-dialog" ref="{{setAnnotationDialogRef}}" onKeyDown="{{onAnnotationDialogKeydown}}" tabIndex="-1" role="dialog" aria-modal="true" aria-label="Screenshot markup">
         <div style="display:flex;align-items:center;gap:10px">
           <div style="flex:1;min-width:0"><div style="font-family:'Manrope',system-ui,sans-serif;font-size:9px;letter-spacing:1.5px;color:var(--tx-faint)">SCREENSHOT MARKUP</div><div style="font-size:15px;font-weight:700;margin-top:3px">Mark the decision, not the image</div></div>
-          <button onClick="{{cancelAnnotation}}" aria-label="Cancel screenshot markup" title="Cancel" style="width:31px;height:31px;border:1px solid var(--bd2);background:transparent;color:var(--tx-dim);border-radius:9px;cursor:pointer">✕</button>
+          <button class="native-symbol" onClick="{{cancelAnnotation}}" aria-label="Cancel screenshot markup" title="Cancel" style="width:31px;height:31px;border:1px solid var(--bd2);background:transparent;color:var(--tx-dim);border-radius:9px;cursor:pointer">✕</button>
         </div>
         <div class="annotation-stage-wrap">
           <sc-for list="{{annotationImgs}}" as="ai" hint-placeholder-count="0">
@@ -1324,7 +1323,7 @@ html{--accent:#3DDC97;scrollbar-gutter:stable;scrollbar-color:var(--accent) tran
           <div style="font-size:18px;font-weight:700;margin-top:4px">{{eTitle}}</div>
         </div>
         <div style="font-family:'Manrope',system-ui,sans-serif;font-size:13px;font-weight:600;color:{{ePnlCol}};border:1px solid var(--bd);background:var(--chip);border-radius:9px;padding:6px 11px">{{ePnlS}}</div>
-        <button onClick="{{closeEditor}}" aria-label="Close journal entry" title="Close" style="width:30px;height:30px;border-radius:9px;border:1px solid var(--bd2);background:transparent;color:var(--tx-dim);font-size:14px;cursor:pointer;transition:all .15s" style-hover="color:var(--tx);border-color:var(--bd3)">✕</button>
+        <button class="native-symbol" onClick="{{closeEditor}}" aria-label="Close journal entry" title="Close" style="width:30px;height:30px;border-radius:9px;border:1px solid var(--bd2);background:transparent;color:var(--tx-dim);font-size:14px;cursor:pointer;transition:all .15s" style-hover="color:var(--tx);border-color:var(--bd3)">✕</button>
       </div>
       <div style="font-family:'Manrope',system-ui,sans-serif;font-size:9.5px;letter-spacing:1.6px;color:var(--tx-faint);margin-top:22px">HOW DID THE DAY FEEL?</div>
       <div style="display:flex;gap:9px;margin-top:10px">
@@ -1342,7 +1341,7 @@ html{--accent:#3DDC97;scrollbar-gutter:stable;scrollbar-color:var(--accent) tran
         <div style="height:9px;border-radius:5px;background:var(--chip2);overflow:hidden;margin-top:11px"><div class="meter-fill" style="height:100%;border-radius:5px;width:{{discFillW}};background:linear-gradient(90deg,color-mix(in srgb,{{discCol}} 45%,transparent),{{discCol}});box-shadow:0 0 10px {{discCol}};transition:width .7s cubic-bezier(.2,.8,.2,1)"></div></div>
         <div style="display:flex;flex-direction:column;gap:7px;margin-top:13px">
           <sc-for list="{{discRows}}" as="dr" hint-placeholder-count="6">
-            <div style="display:flex;align-items:center;gap:9px"><span style="width:16px;height:16px;flex:none;border-radius:5px;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;color:{{dr.mc}};border:1px solid {{dr.mc}}">{{dr.mark}}</span><span style="font-size:12px;color:{{dr.fg}}">{{dr.label}}</span></div>
+            <div style="display:flex;align-items:center;gap:9px"><span class="native-symbol" style="width:16px;height:16px;flex:none;border-radius:5px;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;color:{{dr.mc}};border:1px solid {{dr.mc}}">{{dr.mark}}</span><span style="font-size:12px;color:{{dr.fg}}">{{dr.label}}</span></div>
           </sc-for>
         </div>
       </div>
@@ -1371,7 +1370,7 @@ html{--accent:#3DDC97;scrollbar-gutter:stable;scrollbar-color:var(--accent) tran
               <div class="plan-score-head" style="display:flex;align-items:center;gap:9px"><span style="font-family:'Manrope',system-ui,sans-serif;font-size:8.5px;letter-spacing:1.2px;color:var(--tx-faint)">PLAN VS EXECUTION</span><span style="flex:1"></span><span style="font-family:'Manrope',system-ui,sans-serif;font-size:11px;font-weight:700;color:{{accent}}">{{planExecScore}}%</span><span style="font-family:'Manrope',system-ui,sans-serif;font-size:8.5px;color:var(--tx-faint)">{{planExecSummary}}</span></div>
               <div style="display:flex;flex-direction:column;gap:6px;margin-top:9px">
                 <sc-for list="{{planExecRows}}" as="pr" hint-placeholder-count="4">
-                  <div style="display:grid;grid-template-columns:18px 1fr auto;gap:7px;align-items:center;background:{{pr.bg}};border-radius:7px;padding:6px 8px"><span style="font-family:'Manrope',system-ui,sans-serif;font-size:10px;font-weight:700;color:{{pr.col}}">{{pr.mark}}</span><span style="font-size:11px;color:var(--tx-mid)">{{pr.label}}</span><span style="font-family:'Manrope',system-ui,sans-serif;font-size:8.5px;color:{{pr.col}}">{{pr.detail}}</span></div>
+                  <div style="display:grid;grid-template-columns:18px 1fr auto;gap:7px;align-items:center;background:{{pr.bg}};border-radius:7px;padding:6px 8px"><span class="native-symbol" style="font-size:10px;font-weight:700;color:{{pr.col}}">{{pr.mark}}</span><span style="font-size:11px;color:var(--tx-mid)">{{pr.label}}</span><span style="font-family:'Manrope',system-ui,sans-serif;font-size:8.5px;color:{{pr.col}}">{{pr.detail}}</span></div>
                 </sc-for>
               </div>
             </div>
@@ -1393,7 +1392,7 @@ html{--accent:#3DDC97;scrollbar-gutter:stable;scrollbar-color:var(--accent) tran
               </select>
               <button onClick="{{t.toggleSide}}" title="Click to flip long/short" style="border:1px solid {{t.sideBd}};background:transparent;color:{{t.sideCol}};font-family:'Manrope',system-ui,sans-serif;font-size:11.5px;font-weight:700;padding:8px 0;border-radius:9px;cursor:pointer;letter-spacing:1px;transition:all .15s" style-hover="transform:scale(1.04)">{{t.side}}</button>
               <input value="{{t.qty}}" onChange="{{t.onQty}}" inputMode="numeric" title="contracts" style="background:var(--input);border:1px solid var(--bd2);border-radius:9px;color:var(--tx);font-family:'Manrope',system-ui,sans-serif;font-size:12.5px;padding:8px 9px;width:100%;box-sizing:border-box;text-align:center">
-              <button onClick="{{t.del}}" title="Delete trade" style="width:30px;height:30px;border-radius:9px;border:1px solid rgba(255,92,122,.35);background:transparent;color:var(--red);font-size:12px;cursor:pointer;transition:all .15s" style-hover="background:rgba(255,92,122,.1)">✕</button>
+              <button class="native-symbol" onClick="{{t.del}}" title="Delete trade" style="width:30px;height:30px;border-radius:9px;border:1px solid rgba(255,92,122,.35);background:transparent;color:var(--red);font-size:12px;cursor:pointer;transition:all .15s" style-hover="background:rgba(255,92,122,.1)">✕</button>
             </div>
             <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-top:9px">
               <div><div style="font-family:'Manrope',system-ui,sans-serif;font-size:8.5px;letter-spacing:1px;color:var(--tx-faint);margin-bottom:4px">ENTRY</div><input value="{{t.entry}}" onChange="{{t.onEntry}}" inputMode="decimal" style="background:var(--input);border:1px solid var(--bd2);border-radius:9px;color:var(--tx);font-family:'Manrope',system-ui,sans-serif;font-size:12.5px;padding:8px 9px;width:100%;box-sizing:border-box"></div>
@@ -1466,7 +1465,7 @@ html{--accent:#3DDC97;scrollbar-gutter:stable;scrollbar-color:var(--accent) tran
       <div style="display:flex;flex-direction:column;gap:8px;margin-top:10px">
         <sc-for list="{{eRules}}" as="ru" hint-placeholder-count="4">
           <button onClick="{{ru.tog}}" style="display:flex;align-items:center;gap:11px;border:none;background:transparent;cursor:pointer;padding:4px 2px;text-align:left">
-            <span style="width:19px;height:19px;flex:none;border-radius:6px;border:1.5px solid {{ru.bd}};background:{{ru.bg}};color:var(--on-acc);font-size:11px;font-weight:700;display:flex;align-items:center;justify-content:center;transition:all .15s">{{ru.mark}}</span>
+            <span class="native-symbol" style="width:19px;height:19px;flex:none;border-radius:6px;border:1.5px solid {{ru.bd}};background:{{ru.bg}};color:var(--on-acc);font-size:11px;font-weight:700;display:flex;align-items:center;justify-content:center;transition:all .15s">{{ru.mark}}</span>
             <span style="font-size:13px;color:{{ru.fg}}">{{ru.name}}</span>
           </button>
         </sc-for>
@@ -1490,7 +1489,7 @@ html{--accent:#3DDC97;scrollbar-gutter:stable;scrollbar-color:var(--accent) tran
           <div style="position:relative;border-radius:11px;overflow:hidden;border:1px solid var(--bd2)">
             <img ref="{{ph.setRef}}" alt="screenshot" style="width:100%;aspect-ratio:16/10;object-fit:cover;display:block">
             <button onClick="{{ph.markup}}" style="position:absolute;left:6px;bottom:6px;border:1px solid rgba(255,255,255,.2);background:rgba(4,6,10,.76);color:#FFFFFF;font-size:9.5px;font-weight:700;padding:5px 8px;border-radius:7px;cursor:pointer;backdrop-filter:blur(4px)">Mark up</button>
-            <button onClick="{{ph.del}}" title="Remove" style="position:absolute;top:6px;right:6px;width:22px;height:22px;border-radius:7px;border:none;background:rgba(4,6,10,.7);color:#FF5C7A;font-size:10px;cursor:pointer">✕</button>
+            <button class="native-symbol" onClick="{{ph.del}}" title="Remove" style="position:absolute;top:6px;right:6px;width:22px;height:22px;border-radius:7px;border:none;background:rgba(4,6,10,.7);color:#FF5C7A;font-size:10px;cursor:pointer">✕</button>
           </div>
         </sc-for>
         <sc-for list="{{eVideos}}" as="vd" hint-placeholder-count="0">
@@ -1499,7 +1498,7 @@ html{--accent:#3DDC97;scrollbar-gutter:stable;scrollbar-color:var(--accent) tran
             <div onClick="{{vd.play}}" style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;cursor:zoom-in;pointer-events:none">
               <span style="width:32px;height:32px;border-radius:50%;background:rgba(4,6,10,.65);border:1px solid rgba(255,255,255,.3);color:#FFFFFF;font-size:11px;display:flex;align-items:center;justify-content:center;padding-left:2px">▶</span>
             </div>
-            <button onClick="{{vd.del}}" title="Remove" style="position:absolute;top:6px;right:6px;width:22px;height:22px;border-radius:7px;border:none;background:rgba(4,6,10,.7);color:#FF5C7A;font-size:10px;cursor:pointer">✕</button>
+            <button class="native-symbol" onClick="{{vd.del}}" title="Remove" style="position:absolute;top:6px;right:6px;width:22px;height:22px;border-radius:7px;border:none;background:rgba(4,6,10,.7);color:#FF5C7A;font-size:10px;cursor:pointer">✕</button>
           </div>
         </sc-for>
         <label style="border:1px dashed var(--bd3);border-radius:11px;aspect-ratio:16/10;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:5px;cursor:pointer;color:var(--tx-faint);transition:all .15s" style-hover="color:var(--tx-dim);border-color:var(--tx-dim)">
@@ -1529,7 +1528,7 @@ html{--accent:#3DDC97;scrollbar-gutter:stable;scrollbar-color:var(--accent) tran
             </div>
             <sc-for list="{{obStepList}}" as="sp" hint-placeholder-count="5">
               <div style="display:flex;align-items:center;gap:10px;padding:8px 6px;border-radius:9px">
-                <span style="width:22px;height:22px;flex:none;border-radius:50%;border:1.5px solid {{sp.cbd}};background:{{sp.cbg}};color:{{sp.cfg}};font-family:'Manrope',system-ui,sans-serif;font-size:10px;font-weight:700;display:flex;align-items:center;justify-content:center;transition:all .3s">{{sp.num}}</span>
+                <span class="native-symbol" style="width:22px;height:22px;flex:none;border-radius:50%;border:1.5px solid {{sp.cbd}};background:{{sp.cbg}};color:{{sp.cfg}};font-family:'Manrope',system-ui,sans-serif;font-size:10px;font-weight:700;display:flex;align-items:center;justify-content:center;transition:all .3s">{{sp.num}}</span>
                 <span style="font-size:12.5px;color:{{sp.tfg}};font-weight:{{sp.tw}};transition:all .3s">{{sp.t}}</span>
               </div>
             </sc-for>
@@ -1545,9 +1544,9 @@ html{--accent:#3DDC97;scrollbar-gutter:stable;scrollbar-color:var(--accent) tran
                 <div style="font-size:21px;font-weight:700;margin-top:4px">Welcome to Written<span style="color:{{accent}}">.</span></div>
                 <div style="font-size:13px;color:var(--tx-dim);line-height:1.65;margin-top:10px">Written is a local-first futures journal. This short setup installs it into this webview and tailors it to how you trade — nothing ever leaves this device.</div>
                 <div style="display:flex;flex-direction:column;gap:9px;margin-top:20px;font-family:'Manrope',system-ui,sans-serif;font-size:11.5px;color:var(--tx-mid)">
-                  <div style="display:flex;gap:10px;align-items:center"><span style="color:{{accent}}">●</span> installs locally, runs offline</div>
-                  <div style="display:flex;gap:10px;align-items:center"><span style="color:{{accent}}">●</span> no account, no server, no tracking</div>
-                  <div style="display:flex;gap:10px;align-items:center"><span style="color:{{accent}}">●</span> every part of it is customizable once inside</div>
+                  <div style="display:flex;gap:10px;align-items:center"><span class="native-symbol" style="color:{{accent}}">●</span> installs locally, runs offline</div>
+                  <div style="display:flex;gap:10px;align-items:center"><span class="native-symbol" style="color:{{accent}}">●</span> no account, no server, no tracking</div>
+                  <div style="display:flex;gap:10px;align-items:center"><span class="native-symbol" style="color:{{accent}}">●</span> every part of it is customizable once inside</div>
                 </div>
               </div>
             </sc-if>
@@ -1561,7 +1560,7 @@ html{--accent:#3DDC97;scrollbar-gutter:stable;scrollbar-color:var(--accent) tran
                 </div>
                 <div style="display:flex;flex-direction:column;gap:8px;margin-top:20px">
                   <sc-for list="{{obInstItems}}" as="it" hint-placeholder-count="5">
-                    <div style="display:flex;gap:10px;align-items:center;font-family:'Manrope',system-ui,sans-serif;font-size:11.5px;color:{{it.fg}};transition:color .3s"><span style="color:{{it.mc}};width:12px;transition:color .3s">{{it.mk}}</span> {{it.t}}</div>
+                    <div style="display:flex;gap:10px;align-items:center;font-family:'Manrope',system-ui,sans-serif;font-size:11.5px;color:{{it.fg}};transition:color .3s"><span class="native-symbol" style="color:{{it.mc}};width:12px;transition:color .3s">{{it.mk}}</span> {{it.t}}</div>
                   </sc-for>
                 </div>
                 <sc-if value="{{obInstDone}}" hint-placeholder-val="{{false}}">
@@ -1644,7 +1643,7 @@ html{--accent:#3DDC97;scrollbar-gutter:stable;scrollbar-color:var(--accent) tran
             </sc-if>
             <sc-if value="{{obS4}}" hint-placeholder-val="{{false}}">
               <div style="animation:rise .3s ease both;display:flex;flex-direction:column;align-items:center;text-align:center;padding-top:26px">
-                <div style="width:74px;height:74px;border-radius:50%;border:2px solid {{acc55}};background:{{acc16}};color:{{accent}};font-size:30px;display:flex;align-items:center;justify-content:center;box-shadow:0 0 40px {{acc44}}">✓</div>
+                <div class="native-symbol" style="width:74px;height:74px;border-radius:50%;border:2px solid {{acc55}};background:{{acc16}};color:{{accent}};font-size:30px;display:flex;align-items:center;justify-content:center;box-shadow:0 0 40px {{acc44}}">✓</div>
                 <div style="font-size:21px;font-weight:700;margin-top:18px">Installation complete</div>
                 <div style="font-size:13px;color:var(--tx-dim);line-height:1.6;margin-top:8px;max-width:360px">Written is installed in this webview. Your journal lives only on this device — trade the plan, then write it down.</div>
                 <div style="font-family:'Manrope',system-ui,sans-serif;font-size:9px;letter-spacing:1.6px;color:var(--tx-ghost);margin-top:16px">CLICK LAUNCH TO OPEN YOUR LEDGER</div>
@@ -1766,13 +1765,13 @@ html{--accent:#3DDC97;scrollbar-gutter:stable;scrollbar-color:var(--accent) tran
   <sc-if value="{{storageWarningOpen}}" hint-placeholder-val="{{false}}">
     <div class="storage-warning glass-surface-strong" role="alert" style="position:fixed;right:22px;bottom:22px;z-index:132;max-width:440px;display:flex;align-items:flex-start;gap:12px;border:1px solid rgba(255,180,84,.58);border-radius:13px;padding:13px 14px 13px 16px;box-shadow:0 18px 48px var(--sh)">
       <span style="font-size:12px;color:var(--tx-mid);line-height:1.5;flex:1">{{storageWarning}}</span>
-      <button onClick="{{dismissStorageWarning}}" aria-label="Dismiss storage warning" style="border:0;background:transparent;color:var(--tx-faint);font-size:13px;line-height:1;cursor:pointer;padding:2px">✕</button>
+      <button class="native-symbol" onClick="{{dismissStorageWarning}}" aria-label="Dismiss storage warning" style="border:0;background:transparent;color:var(--tx-faint);font-size:13px;line-height:1;cursor:pointer;padding:2px">✕</button>
     </div>
   </sc-if>
 
   <sc-if value="{{toastOpen}}" hint-placeholder-val="{{false}}">
     <div style="position:fixed;right:22px;bottom:22px;z-index:130;display:flex;align-items:center;gap:11px;background:var(--card-a);border:1px solid rgba(61,220,151,.55);border-radius:13px;padding:13px 18px;box-shadow:0 0 34px rgba(61,220,151,.35),0 18px 44px var(--sh);animation:slidein .35s cubic-bezier(.2,.8,.2,1) both">
-      <span style="width:22px;height:22px;flex:none;border-radius:50%;background:var(--green);color:#07130C;font-size:11px;font-weight:700;display:flex;align-items:center;justify-content:center;box-shadow:0 0 14px rgba(61,220,151,.6)">✓</span>
+      <span class="native-symbol" style="width:22px;height:22px;flex:none;border-radius:50%;background:var(--green);color:#07130C;font-size:11px;font-weight:700;display:flex;align-items:center;justify-content:center;box-shadow:0 0 14px rgba(61,220,151,.6)">✓</span>
       <div>
         <div style="font-size:13px;font-weight:700;color:var(--green)">Successful</div>
         <div style="font-size:11.5px;color:var(--tx-dim);margin-top:1px">{{toastMsg}}</div>
@@ -3996,7 +3995,6 @@ class Component extends DCLogic {
       glowOpts:[['off','Off'],['soft','Soft'],['medium','Medium'],['strong','Strong']].map(o=>{const on=(st.glow||'soft')===o[0];return{label:o[1],bg:on?acc+'22':'transparent',fg:on?acc:'var(--tx-dim)',bd:on?acc+'55':'var(--bd2)',set:()=>this.setSetting('glow',o[0])}}),
       surfaceBg:surfaceVars.surfaceBg,surfaceBgStrong:surfaceVars.surfaceBgStrong,surfaceFx:surfaceVars.surfaceFx,surfaceFxStrong:surfaceVars.surfaceFxStrong,
       glassOpts:[['off','Off'],['subtle','Subtle'],['frosted','Frosted']].map(o=>{const on=(st.glass||'frosted')===o[0];return{label:o[1],bg:on?acc+'22':'transparent',fg:on?acc:'var(--tx-dim)',bd:on?acc+'55':'var(--bd2)',set:()=>this.setSetting('glass',o[0])}}),
-      perfAvailable:typeof window!=='undefined'&&!!window.desktopPrefs,
       perfHint:({full:'every effect on — the drifting glow and pulses keep the GPU busy',reduced:'stops the perpetual background motion; frosted glass stays',max:'also drops the blur — smoothest, flattest'})[S.perfMode||'full'],
       perfOpts:[['full','Full effects'],['reduced','Reduced motion'],['max','Maximum performance']].map(o=>{const on=(S.perfMode||'full')===o[0];return{label:o[1],bg:on?acc+'22':'transparent',fg:on?acc:'var(--tx-dim)',bd:on?acc+'55':'var(--bd2)',set:()=>this.setPerfMode(o[0])}}),
       tagList:this.tags().map(name=>({name,del:()=>this.setSetting('tags',this.tags().filter(x=>x!==name))})),
