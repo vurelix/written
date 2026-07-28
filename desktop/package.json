@@ -8,6 +8,7 @@
     "build:renderer": "node scripts/build-renderer.js",
     "verify:renderer": "node scripts/build-renderer.js --check",
     "sync": "node scripts/sync.js",
+    "test:smoke": "npm run verify:renderer && playwright test",
     "prepack": "npm run verify:renderer",
     "dist": "npm run verify:renderer && electron-builder",
     "dist:mac": "npm run verify:renderer && electron-builder --mac --config.directories.output=dist/macOS",
@@ -16,6 +17,7 @@
   "author": "",
   "license": "UNLICENSED",
   "devDependencies": {
+    "@playwright/test": "^1.62.0",
     "electron": "^31.0.0",
     "electron-builder": "^24.13.0"
   },

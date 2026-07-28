@@ -481,7 +481,7 @@ test('valid version-two mount skips legacy reads and migration writes', () => {
             id: 'profile-one',
             createdAt: 1,
             lastUsedAt: 1,
-            settings: { name: 'One', onboarded: true, riskPct: 1 },
+            settings: { name: 'One', onboarded: true, riskPct: 1, widgetLayoutVersion: 1 },
             days: {},
           },
         },
@@ -502,6 +502,66 @@ test('valid version-two mount skips legacy reads and migration writes', () => {
   assert.deepEqual(reads, ['written-profiles-v2']);
   assert.deepEqual(writes, []);
   assert.equal(component.state.settings.name, 'One');
+});
+
+test('widget layout migration upgrades every profile once and preserves custom dimensions', () => {
+  const writes = [];
+  const stored = {
+    version: 2,
+    activeProfileId: 'one',
+    profiles: {
+      one: {
+        id: 'one',
+        createdAt: 1,
+        lastUsedAt: 1,
+        settings: {
+          name: 'One',
+          widgets: {
+            score: { on: 1, columns: 6, rows: 7 },
+            month: { on: 0, columns: 4, rows: 5 },
+            expectancy: { on: 1, columns: 3, rows: 6 },
+          },
+        },
+        days: {},
+      },
+      two: {
+        id: 'two',
+        createdAt: 2,
+        lastUsedAt: 2,
+        settings: {
+          name: 'Two',
+          widgets: {
+            score: { on: 1, columns: 4, rows: 9 },
+            month: { on: 1, columns: 4, rows: 7 },
+            expectancy: { on: 1, columns: 6, rows: 5 },
+          },
+        },
+        days: {},
+      },
+    },
+  };
+  const component = loadComponent({
+    localStorage: {
+      getItem(key) { return key === 'written-profiles-v2' ? JSON.stringify(stored) : null; },
+      setItem(key, value) { writes.push([key, JSON.parse(value)]); },
+    },
+  });
+
+  const result = component.loadProfileStore();
+  const one = result.store.profiles.one.settings;
+  const two = result.store.profiles.two.settings;
+
+  assert.equal(one.widgetLayoutVersion, 1);
+  assert.deepEqual(plain(one.widgets.score), { on: 1, columns: 6, rows: 8 });
+  assert.deepEqual(plain(one.widgets.month), { on: 0, columns: 4, rows: 6 });
+  assert.deepEqual(plain(one.widgets.expectancy), { on: 1, columns: 4, rows: 6 });
+  assert.equal(two.widgetLayoutVersion, 1);
+  assert.deepEqual(plain(two.widgets.score), { on: 1, columns: 4, rows: 9 });
+  assert.deepEqual(plain(two.widgets.month), { on: 1, columns: 4, rows: 7 });
+  assert.deepEqual(plain(two.widgets.expectancy), { on: 1, columns: 6, rows: 5 });
+  assert.equal(writes.length, 1);
+  assert.equal(writes[0][0], 'written-profiles-v2');
+  assert.deepEqual(writes[0][1], plain(result.store));
 });
 
 test('active profile writes remain isolated for overlapping journal dates', () => {
@@ -793,15 +853,39 @@ test('legacy migration is idempotent and ignores createdAt-only storage', () => 
   assert.deepEqual(plain(empty), { version: 2, activeProfileId: null, profiles: {} });
 
   const migrated = component.migrateLegacyStore(
-    { createdAt: 5, onboarded: true, name: 'Alex', accent: '#5EB1FF' },
+    {
+      createdAt: 5,
+      onboarded: true,
+      name: 'Alex',
+      accent: '#5EB1FF',
+      widgets: {
+        score: { on: 1, columns: 4, rows: 7 },
+        expectancy: { on: 1, columns: 3, rows: 5 },
+      },
+    },
     { '2026-07-22': { notes: 'legacy note' } },
     100,
   );
   assert.equal(migrated.activeProfileId, 'legacy-profile');
   assert.equal(migrated.profiles['legacy-profile'].settings.name, 'Alex');
   assert.equal(migrated.profiles['legacy-profile'].settings.tourCompleted, true);
+  assert.equal(migrated.profiles['legacy-profile'].settings.widgetLayoutVersion, 1);
+  assert.equal(migrated.profiles['legacy-profile'].settings.widgets.score.rows, 8);
+  assert.equal(migrated.profiles['legacy-profile'].settings.widgets.expectancy.columns, 4);
   assert.equal(migrated.profiles['legacy-profile'].days['2026-07-22'].notes, 'legacy note');
   assert.deepEqual(plain(component.normalizeProfileStore(migrated)), plain(migrated));
+});
+
+test('new profile creation stamps the current widget layout version', () => {
+  const component = loadComponent({
+    crypto: { randomUUID: () => 'new-profile' },
+    localStorage: { setItem() {} },
+  });
+
+  const profile = component.finishProfileSetup({ name: 'New', syms: [] }, false);
+
+  assert.equal(profile.settings.widgetLayoutVersion, 1);
+  assert.equal(component.state.settings.widgetLayoutVersion, 1);
 });
 
 test('malformed v2 recovers legacy in memory without overwriting either source', () => {
@@ -1201,17 +1285,20 @@ test('profile activation and logout clear pending search results from the prior 
   assert.equal(component.state.pendingSearchResult, null);
 });
 
-test('global search is centered in the titlebar and visible Quick Add is removed', () => {
+test('the titlebar search trigger opens a modal command palette with its input inside', () => {
   const html = fs.readFileSync(htmlPath, 'utf8');
   const titlebar = html.match(/<div data-screen-label="Titlebar"[\s\S]*?<\/div>\s*<\/div>/);
   assert.ok(titlebar);
   assert.match(html, /class="app-titlebar glass-surface"/);
   assert.match(html, /grid-template-columns:minmax\(120px,1fr\) minmax\(260px,520px\) minmax\(120px,1fr\)/);
+  assert.match(html, /class="global-search-trigger"[^>]+onClick="{{openSearch}}"[^>]+aria-haspopup="dialog"/);
+  assert.match(html, /class="command-palette-backdrop"[^>]+onClick="{{closeSearch}}"/);
+  assert.match(html, /class="command-palette-dialog glass-surface-strong"[^>]+role="dialog"[^>]+aria-modal="true"/);
   assert.match(html, /role="combobox"/);
   assert.match(html, /aria-controls="global-search-results"/);
   assert.match(html, /aria-activedescendant="{{searchActiveId}}"/);
   assert.match(html, /id="global-search-results"/);
-  assert.match(html, /class="search-popover glass-surface-strong"/);
+  assert.match(html, /ref="{{setSearchInputRef}}"/);
   assert.doesNotMatch(html, />Quick add </);
   assert.doesNotMatch(html, /quick-overlay/);
 });
@@ -1385,10 +1472,12 @@ test('search interaction guard blocks every unavailable private surface and clos
   component.state = Object.assign({}, component.state, { booting: false, launching: false, obStarted: false, annotation: null, lightbox: null, tourOpen: false, confirm: null, editing: '2026-07-22', draft: {}, settings: { onboarded: true, loggedOut: false } });
   assert.equal(component.canUseSearch(), true, 'search remains available while editing');
   component.state = Object.assign({}, component.state, { searchOpen: true, searchQuery: 'export', searchSel: 2, pendingSearchResult: { id: 'day:old', type: 'day' } });
-  assert.equal(component.renderVals().appInert, true, 'editor, not search, keeps the app inert');
+  assert.equal(component.renderVals().appInert, true, 'editor and palette both keep the app inert');
+  assert.equal(component.renderVals().drawerInert, true, 'palette keeps an open editor inert');
   component.state.editing = null;
   component.state.draft = null;
-  assert.equal(component.renderVals().appInert, false, 'search popover does not inert the app');
+  assert.equal(component.renderVals().appInert, true, 'modal palette keeps the app inert without an editor');
+  assert.equal(component.renderVals().drawerInert, true, 'palette inertness is stable without a mounted editor');
   component.logout();
   assert.equal(component.state.searchOpen, false);
   assert.equal(component.state.searchQuery, '');
@@ -1488,11 +1577,11 @@ test('search-leave Escape cancels confirmation and restores the open search inpu
   const resultButton = { focus() { focused = 'detached-result'; } };
   const document = { activeElement: opener };
   const component = loadComponent({ document, setTimeout, clearTimeout });
+  seedActiveProfile(component, { onboarded: true, loggedOut: false, quickPresets: [] }, {});
   component.state = Object.assign({}, component.state, {
     booting: false,
-    settings: { onboarded: true, loggedOut: false },
     editing: '2026-07-22',
-    draft: { notes: 'Unsaved', trades: [] },
+    draft: Object.assign(component.draftForDay('2026-07-22'), { notes: 'Unsaved' }),
     searchQuery: 'insights',
   });
   component.setSearchInputRef({ focus() { focused = 'search-input'; }, select() { focused = 'search-selected'; } });
@@ -1501,6 +1590,7 @@ test('search-leave Escape cancels confirmation and restores the open search inpu
   document.activeElement = resultButton;
   assert.equal(component.executeSearchResult({ id: 'nav:insights', type: 'nav', tab: 'insights' }), false);
   assert.equal(component.state.confirm, 'search-leave');
+  assert.equal(component.renderVals().searchInert, true);
 
   const event = { key: 'Escape', prevented: false, stopped: false, preventDefault() { this.prevented = true; }, stopPropagation() { this.stopped = true; } };
   assert.equal(component.handleGlobalKeydown(event), true);
@@ -1508,6 +1598,7 @@ test('search-leave Escape cancels confirmation and restores the open search inpu
   assert.equal(component.state.pendingSearchResult, null);
   assert.equal(component.state.searchOpen, true);
   assert.equal(component.state.searchQuery, 'insights');
+  assert.equal(component.renderVals().searchInert, false);
   flushFocus();
   assert.equal(focused, 'search-selected');
   assert.equal(event.prevented, true);
@@ -1537,7 +1628,7 @@ test('search option ids are semantic, stable across query reorder, and collision
   assert.notEqual(unicode, punctuation);
 });
 
-test('focusSearch binding focuses and selects the registered titlebar input', () => {
+test('focusSearch binding focuses and selects the registered palette input', () => {
   const component = loadComponent();
   seedActiveProfile(component, { onboarded: true, loggedOut: false, quickPresets: [] }, {});
   component.state.booting = false;
@@ -1549,7 +1640,7 @@ test('focusSearch binding focuses and selects the registered titlebar input', ()
   assert.deepEqual(calls, ['focus', 'select']);
 });
 
-test('native export and navigation results restore the pre-search opener after popover removal', () => {
+test('native export and navigation results restore the pre-search opener after palette removal', () => {
   let focused = '';
   let nextTimer = 1;
   const timers = new Map();
@@ -1659,9 +1750,9 @@ test('profile setup clears hidden search state and opener through cancel and new
   assert.equal(component._surfaceOpeners.search, undefined);
 });
 
-test('navigation restores a live opener or a persistent titlebar fallback after deferred unmount', () => {
+test('navigation restores a live opener or the app-main fallback after deferred unmount', () => {
   const html = fs.readFileSync(htmlPath, 'utf8');
-  assert.match(html, /data-screen-label="Titlebar"[^>]+ref="{{setTitlebarFocusRef}}"[^>]+tabIndex="-1"/);
+  assert.match(html, /class="app-main"[^>]+ref="{{setAppMainFocusRef}}"[^>]+tabIndex="-1"/);
 
   const runNavigation = disconnectBeforeFlush => {
     let nextTimer = 1;
@@ -1677,7 +1768,7 @@ test('navigation restores a live opener or a persistent titlebar fallback after 
     seedActiveProfile(component, { onboarded: true, loggedOut: false, quickPresets: [] }, {});
     component.state.booting = false;
     component.setSearchInputRef({ isConnected: true, focus() {}, select() {} });
-    component.setTitlebarFocusRef(fallback);
+    component.setAppMainFocusRef(fallback);
 
     const shortcut = { key: 'k', metaKey: true, ctrlKey: false, target: opener, preventDefault() {} };
     assert.equal(component.handleGlobalKeydown(shortcut), true);
@@ -1695,6 +1786,39 @@ test('navigation restores a live opener or a persistent titlebar fallback after 
 
   assert.deepEqual(runNavigation(true), { opener: 0, fallback: 1 });
   assert.deepEqual(runNavigation(false), { opener: 1, fallback: 0 });
+});
+
+test('focus restoration revalidates targets after commit across all three restore paths', () => {
+  let nextTimer = 1;
+  const timers = new Map();
+  const setTimeout = fn => { const id = nextTimer++; timers.set(id, fn); return id; };
+  const clearTimeout = id => timers.delete(id);
+  const flushFocus = () => { const jobs = [...timers.values()]; timers.clear(); jobs.forEach(fn => fn()); };
+  const calls = { opener: 0, fallback: 0 };
+  const opener = { isConnected: true, focus() { calls.opener++; } };
+  const fallback = { isConnected: true, focus() { calls.fallback++; } };
+  const component = loadComponent({ setTimeout, clearTimeout });
+  component.setAppMainFocusRef(fallback);
+
+  component._surfaceOpeners = { direct: opener };
+  assert.equal(component.restoreSurfaceFocus('direct'), true);
+  opener.isConnected = false;
+  flushFocus();
+
+  opener.isConnected = true;
+  component._surfaceOpeners.surface = opener;
+  assert.equal(component.setStateAndRestoreSurface({ confirm: null }, 'surface'), true);
+  opener.isConnected = false;
+  flushFocus();
+
+  opener.isConnected = true;
+  component._surfaceOpeners.search = opener;
+  component.state.searchOpen = true;
+  assert.equal(component.closeSearchToLiveTarget(), true);
+  opener.isConnected = false;
+  flushFocus();
+
+  assert.deepEqual(calls, { opener: 0, fallback: 3 });
 });
 
 test('picker pointer listeners are replaced and removed on pointerup and unmount', () => {
@@ -2094,18 +2218,27 @@ test('trade table view rows show canonical times and restrained dashes for legac
   assert.equal(rows[1].time, '—');
 });
 
-test('v1.0.0 release copy documents all action tools in a single changelog entry', () => {
+test('v1.0.0 release stays consolidated and Help documents the shipped action tools', () => {
   const html = fs.readFileSync(htmlPath, 'utf8');
   assert.match(html, /appVersion:'v1\.0\.0'/);
   assert.match(html, /V1\.0\.0 · LOCAL BUILD · JUL 2026/);
-  assert.match(html, />v1\.0\.0<\/span>/);
+  assert.match(html, />v1\.0\.0 &mdash;<\/span><span[^>]*>first official release:/);
   // first official release: prior pre-release versions are merged, not listed
   assert.doesNotMatch(html, />v2\.[0-9]<\/span>/);
-  for (const heading of ['Risk sizing', 'Time edge and weekly review', 'Search', 'Chart markup']) {
-    assert.match(html, new RegExp(`>${heading}<`));
+  const release = html.match(/first official release:([^<]+)/i);
+  assert.ok(release);
+  for (const tool of ['risk sizing', 'plan scorecards', 'tilt radar', 'chart markup', 'quick capture']) {
+    assert.match(release[1], new RegExp(tool, 'i'));
   }
-  assert.match(html, /risk sizing is informational/i);
-  assert.match(html, /pattern detection, not a market prediction/i);
+  const component = loadComponent();
+  const questions = component.helpFaqData().flatMap(group => group.questions);
+  const text = id => component.helpQuestionText(questions.find(question => question.id === id));
+  assert.match(text('risk-sizing'), /risk sizing is informational/i);
+  assert.match(text('insight-panels'), /Weekly Review Digest/i);
+  assert.match(text('insight-panels'), /Time-of-Day Edge/i);
+  assert.match(text('trading-score-discipline'), /not market predictions/i);
+  assert.match(component.normalizeHelpText(text('search')), /title-bar search/i);
+  assert.match(text('chart-markup'), /Save markup/i);
   assert.doesNotMatch(html, /demo journal ships with generated example candlestick charts/i);
 });
 
@@ -2245,7 +2378,7 @@ test('strict finite parsing shapes only valid prices, P&L, quantity, and duratio
   ]);
 });
 
-test('search is non-modal while journal and lightbox dialogs contain Tab and restore openers', () => {
+test('command palette, journal, and lightbox dialogs contain Tab and restore openers', () => {
   let focused = '';
   let nextTimer = 1;
   const timers = new Map();
@@ -2266,15 +2399,23 @@ test('search is non-modal while journal and lightbox dialogs contain Tab and res
   };
 
   const searchInput = { focus() { focused = 'search-input'; }, select() { focused = 'search-selected'; } };
+  const searchLast = { focus() { focused = 'search-last'; } };
   component.setSearchInputRef(searchInput);
-  assert.equal(component.openSearch(), true);
+  assert.equal(component.openSearch(searchOpener), true);
+  assert.equal(component.captureSurfaceDialog('search', {
+    focus() { focused = 'search-dialog'; },
+    querySelectorAll() { return [searchInput, searchLast]; },
+  }), true);
   flushFocus();
   assert.equal(focused, 'search-selected');
-  const tab = { key: 'Tab', prevented: false, preventDefault() { this.prevented = true; } };
+  const tab = { key: 'Tab', target: searchLast, prevented: false, stopped: false, preventDefault() { this.prevented = true; }, stopPropagation() { this.stopped = true; } };
   assert.equal(component.handleSearchKeydown(tab, []), false);
-  assert.equal(tab.prevented, false);
+  assert.equal(component.handleSurfaceDialogKeydown('search', tab, () => component.closeSearch()), true);
+  assert.equal(tab.prevented, true);
+  assert.equal(tab.stopped, true);
+  assert.equal(focused, 'search-input');
   component.closeSearch();
-  assert.equal(focused, 'search-selected');
+  assert.equal(focused, 'search-input');
   flushFocus();
   assert.equal(focused, 'search-opener');
 
@@ -2437,7 +2578,8 @@ test('the single accent is bound on the app root so range fills and score meter 
 test('modal focus and inert source contracts cover app, editor, and keyboard media', () => {
   const html = fs.readFileSync(htmlPath, 'utf8');
   assert.match(html, /inert="{{appInert}}"[^>]+aria-hidden="{{appInert}}"/);
-  assert.match(html, /class="search-popover glass-surface-strong"[^>]+id="global-search-results"[^>]+role="listbox"/);
+  assert.match(html, /class="command-palette-dialog glass-surface-strong"[^>]+role="dialog"[^>]+aria-modal="true"/);
+  assert.match(html, /class="search-popover"[^>]+id="global-search-results"[^>]+role="listbox"/);
   assert.doesNotMatch(html, /aria-modal="true"[^>]+aria-label="Quick add"/);
   assert.match(html, /class="journal-drawer"[^>]+ref="{{setEditorDialogRef}}"[^>]+onKeyDown="{{onEditorDialogKeydown}}"[^>]+tabIndex="-1"/);
   assert.match(html, /class="lightbox-dialog"[^>]+ref="{{setLightboxDialogRef}}"[^>]+onKeyDown="{{onLightboxDialogKeydown}}"[^>]+tabIndex="-1"/);
@@ -2451,8 +2593,13 @@ test('weekly usage labels and Help interval match the underlying calculations', 
   assert.match(html, />MOST USED SESSION</);
   assert.doesNotMatch(html, />BEST SETUP</);
   assert.doesNotMatch(html, />BEST SESSION</);
-  assert.match(html, /results by hour/i);
-  assert.doesNotMatch(html, /half-hour/i);
+  const component = loadComponent();
+  const question = component.helpFaqData()
+    .flatMap(group => group.questions)
+    .find(item => item.id === 'insight-panels');
+  const help = component.helpQuestionText(question);
+  assert.match(help, /hourly buckets/i);
+  assert.doesNotMatch(help, /half-hour/i);
 });
 
 test('the daily loss limit passes exactly at the configured boundary', () => {
@@ -2462,13 +2609,16 @@ test('the daily loss limit passes exactly at the configured boundary', () => {
   assert.equal(row.pass, true);
 });
 
-test('narrow screens stack Help and fit trade detail fields without changing the sidebar', () => {
+test('narrow screens use the FAQ column rules and retain trade detail behavior', () => {
   const html = fs.readFileSync(htmlPath, 'utf8');
-  assert.match(html, /\.help-grid\{grid-template-columns:1fr!important\}/);
+  const mobile = html.match(/@media\(max-width:760px\)\{([\s\S]*?)\}\nhtml\{/);
+  assert.ok(mobile, 'the narrow-screen CSS block is present');
+  assert.match(mobile[1], /\.help-faq\{gap:14px\}/);
+  assert.match(mobile[1], /\.help-question\{[^}]*min-height:44px/);
+  assert.match(html, /\.help-search-panel\{[^}]*padding:/);
   assert.match(html, /\.trade-detail-grid\{grid-template-columns:repeat\(2,minmax\(0,1fr\)\)!important\}/);
-  assert.match(html, /class="help-grid"/);
-  assert.match(html, /class="trade-detail-grid"/);
-  assert.doesNotMatch(html, /@media\(max-width:760px\)\{[^}]*data-screen-label="Sidebar"/);
+  assert.doesNotMatch(html, /\.help-grid\{grid-template-columns:1fr!important\}/);
+  assert.doesNotMatch(html, /class="help-grid"/);
 });
 
 test('glass, calendar, typography, tags, icon, and reduced-motion contracts are present', () => {
@@ -2513,6 +2663,106 @@ test('accent-glow and accent-soft custom properties track the current accent', (
   const html=fs.readFileSync(htmlPath,'utf8');
   assert.match(html,/--accent-glow:\{\{accentGlow\}\}/);
   assert.match(html,/--accent-soft:\{\{accentSoft\}\}/);
+});
+
+test('accentInk chooses the higher-contrast foreground using numeric sRGB', () => {
+  const component = loadComponent();
+  assert.equal(component.accentInk('#3DDC97'), '#07130C');
+  assert.equal(component.accentInk('#C29BFF'), '#07130C');
+  assert.equal(component.accentInk('#FFFFFF'), '#07130C');
+  assert.equal(component.accentInk('#17324D'), '#FFFFFF');
+  assert.equal(component.accentInk('#000'), '#FFFFFF');
+  assert.equal(component.accentInk('not-a-colour'), '#07130C');
+  component.state.settings = { accent: '#17324D' };
+  assert.equal(component.renderVals().accentInk, '#FFFFFF');
+});
+
+test('document-level accent tokens mirror the active accent for root-owned controls', () => {
+  const values = {};
+  const style = {
+    setProperty(name, value) { values[name] = value; },
+    removeProperty(name) { delete values[name]; },
+  };
+  const component = loadComponent({ document: { documentElement: { style } } });
+  assert.equal(component.applyDocumentAccentTokens('#17324D'), true);
+  assert.deepEqual(values, {
+    '--accent': '#17324D',
+    '--accent-ink': '#FFFFFF',
+    '--accent-soft': '#17324D22',
+    '--accent-glow': '#17324D44',
+  });
+  assert.equal(component.clearDocumentAccentTokens(), true);
+  assert.deepEqual(values, {});
+
+  const html = fs.readFileSync(htmlPath, 'utf8');
+  assert.match(html, /componentDidMount\(\)\{[\s\S]*this\.applyDocumentAccentTokens\(settings\.accent\|\|'#3DDC97'\)/);
+  assert.match(html, /componentDidUpdate\([^)]*\)\{[^}]*this\.applyDocumentAccentTokens\(this\.state\.settings\.accent\|\|'#3DDC97'\)/);
+  assert.match(html, /componentWillUnmount\(\)\{[\s\S]*this\.clearDocumentAccentTokens\(\)/);
+});
+
+test('the document scrollbar uses the active accent with an inset rounded thumb', () => {
+  const html = fs.readFileSync(htmlPath, 'utf8');
+  assert.match(html, /html\{scrollbar-gutter:stable;scrollbar-color:var\(--accent\) transparent;scrollbar-width:thin\}/);
+  assert.match(html, /::-webkit-scrollbar\{width:12px;height:12px\}/);
+  assert.match(html, /::-webkit-scrollbar-thumb\{background:var\(--accent\);border:3px solid transparent;background-clip:padding-box;border-radius:999px\}/);
+  assert.match(html, /::-webkit-scrollbar-thumb:hover\{background:var\(--accent\);background-clip:padding-box\}/);
+  assert.match(html, /::-webkit-scrollbar-track\{background:transparent\}/);
+});
+
+test('solid accent surfaces use accentInk instead of a theme-wide foreground', () => {
+  const component = loadComponent();
+  const today = component.dk(new Date());
+  const settings = { onboarded: true, loggedOut: false, quickPresets: [], accent: '#3DDC97', theme: 'light', checklist: { [today]: { 0: true } } };
+  seedActiveProfile(component, settings, {});
+  const draft = component.draftForDay(today);
+  draft.rules[component.RULES[0]] = true;
+  component.state = Object.assign({}, component.state, { booting: false, editing: today, draft });
+  const bindings = component.renderVals();
+  assert.equal(bindings.eRules[0].fg, '#07130C');
+  assert.equal(bindings.checklistItems[0].fg, '#07130C');
+
+  const html = fs.readFileSync(htmlPath, 'utf8');
+  assert.match(html, /--on-acc:\{\{accentInk\}\}/);
+});
+
+test('custom colour pickers use bounded fields and no redundant current-colour dot', () => {
+  const html = fs.readFileSync(htmlPath, 'utf8');
+  assert.match(html, /\.color-picker-sv,.color-picker-hue\{border:1px solid var\(--bd3\);box-sizing:border-box\}/);
+  assert.equal((html.match(/class="color-picker-sv"/g) || []).length, 2);
+  assert.equal((html.match(/class="color-picker-hue"/g) || []).length, 2);
+  assert.equal((html.match(/aria-label="Pick any color"/g) || []).length, 2);
+  assert.doesNotMatch(html, /title="Pick any color"[^>]*><span[^>]*background:\{\{accent\}\}/);
+});
+
+test('shared alignment primitives normalize page controls and dependent sections', () => {
+  const html = fs.readFileSync(htmlPath, 'utf8');
+  assert.match(html, /html\{scrollbar-gutter:stable;scrollbar-color:var\(--accent\) transparent;scrollbar-width:thin\}/);
+  assert.match(html, /\.section-header\{display:flex;align-items:center;gap:14px;min-height:48px;margin-bottom:26px;flex-wrap:wrap;animation:rise \.4s ease both\}/);
+  assert.match(html, /class="section-header"/);
+  assert.match(html, /Risk analytics[\s\S]*grid-template-columns:repeat\(2,minmax\(0,1fr\)\);gap:24px/);
+  assert.match(html, /data-screen-label="Profile"[^>]+margin:0 auto/);
+  assert.match(html, /class="expectancy-change"[^>]+width:72px;text-align:right/);
+  assert.match(html, /\.risk-setting-field\{display:flex;flex-direction:column\}\.risk-setting-help\{flex:1\}/);
+  assert.equal((html.match(/class="risk-setting-field"/g) || []).length, 2);
+  assert.match(html, /class="sidebar-brand-version"[^>]*>v1\.0\.0<\/div>/);
+  assert.match(html, /onClick="\{\{openLicenses\}\}"[^>]+margin:13px auto 0;display:block/);
+  assert.match(html, /class="quick-presets-list"[^>]+align-items:center;min-height:25px/);
+});
+
+test('the selected command-palette row uses the live accent with readable accentInk', () => {
+  const component = loadComponent();
+  seedActiveProfile(component, { onboarded: true, loggedOut: false, quickPresets: [], accent: '#17324D' }, {});
+  component.state = Object.assign({}, component.state, { booting: false, searchOpen: true, searchQuery: 'Dashboard', searchSel: 0 });
+  const selected = component.renderVals().searchRows[0];
+  assert.equal(selected.bg, '#17324D');
+  assert.equal(selected.bd, '#17324D');
+  assert.equal(selected.fg, '#FFFFFF');
+
+  const html = fs.readFileSync(htmlPath, 'utf8');
+  assert.match(html, /class="search-result" style="background:\{\{item\.bg\}\};border-color:\{\{item\.bd\}\};color:\{\{item\.fg\}\}"/);
+  assert.match(html, /--search-bg:rgba\(255,255,255,.07\)/);
+  assert.match(html, /body\[data-theme="light"\]\{[\s\S]*--search-bg:#FFFFFF/);
+  assert.match(html, /\.global-search-trigger\{[^}]*background:var\(--search-bg\)/);
 });
 
 test('rangePercent normalizes and clamps arbitrary slider bounds', () => {
@@ -2577,9 +2827,14 @@ test('walkthrough has four steps and completion persists only on the active prof
   component.state.profileStore={version:2,activeProfileId:'one',profiles:{one:{id:'one',createdAt:1,lastUsedAt:1,settings:{name:'One',onboarded:true,loggedOut:false,tourCompleted:false},days:{}}}};
   component.state.settings=component.state.profileStore.profiles.one.settings;
   component.state.days={};
-  assert.equal(component.tourSteps().length,4);
+  const steps=component.tourSteps();
+  assert.equal(steps.length,4);
+  assert.deepEqual(plain(steps.map(step=>step.tab)),['dash','cal','insights','playbook']);
+  assert.equal(new Set(steps.map(step=>step.tab)).size,4);
+  assert.ok(steps.every(step=>step.target&&step.title&&step.body));
   component.openTour();
   assert.equal(component.state.tourOpen,true);
+  assert.equal(component.state.tab,'dash');
   component.closeTour(false);
   assert.equal(component.state.settings.tourCompleted,false);
   component.openTour();
@@ -2588,12 +2843,687 @@ test('walkthrough has four steps and completion persists only on the active prof
   assert.equal(component.state.settings.tourCompleted,true);
 });
 
+test('walkthrough geometry waits for animation and two stable in-viewport frames', () => {
+  const component=loadComponent();
+  assert.equal(component.tourAnimationWaitMs({
+    animationDuration:'0.2s, 75ms',
+    animationDelay:'0.1s, 25ms',
+  }),300);
+  assert.equal(component.sameTourRect(
+    {left:10,top:20,width:100,height:50},
+    {left:10.2,top:19.8,width:100.1,height:50.2},
+  ),true);
+  assert.equal(component.sameTourRect(
+    {left:10,top:20,width:100,height:50},
+    {left:12,top:20,width:100,height:50},
+  ),false);
+  assert.equal(component.tourRectWithinViewport({left:20,top:50,right:220,bottom:250,width:200,height:200},800,600,12),true);
+  assert.equal(component.tourRectWithinViewport({left:20,top:-2,right:220,bottom:198,width:200,height:200},800,600,12),false);
+  assert.deepEqual(plain(component.tourPanelPosition(
+    {left:40,top:100,right:240,bottom:260,width:200,height:160},
+    1200,800,400,230,
+  )),{left:264,top:100});
+});
+
+test('walkthrough step changes cancel stale measurement and switch tabs before targeting', () => {
+  let cancelledFrame=null,clearedTimer=null;
+  const component=loadComponent({
+    cancelAnimationFrame:id=>{cancelledFrame=id},
+    clearTimeout:id=>{clearedTimer=id},
+  });
+  component.state.tourOpen=true;
+  component.state.tourStep=0;
+  component.state.tourSpotlight={top:1};
+  component._tourMeasureFrame=17;
+  component._tourMeasureTimer=23;
+  const token=component._tourMeasureToken||0;
+  assert.equal(component.goTourStep(1),true);
+  assert.equal(component.state.tourStep,1);
+  assert.equal(component.state.tab,'cal');
+  assert.equal(component.state.tourSpotlight,null);
+  assert.equal(component._tourMeasureToken,token+1);
+  assert.equal(cancelledFrame,17);
+  assert.equal(clearedTimer,23);
+});
+
 test('walkthrough markup is modal, focus-managed, and replayable from Help', () => {
   const html=fs.readFileSync(htmlPath,'utf8');
   assert.match(html,/aria-label="Written walkthrough"/);
   assert.match(html,/aria-modal="true"/);
   assert.match(html,/Replay walkthrough/);
   assert.match(html,/tourProgressDots/);
+  assert.match(html,/class="tour-spotlight"/);
+  assert.match(html,/scrollIntoView\(\{block:'center',inline:'nearest',behavior:'auto'\}\)/);
+  assert.match(html,/waitForStableTourRect/);
   assert.match(html,/>Skip</);
   assert.match(html,/>Back</);
+});
+
+// --- Help FAQ ---------------------------------------------------------------
+
+test('Help FAQ exposes six ordered categories, twenty-one stable questions, and exact UI labels', () => {
+  const component = loadComponent();
+  const groups = component.helpFaqData();
+  assert.equal(component.helpFaqData(), groups, 'the cached FAQ graph is built once per component');
+  assert.deepEqual(plain(groups.map(group => group.label)), [
+    'Getting Started',
+    'Dashboard and Insights',
+    'Trades, Setups, and Risk',
+    'Charts and Tools',
+    'Profiles and Customization',
+    'Data and Troubleshooting',
+  ]);
+  const questions = groups.flatMap(group => group.questions);
+  assert.equal(questions.length, 21);
+  assert.equal(new Set(questions.map(question => question.id)).size, 21);
+  const allText = JSON.stringify(plain(groups));
+  for (const label of [
+    'Weekly Review Digest',
+    'Time-of-Day Edge',
+    'Tilt and Discipline Radar',
+    'Lock journal',
+    'Replay walkthrough',
+  ]) {
+    assert.ok(allText.includes(label), `FAQ includes exact visible label: ${label}`);
+  }
+  assert.ok(questions.every(question =>
+    question.id &&
+    question.question &&
+    typeof question.searchText === 'string' &&
+    question.searchText === component.normalizeHelpText(component.helpQuestionText(question)) &&
+    Array.isArray(question.blocks) &&
+    question.blocks.length > 0
+  ));
+});
+
+test('Help FAQ blocks preserve ordered strong runs and flatten to searchable text', () => {
+  const component = loadComponent();
+  const groups = component.helpFaqData();
+  const questions = groups.flatMap(group => group.questions);
+  const runs = questions.flatMap(question => question.blocks.flatMap(block =>
+    block.kind === 'steps'
+      ? block.steps.flatMap(step => step.runs)
+      : block.runs
+  ));
+  assert.ok(runs.some(run => run.strong && run.text === 'Calendar'));
+  assert.ok(runs.some(run => run.strong && run.text === 'Lock journal'));
+  assert.ok(runs.every(run => typeof run.text === 'string' && typeof run.strong === 'boolean'));
+  const lock = questions.find(question => question.id === 'lock-journal');
+  assert.match(component.helpQuestionText(lock), /privacy curtain/i);
+  assert.match(component.helpQuestionText(lock), /not encryption/i);
+});
+
+test('Help FAQ search matches questions, answers, and action labels while preserving group order', () => {
+  const component = loadComponent();
+  const data = component.helpFaqData();
+  component.helpQuestionText = () => {
+    throw new Error('filtering cached FAQ data must use precomputed searchText');
+  };
+
+  const answerOnly = component.filterHelpFaq(data, '  ACTIVE   only IN memory ');
+  assert.equal(answerOnly.normalized, 'active only in memory');
+  assert.equal(answerOnly.matchCount, 1);
+  assert.equal(answerOnly.firstId, 'storage-warning');
+  assert.deepEqual(plain(answerOnly.groups.map(group => group.label)), ['Data and Troubleshooting']);
+
+  const question = component.filterHelpFaq(data, 'time-of-day edge');
+  assert.ok(question.matchCount >= 1);
+  assert.equal(question.groups[0].label, 'Dashboard and Insights');
+
+  const action = component.filterHelpFaq(data, 'replay walkthrough');
+  assert.equal(action.firstId, 'interactive-walkthrough');
+
+  const empty = component.filterHelpFaq(data, '   ');
+  assert.equal(empty.normalized, '');
+  assert.equal(empty.matchCount, 21);
+  assert.equal(empty.firstId, null);
+  assert.equal(empty.groups.length, 6);
+
+  const missing = component.filterHelpFaq(data, 'cloud account recovery service');
+  assert.deepEqual(plain(missing), {
+    normalized: 'cloud account recovery service',
+    matchCount: 0,
+    groups: [],
+    firstId: null,
+  });
+});
+
+test('Help FAQ copy preserves privacy, storage, risk, export, and destructive-action safeguards', () => {
+  const component = loadComponent();
+  const questions = component.helpFaqData().flatMap(group => group.questions);
+  const text = id => component.helpQuestionText(questions.find(question => question.id === id));
+  assert.match(text('lock-journal'), /privacy curtain/i);
+  assert.match(text('lock-journal'), /not encryption/i);
+  assert.match(text('storage-warning'), /reduce stored media/i);
+  assert.match(text('storage-warning'), /switch did not complete/i);
+  assert.match(text('storage-warning'), /active only in memory/i);
+  assert.match(text('risk-sizing'), /not financial advice/i);
+  assert.match(text('csv-export'), /does not include screenshots or clips/i);
+  assert.match(text('reset-clear'), /active profile/i);
+  assert.match(text('reset-clear'), /neither action deletes the profile or its settings/i);
+});
+
+test('Help query auto-opens only on query changes and one question remains open globally', () => {
+  const component = loadComponent();
+  component.state.helpQuery = '';
+  component.state.helpOpenId = null;
+
+  const result = component.setHelpQuery('journal');
+  assert.equal(component.state.helpQuery, 'journal');
+  assert.equal(component.state.helpOpenId, result.firstId);
+
+  const first = component.state.helpOpenId;
+  assert.equal(component.toggleHelpFaq(first), true);
+  assert.equal(component.state.helpOpenId, null);
+  assert.equal(component.state.helpQuery, 'journal');
+
+  component.renderVals();
+  assert.equal(component.state.helpOpenId, null, 'rendering does not reopen the first result');
+
+  assert.equal(component.toggleHelpFaq('quick-presets'), true);
+  assert.equal(component.state.helpOpenId, 'quick-presets');
+  assert.equal(component.toggleHelpFaq('journal-day'), true);
+  assert.equal(component.state.helpOpenId, 'journal-day');
+
+  component.setHelpQuery('active only in memory');
+  assert.equal(component.state.helpOpenId, 'storage-warning');
+  component.setHelpQuery('no matching help answer phrase');
+  assert.equal(component.state.helpOpenId, null);
+});
+
+test('setTab resets Help state atomically and extra cannot override the reset', () => {
+  const component = loadComponent();
+  component.state.tab = 'help';
+  component.state.helpQuery = 'risk';
+  component.state.helpOpenId = 'risk-sizing';
+  assert.equal(component.setTab('cal', {
+    tourStep: 1,
+    helpQuery: 'override',
+    helpOpenId: 'override',
+  }), true);
+  assert.equal(component.state.tab, 'cal');
+  assert.equal(component.state.tourStep, 1);
+  assert.equal(component.state.helpQuery, '');
+  assert.equal(component.state.helpOpenId, null);
+});
+
+test('clearing Help search restores focus through the stable input ref after commit', () => {
+  let focused = 0;
+  const component = loadComponent();
+  component.setState = function setState(patch, callback) {
+    this.state = Object.assign({}, this.state, patch);
+    if (callback) callback();
+  };
+  component.state.helpQuery = 'risk';
+  component.state.helpOpenId = 'risk-sizing';
+  component.setHelpSearchRef({ focus() { focused++; } });
+  assert.equal(component.clearHelpSearch(), true);
+  assert.equal(component.state.helpQuery, '');
+  assert.equal(component.state.helpOpenId, null);
+  assert.equal(focused, 1);
+});
+
+test('Help interactions remain transient and never write profile settings', () => {
+  let writes = 0;
+  const component = loadComponent();
+  component.setSettings = () => { writes++; return true; };
+  component.state.settings = { name: 'Unchanged' };
+  component.setHelpQuery('risk');
+  component.toggleHelpFaq('risk-sizing');
+  component.setTab('dash');
+  assert.equal(writes, 0);
+  assert.deepEqual(plain(component.state.settings), { name: 'Unchanged' });
+});
+
+test('every current tab assignment routes through setTab without direct tab state writes', () => {
+  const html = fs.readFileSync(htmlPath, 'utf8');
+  assert.match(html, /setTab\(tab,extra=null\)/);
+  assert.match(html, /descriptor\.type==='nav'[^\n}]*this\.setTab\(descriptor\.tab\)/);
+  assert.match(html, /this\.setTab\(step\.tab,\{tourStep:next,tourSpotlight:null\}\);return true/);
+  assert.match(html, /this\.setTab\(step\.tab,\{tourOpen:true,tourStep:0,tourSpotlight:null,tourReplay:!!replay,searchOpen:false\}\);return true/);
+  assert.match(html, /logout\(\)\{const durable=[^\n]*this\.setTab\('dash',[^\n]*return durable\}/);
+  assert.match(html, /const mkNav=o=>[^\n]*go:\(\)=>this\.setTab\(o\[0\]\)/);
+  assert.match(html, /goProfile:\(\)=>this\.setTab\('profile'\)/);
+  assert.match(html, /goTrades:\(\)=>this\.setTab\('trades'\),goCal:\(\)=>this\.setTab\('cal'\)/);
+  assert.doesNotMatch(html, /setState\(\{[^\n}]*tab:/);
+});
+
+test('Help render bindings expose a complete recursive view model', () => {
+  const component = loadComponent();
+  seedActiveProfile(component, { onboarded: true, loggedOut: false }, {});
+  component.state.booting = false;
+  component.state.tab = 'help';
+  const values = component.renderVals();
+
+  for (const name of [
+    'helpQuery','helpGroups','helpMatchCount','helpResultStatus',
+    'helpNoResults','helpClearDisabled',
+    'setHelpSearchRef','onHelpQuery','clearHelpSearch','replayTour',
+  ]) {
+    assert.notEqual(values[name], undefined, `top-level Help binding ${name} exists`);
+  }
+  assert.equal(values.helpGroups.length, 6);
+  let questionCount = 0;
+  for (const group of values.helpGroups) {
+    assert.equal(typeof group.key, 'string');
+    assert.equal(group.categoryId, 'help-faq-category-' + group.key);
+    assert.equal(typeof group.label, 'string');
+    assert.ok(Array.isArray(group.questions));
+    for (const question of group.questions) {
+      questionCount++;
+      for (const key of [
+        'id','question','questionId','answerId','expanded','hidden',
+        'caretTransform','toggle','blocks','hasAction',
+      ]) assert.notEqual(question[key], undefined, `question field ${key} exists`);
+      assert.equal(typeof question.toggle, 'function');
+      for (const block of question.blocks) {
+        assert.equal(typeof block.isPara, 'boolean');
+        assert.equal(typeof block.isSteps, 'boolean');
+        assert.ok(Array.isArray(block.runs));
+        assert.ok(Array.isArray(block.steps));
+        const runs = block.runs.concat(block.steps.flatMap(step => step.runs));
+        for (const run of runs) {
+          assert.equal(typeof run.text, 'string');
+          assert.equal(typeof run.strong, 'boolean');
+          assert.equal(typeof run.plain, 'boolean');
+          assert.notEqual(run.strong, run.plain);
+        }
+      }
+      if (question.hasAction) {
+        assert.equal(typeof question.action.label, 'string');
+        assert.equal(typeof question.action.run, 'function');
+        if (question.action.label === 'Replay walkthrough') {
+          assert.equal(question.action.run, values.replayTour);
+        }
+      }
+    }
+  }
+  assert.equal(questionCount, 21);
+  assert.ok(values.helpGroups.flatMap(group => group.questions).every(question => question.hidden));
+});
+
+test('Help FAQ markup keeps answer IDREFs mounted and exposes search accessibility', () => {
+  const html = fs.readFileSync(htmlPath, 'utf8');
+  assert.match(html, /class="help-faq"/);
+  assert.match(html, /<label[^>]+for="help-faq-search"[^>]*>Search Help<\/label>/);
+  assert.match(html, /id="help-faq-search"[^>]+ref="\{\{setHelpSearchRef\}\}"/);
+  assert.match(html, /aria-live="polite"/);
+  assert.match(html, /aria-expanded="\{\{faq\.expanded\}\}"/);
+  assert.match(html, /aria-controls="\{\{faq\.answerId\}\}"/);
+  assert.match(html, /id="\{\{faq\.answerId\}\}"[^>]+hidden="\{\{faq\.hidden\}\}"[^>]+role="region"[^>]+aria-labelledby="\{\{faq\.questionId\}\}"/);
+  assert.doesNotMatch(html, /<sc-if value="\{\{faq\.expanded\}\}"[^>]*>[\s\S]*id="\{\{faq\.answerId\}\}"/);
+  assert.match(html, /<section class="help-category" aria-labelledby="\{\{category\.categoryId\}\}">/);
+  assert.match(html, /<h2 id="\{\{category\.categoryId\}\}">\{\{category\.label\}\}<\/h2>/);
+  assert.match(html, /onClick="\{\{faq\.action\.run\}\}">\{\{faq\.action\.label\}\}<\/button>/);
+  assert.doesNotMatch(html, /it covers search, journaling a day, shaping the dashboard/i);
+});
+
+// --- Discipline scoring (plan rev.8 §D6) -------------------------------------
+// The reported bug: an untouched day scored 17, because "No mistakes logged"
+// passes vacuously (1 of 6 checks). These pin BOTH boundaries — a negative-only
+// suite would also be satisfied by hardwiring noMist to false.
+
+function disciplineMistakeMark(component, draft) {
+  const vals = component.disciplineVals(draft, '#3DDC97');
+  return vals.discRows[component.RULES.length].mark;
+}
+
+test('discipline score is 0 for a pristine untouched day', () => {
+  const component = loadComponent();
+  const draft = component.draftForDay('2026-07-20');
+  assert.equal(component.disciplineVals(draft, '#3DDC97').discScore, 0);
+});
+
+test('discipline: a session-only day does not earn the no-mistakes check', () => {
+  const component = loadComponent();
+  const draft = Object.assign(component.draftForDay('2026-07-20'), { sessions: ['NY Open'] });
+  assert.equal(disciplineMistakeMark(component, draft), '✕');
+});
+
+test('discipline: a mood-only day does not earn the no-mistakes check', () => {
+  const component = loadComponent();
+  const draft = Object.assign(component.draftForDay('2026-07-20'), { emoji: '🙂' });
+  assert.equal(disciplineMistakeMark(component, draft), '✕');
+});
+
+test('discipline: a logged trade with no mistakes earns the no-mistakes check', () => {
+  const component = loadComponent();
+  const draft = Object.assign(component.draftForDay('2026-07-20'), {
+    trades: [{ sym: 'MES', side: 'LONG', qty: 1, entry: 100, pnl: 50 }],
+  });
+  assert.equal(disciplineMistakeMark(component, draft), '✓');
+});
+
+test('discipline: a completed journal with no mistakes earns the no-mistakes check', () => {
+  const component = loadComponent();
+  const draft = Object.assign(component.draftForDay('2026-07-20'), {
+    review: { well: 'Followed the plan end to end.' },
+  });
+  assert.equal(disciplineMistakeMark(component, draft), '✓');
+});
+
+test('discipline: a logged trade with a mistake loses the no-mistakes check', () => {
+  const component = loadComponent();
+  const draft = Object.assign(component.draftForDay('2026-07-20'), {
+    trades: [{ sym: 'MES', side: 'LONG', qty: 1, entry: 100, pnl: -50 }],
+    mistakes: ['FOMO'],
+  });
+  assert.equal(disciplineMistakeMark(component, draft), '✕');
+});
+
+// --- Trading score radar, no-data state (plan rev.8 §D3) ---------------------
+// With no trades peakEq=0 -> ddPct=0 -> sDd=clamp(100-0)=100 while the other
+// five components are 0, so the polygon drew a single Max-drawdown spike.
+// Zeroing the components alone is not enough: radarData/radarDots apply a
+// Math.max(0.04, ...) floor, which would still leave a small hexagon.
+
+test('radar collapses to the exact centre when there is no trade data', () => {
+  const component = loadComponent();
+  seedActiveProfile(component, { onboarded: true, loggedOut: false }, {});
+  component.state.booting = false;
+  const bindings = component.renderVals();
+
+  const points = bindings.radarData.split(' ');
+  assert.equal(points.length, 6);
+  for (const point of points) assert.equal(point, '100.0,100.0');
+
+  for (const dot of bindings.radarDots) {
+    assert.equal(dot.cx, '100.0');
+    assert.equal(dot.cy, '100.0');
+  }
+});
+
+test('radar max-drawdown axis does not read 100 while the others read 0', () => {
+  const component = loadComponent();
+  seedActiveProfile(component, { onboarded: true, loggedOut: false }, {});
+  component.state.booting = false;
+  const labels = component.renderVals().radarLabels;
+  const drawdown = labels.find(l => l.label === 'Max DD');
+  assert.ok(drawdown, 'the Max DD axis is present');
+  assert.equal(drawdown.col, labels[0].col, 'every axis shares the empty-state colour');
+});
+
+test('radar keeps the 0.04 floor and real geometry once trades exist', () => {
+  const component = loadComponent();
+  seedActiveProfile(component, { onboarded: true, loggedOut: false }, {
+    '2026-07-20': { trades: [{ sym: 'MES', side: 'LONG', qty: 1, entry: 100, pnl: 120 }] },
+    '2026-07-21': { trades: [{ sym: 'MES', side: 'LONG', qty: 1, entry: 100, pnl: -40 }] },
+  });
+  component.state.booting = false;
+  component.state.range = 'all';
+  const bindings = component.renderVals();
+
+  const points = bindings.radarData.split(' ');
+  assert.equal(points.length, 6);
+  assert.ok(
+    points.some(p => p !== '100.0,100.0'),
+    'a populated radar must not collapse to the centre'
+  );
+});
+
+// --- Local-first status + OS shortcut hint (plan rev.8, Sprint 1) ------------
+
+test('the sidebar status reads LOCAL and reuses the shared status dot', () => {
+  const html = fs.readFileSync(htmlPath, 'utf8');
+  assert.doesNotMatch(html, />ONLINE</, 'no "Online" status remains');
+  assert.equal(
+    (html.match(/class="local-status-dot"/g) || []).length,
+    2,
+    'titlebar and sidebar both use the shared dot class'
+  );
+});
+
+test('the search shortcut hint follows the desktop platform', () => {
+  const mac = loadComponent({ window: { desktopPlatform: 'darwin' } });
+  assert.equal(mac.searchHintKey(), '⌘K');
+
+  const win = loadComponent({ window: { desktopPlatform: 'win32' } });
+  assert.equal(win.searchHintKey(), 'Ctrl K');
+});
+
+test('the search shortcut hint falls back to the browser platform', () => {
+  const mac = loadComponent({ navigator: { userAgentData: { platform: 'macOS' } } });
+  assert.equal(mac.searchHintKey(), '⌘K');
+
+  const linux = loadComponent({ navigator: { platform: 'Linux x86_64' } });
+  assert.equal(linux.searchHintKey(), 'Ctrl K');
+
+  const bare = loadComponent();
+  assert.equal(bare.searchHintKey(), 'Ctrl K', 'no platform info defaults to the non-Apple hint');
+});
+
+test('Windows scroll hides the in-app titlebar through one shared dynamic offset', () => {
+  const window = { desktopPlatform: 'win32', scrollY: 0 };
+  const component = loadComponent({ window });
+  assert.equal(component.state.titlebarOffset, '44px');
+  assert.equal(component.syncTitlebarOffset(), false);
+  window.scrollY = 45;
+  assert.equal(component.syncTitlebarOffset(), true);
+  assert.equal(component.state.titlebarOffset, '0px');
+  window.scrollY = 0;
+  assert.equal(component.syncTitlebarOffset(), true);
+  assert.equal(component.state.titlebarOffset, '44px');
+
+  const mac = loadComponent({ window: { desktopPlatform: 'darwin', scrollY: 100 } });
+  assert.equal(mac.syncTitlebarOffset(), false);
+  assert.equal(mac.state.titlebarOffset, '44px');
+
+  const html = fs.readFileSync(htmlPath, 'utf8');
+  assert.match(html, /--titlebar-offset:\{\{titlebarOffset\}\}/);
+  assert.match(html, /\.app-titlebar\{[^}]*top:calc\(var\(--titlebar-offset\) - 44px\)/);
+  assert.match(html, /\.command-palette-backdrop\{[^}]*inset:var\(--titlebar-offset\) 0 0/);
+  assert.match(html, /class="glass-surface"[^>]+position:sticky;top:var\(--titlebar-offset\);height:calc\(100vh - var\(--titlebar-offset\)\)/);
+  assert.match(html, /addEventListener\('scroll',this\._onWindowScroll/);
+  assert.match(html, /removeEventListener\('scroll',this\._onWindowScroll/);
+});
+
+test('the titlebar renders the shortcut hint from the binding, not a hardcoded symbol', () => {
+  const html = fs.readFileSync(htmlPath, 'utf8');
+  assert.doesNotMatch(html, /<kbd>⌘K<\/kbd>/, 'the Apple symbol is no longer hardcoded');
+  assert.match(html, /<kbd>\{\{searchHint\}\}<\/kbd>/);
+});
+
+test('searchHint is an exposed binding, not just a template reference', () => {
+  // A {{name}} with no matching exposed binding renders empty and throws nothing —
+  // the DC failure mode that has bitten this file before.
+  const component = loadComponent({ window: { desktopPlatform: 'darwin' } });
+  seedActiveProfile(component, { onboarded: true, loggedOut: false }, {});
+  component.state.booting = false;
+  assert.equal(component.renderVals().searchHint, '⌘K');
+});
+
+// --- Mood dataset (plan rev.8 §D7) ------------------------------------------
+// emoTimeline/emoAgg mapped TRADE days and substituted a neutral face via
+// `e.emoji || '😐'`, so psychEmpty meant "no trade days" and anyone logging
+// trades without moods saw fabricated neutral data in both views.
+
+function moodBindings(component, days, range = 'all') {
+  seedActiveProfile(component, { onboarded: true, loggedOut: false }, days);
+  component.state.booting = false;
+  component.state.range = range;
+  return component.renderVals();
+}
+
+test('mood: an empty journal has no timeline and reports empty', () => {
+  const component = loadComponent();
+  const b = moodBindings(component, {});
+  assert.equal(b.emoTimeline.length, 0);
+  assert.equal(b.psychEmpty, true);
+  assert.equal(b.psychHasEmo, false);
+});
+
+test('mood: trades without a logged mood do not fabricate neutral entries', () => {
+  const component = loadComponent();
+  const b = moodBindings(component, {
+    '2026-07-20': { trades: [{ sym: 'MES', side: 'LONG', qty: 1, entry: 100, pnl: 75 }] },
+  });
+  assert.equal(b.emoTimeline.length, 0, 'a mood-less trade day is not a mood entry');
+  assert.equal(b.emoAgg.length, 0);
+  assert.equal(b.psychEmpty, true);
+});
+
+test('mood: a mood-only day with no trades still appears', () => {
+  const component = loadComponent();
+  const b = moodBindings(component, { '2026-07-20': { emoji: '🙂' } });
+  assert.equal(b.emoTimeline.length, 1);
+  assert.equal(b.emoTimeline[0].ch, '🙂');
+  assert.equal(b.psychEmpty, false);
+  assert.equal(b.psychHasEmo, true);
+});
+
+test('mood: only days carrying a mood reach the timeline and aggregate', () => {
+  const component = loadComponent();
+  const b = moodBindings(component, {
+    '2026-07-18': { emoji: '😄', trades: [{ sym: 'MES', side: 'LONG', qty: 1, entry: 100, pnl: 90 }] },
+    '2026-07-19': { trades: [{ sym: 'MES', side: 'LONG', qty: 1, entry: 100, pnl: -30 }] },
+    '2026-07-20': { emoji: '🙁' },
+  });
+  assert.deepEqual(plain(b.emoTimeline).map(e => e.ch), ['😄', '🙁']);
+  assert.deepEqual(plain(b.emoAgg).map(e => e.ch).sort(), ['🙁', '😄'].sort());
+});
+
+test('mood: entries outside the selected range are excluded', () => {
+  const component = loadComponent();
+  const todayKey = component.dk(new Date());
+  const b = moodBindings(component, {
+    '2020-01-02': { emoji: '😡' },
+    [todayKey]: { emoji: '😄' },
+  }, 'day');
+  assert.deepEqual(plain(b.emoTimeline).map(e => e.ch), ['😄'], 'only today survives the day range');
+});
+
+test('mood: unsupported legacy emoji are excluded from BOTH views', () => {
+  const component = loadComponent();
+  const b = moodBindings(component, {
+    '2026-07-20': { emoji: '🦄' },
+    '2026-07-21': { emoji: '🙂' },
+  });
+  assert.deepEqual(plain(b.emoTimeline).map(e => e.ch), ['🙂'], 'unknown emoji stays out of the timeline');
+  assert.deepEqual(plain(b.emoAgg).map(e => e.ch), ['🙂'], 'and out of the aggregate, so they cannot disagree');
+});
+
+test('the emotional timeline markup is gated on psychHasEmo', () => {
+  const html = fs.readFileSync(htmlPath, 'utf8');
+  assert.match(html, /<sc-if value="\{\{psychHasEmo\}\}"/);
+  assert.match(
+    html,
+    /<sc-if value="\{\{psychHasEmo\}\}"[\s\S]{0,400}EMOTIONAL TIMELINE/,
+    'the header sits inside the gate, not just the bars'
+  );
+});
+
+// --- Outside-click dismissal (plan rev.8 §D1) -------------------------------
+// Deliberately scoped to dismissible POPOVERS only. The command palette owns its
+// own backdrop dismissal, and modal surfaces (editor, tour, confirmations) must
+// never be closed by a stray outside click.
+
+function fakeEvent(path) {
+  return { composedPath: () => path };
+}
+
+test('outside pointerdown closes the profile menu', () => {
+  const component = loadComponent();
+  const menu = { id: 'menu' };
+  component.setDismissRef('profileMenu', menu);
+  component.state.profileMenuOpen = true;
+  assert.equal(component.handleOutsidePointerDown(fakeEvent([{ id: 'elsewhere' }])), true);
+  assert.equal(component.state.profileMenuOpen, false);
+});
+
+test('pointerdown inside the profile menu leaves it open', () => {
+  const component = loadComponent();
+  const menu = { id: 'menu' };
+  component.setDismissRef('profileMenu', menu);
+  component.state.profileMenuOpen = true;
+  assert.equal(component.handleOutsidePointerDown(fakeEvent([{ id: 'child' }, menu])), false);
+  assert.equal(component.state.profileMenuOpen, true);
+});
+
+test('pointerdown on the opener does not close, so the toggle is not fought', () => {
+  // The ref wraps opener + panel; if dismissal closed here the toggle would
+  // immediately reopen, making the menu impossible to dismiss by its own button.
+  const component = loadComponent();
+  const wrapper = { id: 'wrapper' };
+  component.setDismissRef('profileMenu', wrapper);
+  component.state.profileMenuOpen = true;
+  component.handleOutsidePointerDown(fakeEvent([{ id: 'opener-button' }, wrapper]));
+  assert.equal(component.state.profileMenuOpen, true);
+});
+
+test('outside pointerdown closes the colour picker from either mount point', () => {
+  const settings = { id: 'settings-picker' };
+  const wizard = { id: 'wizard-picker' };
+
+  const a = loadComponent();
+  a.setDismissRef('picker', settings);
+  a.setDismissRef('pickerSetup', wizard);
+  a.state.pickerOpen = true;
+  a.handleOutsidePointerDown(fakeEvent([{ id: 'elsewhere' }]));
+  assert.equal(a.state.pickerOpen, false, 'closes when the click is outside both');
+
+  const b = loadComponent();
+  b.setDismissRef('picker', settings);
+  b.setDismissRef('pickerSetup', wizard);
+  b.state.pickerOpen = true;
+  b.handleOutsidePointerDown(fakeEvent([wizard]));
+  assert.equal(b.state.pickerOpen, true, 'the setup-wizard instance counts as inside');
+});
+
+test('outside pointerdown never closes modal surfaces', () => {
+  const component = loadComponent();
+  Object.assign(component.state, {
+    searchOpen: true, tourOpen: true, lightbox: 'x',
+    editing: '2026-07-20', draft: {}, confirm: 'search-leave',
+  });
+  component.handleOutsidePointerDown(fakeEvent([{ id: 'elsewhere' }]));
+  assert.equal(component.state.searchOpen, true);
+  assert.equal(component.state.tourOpen, true);
+  assert.equal(component.state.lightbox, 'x');
+  assert.equal(component.state.editing, '2026-07-20');
+  assert.equal(component.state.confirm, 'search-leave');
+});
+
+test('a closed popover is a no-op', () => {
+  const component = loadComponent();
+  component.state.profileMenuOpen = false;
+  component.state.pickerOpen = false;
+  assert.equal(component.handleOutsidePointerDown(fakeEvent([{ id: 'elsewhere' }])), false);
+});
+
+test('the dismissal listener is registered on mount and removed on unmount', () => {
+  const added = [];
+  const removed = [];
+  const document = {
+    addEventListener: (type, fn, opts) => added.push({ type, fn, opts }),
+    removeEventListener: (type, fn, opts) => removed.push({ type, fn, opts }),
+    documentElement: { getAttribute: () => null, setAttribute() {} },
+    body: { dataset: {} },
+  };
+  const component = loadComponent({
+    document,
+    window: { addEventListener() {}, removeEventListener() {} },
+    localStorage: { getItem: () => null, setItem: () => {} },
+  });
+  component.componentDidMount();
+  const registration = added.find(a => a.type === 'pointerdown');
+  assert.ok(registration, 'pointerdown listener registered on mount');
+
+  component.componentWillUnmount();
+  const removal = removed.find(r => r.type === 'pointerdown');
+  assert.ok(removal, 'pointerdown listener removed on unmount');
+  assert.equal(removal.fn, registration.fn, 'the same handler reference is removed');
+});
+
+test('every dismiss ref used in markup is an exposed binding', () => {
+  const html = fs.readFileSync(htmlPath, 'utf8');
+  const component = loadComponent();
+  seedActiveProfile(component, { onboarded: true, loggedOut: false }, {});
+  component.state.booting = false;
+  const bindings = component.renderVals();
+  const used = [...html.matchAll(/ref="\{\{(set\w*(?:PickerSetupOpener|PickerOpener|PickerSetup|Picker|ProfileMenu)Ref)\}\}"/g)]
+    .map(m => m[1]);
+  assert.equal(used.length, 5, 'profile menu + two picker panels + two picker openers');
+  for (const name of used) {
+    assert.equal(typeof bindings[name], 'function', `${name} is exposed from renderVals`);
+  }
 });

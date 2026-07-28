@@ -20,29 +20,38 @@ body{margin:0;background:var(--bg);
 --tx:#E8ECF1;--tx-mid:#C6CDD8;--tx-dim:#8B95A5;--tx-faint:#5A6373;--tx-ghost:#4A5261;--tx-ax:#7E899B;
 --chip:rgba(255,255,255,.03);--chip2:rgba(255,255,255,.055);--grid:rgba(255,255,255,.05);--zero:rgba(255,255,255,.16);
 --ovl:rgba(4,6,10,.6);--sh:rgba(0,0,0,.5);--sh2:rgba(0,0,0,.35);--on-acc:#07130C;--glass:rgba(13,17,24,.58);--glass2:rgba(13,17,24,.38);--glass-strong:rgba(13,17,24,.74);--glass2-strong:rgba(13,17,24,.56);
---green:#3DDC97;--red:#FF5C7A;--amber:#FFB454;--blue:#5EB1FF;--green-dim:#3E9B77;--red-dim:#B0596E;--topbar:#0B0E13}
+--green:#3DDC97;--red:#FF5C7A;--amber:#FFB454;--blue:#5EB1FF;--green-dim:#3E9B77;--red-dim:#B0596E;--topbar:#0B0E13;--search-bg:rgba(255,255,255,.07)}
 body[data-theme="light"]{
 --bg:#EEF1F6;--card-a:#FFFFFF;--card-b:#FAFBFD;--panel-a:#FFFFFF;--panel-b:#F6F8FB;--input:#EDF0F5;--side:rgba(255,255,255,.75);
 --bd:rgba(16,22,35,.08);--bd2:rgba(16,22,35,.13);--bd3:rgba(16,22,35,.26);
 --tx:#161C28;--tx-mid:#394456;--tx-dim:#5E6979;--tx-faint:#7E8797;--tx-ghost:#9AA3B2;--tx-ax:#6A7587;
 --chip:rgba(16,22,35,.035);--chip2:rgba(16,22,35,.06);--grid:rgba(16,22,35,.07);--zero:rgba(16,22,35,.22);
 --ovl:rgba(30,38,52,.42);--sh:rgba(29,41,61,.18);--sh2:rgba(29,41,61,.1);--on-acc:#FFFFFF;--glass:rgba(255,255,255,.62);--glass2:rgba(255,255,255,.42);--glass-strong:rgba(255,255,255,.78);--glass2-strong:rgba(255,255,255,.58);
---green:#0C9F63;--red:#DE3D5A;--amber:#C77F1A;--blue:#287ED1;--green-dim:#3C8F6F;--red-dim:#C86B80;--topbar:#EEF1F6}
+--green:#0C9F63;--red:#DE3D5A;--amber:#C77F1A;--blue:#287ED1;--green-dim:#3C8F6F;--red-dim:#C86B80;--topbar:#EEF1F6;--search-bg:#FFFFFF}
 a{color:var(--green)}a:hover{opacity:.75}
 input,select,textarea,button{font-family:inherit}
 input::placeholder,textarea::placeholder{color:var(--tx-ghost)}
 input:focus,select:focus,textarea:focus{outline:none;border-color:var(--bd3)!important}
 button:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-visible,[tabindex]:focus-visible{outline:2px solid var(--focus-accent,#3DDC97);outline-offset:2px}
 .insights-full{grid-column:1/-1}
-.app-titlebar{position:sticky;top:0;z-index:95;height:44px;display:grid;grid-template-columns:minmax(120px,1fr) minmax(260px,520px) minmax(120px,1fr);align-items:center;padding:0 16px;border-bottom:1px solid var(--bd);background:var(--topbar);backdrop-filter:var(--glass-blur,blur(18px));box-sizing:border-box}
+.section-header{display:flex;align-items:center;gap:14px;min-height:48px;margin-bottom:26px;flex-wrap:wrap;animation:rise .4s ease both}
+.risk-setting-field{display:flex;flex-direction:column}.risk-setting-help{flex:1}
+.app-titlebar{position:sticky;top:calc(var(--titlebar-offset) - 44px);z-index:95;height:44px;display:grid;grid-template-columns:minmax(120px,1fr) minmax(260px,520px) minmax(120px,1fr);align-items:center;padding:0 16px;border-bottom:1px solid var(--bd);background:var(--topbar);backdrop-filter:var(--glass-blur,blur(18px));box-sizing:border-box;transition:top .18s ease}
 .titlebar-traffic{display:flex;gap:8px;align-items:center}.traffic-dot{width:12px;height:12px;border-radius:50%;display:inline-block}.traffic-close{background:#FF5F57}.traffic-minimize{background:#FEBC2E}.traffic-zoom{background:#28C840}
-.global-search-wrap{position:relative;min-width:0}.global-search-wrap input{width:100%;height:32px;box-sizing:border-box;border:1px solid var(--bd2);border-radius:10px;background:rgba(0,0,0,.12);color:var(--tx);padding:0 58px 0 34px;font-size:12px}.search-icon{position:absolute;left:11px;top:50%;transform:translateY(-50%);color:var(--tx-faint);pointer-events:none}.global-search-wrap kbd{position:absolute;right:8px;top:50%;transform:translateY(-50%);font-family:'Manrope',system-ui,sans-serif;font-size:8px;color:var(--tx-faint);border:1px solid var(--bd2);border-radius:5px;padding:3px 5px;pointer-events:none}.search-popover{position:absolute;top:38px;left:0;right:0;max-height:min(560px,calc(100vh - 70px));overflow:auto;border:1px solid var(--bd3);border-radius:14px;background:linear-gradient(180deg,var(--panel-a),var(--panel-b));box-shadow:0 24px 70px var(--sh);padding:7px;z-index:110}.search-group-label{font-family:'Manrope',system-ui,sans-serif;font-size:8.5px;letter-spacing:1.1px;color:var(--tx-faint);padding:9px 8px 4px}.search-result{width:100%;display:grid;grid-template-columns:minmax(0,1fr) auto;gap:12px;align-items:center;border:1px solid var(--bd);color:var(--tx);border-radius:9px;padding:9px 10px;margin-top:3px;cursor:pointer;text-align:left}.search-result-copy{min-width:0}.search-result-copy b,.search-result-copy small{display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.search-result-copy b{font-size:12px}.search-result-copy small{font-family:'Manrope',system-ui,sans-serif;font-size:8.5px;letter-spacing:.4px;color:var(--tx-faint);margin-top:3px}.search-result-hint{font-family:'Manrope',system-ui,sans-serif;font-size:8.5px;color:var(--tx-ghost)}.search-empty{padding:25px 12px;text-align:center;color:var(--tx-faint);font-size:12px}.titlebar-status{display:flex;justify-content:flex-end;align-items:center;gap:6px;font-family:'Manrope',system-ui,sans-serif;font-size:9px;letter-spacing:1px;color:var(--tx-faint)}.local-status-dot{width:7px;height:7px;border-radius:50%;background:var(--green);box-shadow:0 0 8px var(--green);animation:pulse 2.6s ease infinite}
+.global-search-wrap{min-width:0}.global-search-trigger{width:100%;height:32px;box-sizing:border-box;display:flex;align-items:center;gap:9px;border:1px solid var(--bd2);border-radius:10px;background:var(--search-bg);color:var(--tx-faint);padding:0 8px 0 11px;font-size:12px;cursor:pointer;text-align:left}.global-search-trigger .search-icon{flex:none}.global-search-trigger .search-placeholder{flex:1;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.global-search-trigger kbd{font-family:'Manrope',system-ui,sans-serif;font-size:8px;color:var(--tx-faint);border:1px solid var(--bd2);border-radius:5px;padding:3px 5px}.command-palette-backdrop{position:fixed;inset:var(--titlebar-offset) 0 0;z-index:120;background:var(--ovl);backdrop-filter:blur(6px);display:flex;align-items:flex-start;justify-content:center;padding:7vh 16px 16px;box-sizing:border-box;animation:fadein .18s ease both;transition:inset .18s ease}.command-palette-dialog{width:min(680px,100%);max-height:min(640px,calc(93vh - 60px));border-radius:16px;display:flex;flex-direction:column;overflow:hidden;box-shadow:0 28px 90px var(--sh);animation:rise .22s ease both}.command-palette-input-wrap{position:relative;padding:14px;border-bottom:1px solid var(--bd)}.command-palette-input-wrap .search-icon{position:absolute;left:27px;top:50%;transform:translateY(-50%);color:var(--tx-faint);pointer-events:none}.command-palette-input-wrap input{width:100%;height:42px;box-sizing:border-box;border:1px solid var(--bd2);border-radius:11px;background:var(--input);color:var(--tx);padding:0 15px 0 39px;font-size:13px}.search-popover{min-height:0;overflow:auto;padding:7px}.search-group-label{font-family:'Manrope',system-ui,sans-serif;font-size:8.5px;letter-spacing:1.1px;color:var(--tx-faint);padding:9px 8px 4px}.search-result{width:100%;display:grid;grid-template-columns:minmax(0,1fr) auto;gap:12px;align-items:center;border:1px solid var(--bd);color:var(--tx);border-radius:9px;padding:9px 10px;margin-top:3px;cursor:pointer;text-align:left}.search-result-copy{min-width:0}.search-result-copy b,.search-result-copy small{display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.search-result-copy b{font-size:12px}.search-result-copy small{font-family:'Manrope',system-ui,sans-serif;font-size:8.5px;letter-spacing:.4px;color:inherit;opacity:.72;margin-top:3px}.search-result-hint{font-family:'Manrope',system-ui,sans-serif;font-size:8.5px;color:inherit;opacity:.62}.search-empty{padding:25px 12px;text-align:center;color:var(--tx-faint);font-size:12px}.titlebar-status{display:flex;justify-content:flex-end;align-items:center;gap:6px;font-family:'Manrope',system-ui,sans-serif;font-size:9px;letter-spacing:1px;color:var(--tx-faint)}.local-status-dot{width:7px;height:7px;border-radius:50%;background:var(--green);box-shadow:0 0 8px var(--green);animation:pulse 2.6s ease infinite}
 .annotation-overlay{position:fixed;inset:44px 0 0;background:rgba(4,6,10,.88);backdrop-filter:blur(9px);z-index:125;display:flex;align-items:center;justify-content:center;padding:24px;box-sizing:border-box;animation:fadein .18s ease both}
 .annotation-dialog{width:min(1100px,100%);max-height:calc(100vh - 92px);display:flex;flex-direction:column;gap:13px;background:var(--surface-bg-strong);backdrop-filter:var(--surface-fx-strong);-webkit-backdrop-filter:var(--surface-fx-strong);border:1px solid var(--bd3);border-radius:18px;padding:15px;box-sizing:border-box;box-shadow:0 30px 100px rgba(0,0,0,.72);animation:zoomin .2s ease both}
+.tour-overlay{position:fixed;inset:0;z-index:129;overflow:hidden;pointer-events:auto;transition:background .18s ease}
+.tour-spotlight{position:fixed;z-index:1;border:2px solid var(--accent);border-radius:16px;box-sizing:border-box;box-shadow:0 0 0 9999px var(--ovl),0 0 28px var(--accent-glow);pointer-events:none;transition:top .18s ease,left .18s ease,width .18s ease,height .18s ease}
+.tour-coachmark{position:fixed;z-index:2;width:400px;max-width:calc(100vw - 32px);box-sizing:border-box}
 .journal-drawer{background:var(--surface-bg);backdrop-filter:var(--surface-fx);-webkit-backdrop-filter:var(--surface-fx)}
 .annotation-stage-wrap{min-height:0;flex:1;display:flex;align-items:center;justify-content:center;overflow:hidden}
-@media(max-width:760px){.app-main{padding:20px 12px 56px!important}.app-titlebar{grid-template-columns:52px minmax(0,1fr) 52px;padding:0 10px}.titlebar-status span:not(.local-status-dot){display:none}.insights-grid{grid-template-columns:1fr!important}.help-grid{grid-template-columns:1fr!important}.insights-full{grid-column:1}.time-edge-row{grid-template-areas:"label count net" "bar bar win";grid-template-columns:52px 1fr auto!important}.time-edge-label{grid-area:label}.time-edge-bar{grid-area:bar}.time-edge-count{grid-area:count}.time-edge-net{grid-area:net}.time-edge-win{grid-area:win}.journal-drawer{width:100%!important;max-width:none!important;padding:18px 14px 28px!important}.trade-detail-grid{grid-template-columns:repeat(2,minmax(0,1fr))!important}.annotation-overlay{padding:10px}.annotation-dialog{width:calc(100vw - 20px);max-height:calc(100vh - 64px);border-radius:14px;padding:10px}.annotation-toolbar{align-items:stretch!important}.annotation-actions{width:100%;flex-wrap:wrap}.plan-fields{grid-template-columns:1fr!important}.plan-score-head,.risk-guide-head{flex-wrap:wrap}.risk-settings-grid{grid-template-columns:1fr!important}.risk-guide-grid{grid-template-columns:repeat(2,minmax(0,1fr))!important}}
-::-webkit-scrollbar{width:10px;height:10px}::-webkit-scrollbar-thumb{background:var(--bd2);border-radius:6px}::-webkit-scrollbar-track{background:transparent}
+.color-picker-sv,.color-picker-hue{border:1px solid var(--bd3);box-sizing:border-box}
+.help-faq{display:flex;flex-direction:column;gap:18px;max-width:1000px;animation:page-enter .4s ease both}
+.help-search-panel{border-radius:16px;padding:20px 22px}.help-search-panel label{display:block;font-size:15px;font-weight:700}.help-search-row{display:flex;gap:9px;margin-top:12px}.help-search-row input{flex:1;min-width:0;background:var(--input);border:1px solid var(--bd2);border-radius:10px;color:var(--tx);font-size:13px;padding:10px 12px}.help-search-row button,.help-empty button{border:1px solid var(--bd2);background:var(--chip);color:var(--tx-dim);border-radius:10px;padding:9px 13px;font-size:12px;font-weight:700;cursor:pointer}.help-search-row button:disabled{color:var(--tx-ghost);cursor:default}.help-result-status{font-size:11px;color:var(--tx-faint);margin-top:8px}.help-category h2{font-size:12px;letter-spacing:.9px;color:var(--tx-dim);margin:0 0 8px}.help-accordion{border-radius:16px;overflow:hidden}.help-item+.help-item{border-top:1px solid var(--grid)}.help-item h3{margin:0}.help-question{width:100%;min-height:48px;display:flex;align-items:center;justify-content:space-between;gap:14px;border:0;background:transparent;color:var(--tx);padding:13px 18px;text-align:left;font-size:13px;font-weight:700;cursor:pointer}.help-question:hover{background:var(--chip2)}.help-caret{flex:none;color:var(--tx-faint);transition:transform .18s ease}.help-answer{padding:0 18px 17px;color:var(--tx-mid);font-size:12.5px;line-height:1.65}.help-answer[hidden]{display:none}.help-answer p{margin:0}.help-answer p+p,.help-answer p+.help-steps,.help-steps+p{margin-top:10px}.help-steps{margin:0;padding-left:24px}.help-steps li+li{margin-top:8px}.help-answer-action{margin-top:14px;border:1px solid var(--accent);background:var(--accent-soft);color:var(--accent);font-size:12.5px;font-weight:700;padding:10px 15px;border-radius:10px;cursor:pointer}.help-empty{border-radius:16px;padding:24px;text-align:center;color:var(--tx-dim);font-size:12.5px}.help-empty button{margin-top:12px}
+@media(max-width:760px){.app-main{padding:20px 12px 56px!important}.app-titlebar{grid-template-columns:52px minmax(0,1fr) 52px;padding:0 10px}.titlebar-status span:not(.local-status-dot){display:none}.insights-grid{grid-template-columns:1fr!important}.help-faq{gap:14px}.help-search-panel{padding:16px}.help-search-row{align-items:stretch}.help-question{min-height:44px;padding:12px 14px}.help-answer{padding:0 14px 15px}.help-question span{min-width:0;white-space:normal}.insights-full{grid-column:1}.time-edge-row{grid-template-areas:"label count net" "bar bar win";grid-template-columns:52px 1fr auto!important}.time-edge-label{grid-area:label}.time-edge-bar{grid-area:bar}.time-edge-count{grid-area:count}.time-edge-net{grid-area:net}.time-edge-win{grid-area:win}.journal-drawer{width:100%!important;max-width:none!important;padding:18px 14px 28px!important}.trade-detail-grid{grid-template-columns:repeat(2,minmax(0,1fr))!important}.annotation-overlay{padding:10px}.annotation-dialog{width:calc(100vw - 20px);max-height:calc(100vh - 64px);border-radius:14px;padding:10px}.annotation-toolbar{align-items:stretch!important}.annotation-actions{width:100%;flex-wrap:wrap}.plan-fields{grid-template-columns:1fr!important}.plan-score-head,.risk-guide-head{flex-wrap:wrap}.risk-settings-grid{grid-template-columns:1fr!important}.risk-guide-grid{grid-template-columns:repeat(2,minmax(0,1fr))!important}}
+html{scrollbar-gutter:stable;scrollbar-color:var(--accent) transparent;scrollbar-width:thin}
+::-webkit-scrollbar{width:12px;height:12px}::-webkit-scrollbar-thumb{background:var(--accent);border:3px solid transparent;background-clip:padding-box;border-radius:999px}::-webkit-scrollbar-thumb:hover{background:var(--accent);background-clip:padding-box}::-webkit-scrollbar-track{background:transparent}
 @keyframes rise{0%{opacity:0;transform:translateY(20px) scale(.97)}70%{opacity:1}100%{opacity:1;transform:none}}
 @keyframes bgpan{from{background-position:0% 0%}to{background-position:100% 100%}}
 @keyframes fadein{from{opacity:0}to{opacity:1}}
@@ -92,10 +101,19 @@ button:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-vis
 .widget-resize-right{top:18px;right:-4px;bottom:18px;width:10px;cursor:ew-resize}
 .widget-resize-bottom{left:18px;right:18px;bottom:-4px;height:10px;cursor:ns-resize}
 .widget-resize-corner{right:-4px;bottom:-4px;width:18px;height:18px;cursor:nwse-resize}
-@container widget (max-width:360px){.widget-secondary{display:none}.score-components{grid-template-columns:1fr}.widget-toolbar{flex-wrap:wrap}}
+.score-components{flex:1;display:flex;align-items:center;justify-content:center;min-height:0;margin-top:8px}
+.score-radar{position:relative;height:100%;width:auto;max-width:100%;max-height:250px;aspect-ratio:1}
+.score-radar>svg{width:100%;height:100%;display:block;overflow:visible}
+.consistency-card{display:flex;flex-direction:column;min-height:0}
+.consistency-grid-slot{flex:1;min-height:0;margin-top:14px;container-type:size;display:flex;align-items:center;justify-content:center}
+.consistency-grid{display:grid;grid-auto-flow:column;grid-template-columns:repeat(13,minmax(0,1fr));grid-template-rows:repeat(7,minmax(0,1fr));gap:4px}
+.consistency-cell{min-width:0;min-height:0;width:100%;max-height:100%;aspect-ratio:1;place-self:center}
+@container (min-aspect-ratio:13/7){.consistency-grid{height:100cqh;max-width:100cqw;aspect-ratio:13/7}}
+@container (max-aspect-ratio:13/7){.consistency-grid{width:100cqw;max-height:100cqh;aspect-ratio:13/7}}
+@container widget (max-width:360px){.widget-secondary{display:none}.score-components{margin-top:4px}.widget-toolbar{flex-wrap:wrap}}
 </style>
 </helmet>
-<div style="display:flex;flex-direction:column;min-height:100vh;font-family:'Manrope',system-ui,sans-serif;color:var(--tx);background:linear-gradient(160deg,var(--card-b) 0%,var(--bg) 46%,var(--panel-b) 100%);--surface-bg:{{surfaceBg}};--surface-bg-strong:{{surfaceBgStrong}};--surface-fx:{{surfaceFx}};--surface-fx-strong:{{surfaceFxStrong}};--accent:{{accent}};--accent-glow:{{accentGlow}};--accent-soft:{{accentSoft}}">
+<div style="display:flex;flex-direction:column;min-height:100vh;font-family:'Manrope',system-ui,sans-serif;color:var(--tx);background:linear-gradient(160deg,var(--card-b) 0%,var(--bg) 46%,var(--panel-b) 100%);--surface-bg:{{surfaceBg}};--surface-bg-strong:{{surfaceBgStrong}};--surface-fx:{{surfaceFx}};--surface-fx-strong:{{surfaceFxStrong}};--accent:{{accent}};--accent-ink:{{accentInk}};--on-acc:{{accentInk}};--accent-glow:{{accentGlow}};--accent-soft:{{accentSoft}};--titlebar-offset:{{titlebarOffset}}">
   <div style="position:fixed;inset:-25%;pointer-events:none;z-index:0;overflow:hidden">
     <div style="position:absolute;top:0;left:0;width:70%;height:75%;border-radius:50%;filter:blur(30px);opacity:{{auroraOp}};background:radial-gradient(circle at 30% 30%,{{glowA}},transparent 66%);animation:aurora 28s ease-in-out infinite,glowpulse 9s ease-in-out infinite"></div>
     <div style="position:absolute;top:-10%;right:-5%;width:65%;height:70%;border-radius:50%;filter:blur(30px);opacity:{{auroraOp}};background:radial-gradient(circle at 60% 40%,{{glowC}},transparent 64%);animation:auroraB 34s ease-in-out infinite,glowpulse 11s ease-in-out infinite"></div>
@@ -103,28 +121,41 @@ button:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-vis
   </div>
   <div style="position:fixed;inset:0;pointer-events:none;z-index:0;opacity:{{glowOp}};transition:opacity .5s;background:linear-gradient(118deg,{{glowB}} 0%,transparent 32%,transparent 55%,{{glowC}} 82%,transparent 100%);background-size:240% 240%;animation:bgpan 26s ease-in-out infinite alternate"></div>
 
-  <div data-screen-label="Titlebar" ref="{{setTitlebarFocusRef}}" tabIndex="-1" class="app-titlebar glass-surface">
+  <div data-screen-label="Titlebar" class="app-titlebar glass-surface">
     <div class="titlebar-traffic" aria-hidden="true"><span class="traffic-dot traffic-close"></span><span class="traffic-dot traffic-minimize"></span><span class="traffic-dot traffic-zoom"></span></div>
     <div class="global-search-wrap">
-      <svg class="search-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="11" cy="11" r="7"></circle><path d="m20 20-3.5-3.5"></path></svg>
-      <input ref="{{setSearchInputRef}}" role="combobox" aria-label="Search this journal" aria-expanded="{{searchOpen}}" aria-controls="global-search-results" aria-activedescendant="{{searchActiveId}}" value="{{searchQuery}}" onFocus="{{openSearch}}" onInput="{{onSearchQuery}}" onKeyDown="{{onSearchKeydown}}" placeholder="Search journal, actions, or pages">
-      <kbd>⌘K</kbd>
-      <sc-if value="{{searchOpen}}" hint-placeholder-val="{{false}}">
-        <div class="search-popover glass-surface-strong" id="global-search-results" role="listbox" aria-label="Search results">
-          <sc-for list="{{searchGroups}}" as="group" hint-placeholder-count="3"><div role="group" aria-label="{{group.label}}"><div class="search-group-label">{{group.label}}</div><sc-for list="{{group.items}}" as="item" hint-placeholder-count="4"><button id="{{item.optionId}}" role="option" aria-selected="{{item.selected}}" onMouseEnter="{{item.select}}" onClick="{{item.run}}" class="search-result" style="background:{{item.bg}};border-color:{{item.bd}}"><span class="search-result-copy"><b>{{item.title}}</b><small>{{item.meta}}</small></span><span class="search-result-hint">{{item.hint}}</span></button></sc-for></div></sc-for>
-          <sc-if value="{{searchEmpty}}" hint-placeholder-val="{{false}}"><div class="search-empty">No results in this journal.</div></sc-if>
-        </div>
-      </sc-if>
+      <button class="global-search-trigger" onClick="{{openSearch}}" aria-label="Search this journal" aria-haspopup="dialog" aria-expanded="{{searchOpen}}">
+        <svg class="search-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="11" cy="11" r="7"></circle><path d="m20 20-3.5-3.5"></path></svg>
+        <span class="search-placeholder">Search journal, actions, or pages</span>
+        <kbd>{{searchHint}}</kbd>
+      </button>
     </div>
     <div class="titlebar-status"><span class="local-status-dot"></span><span class="sidebar-section" style="font-size:9px;letter-spacing:1px;color:var(--tx-faint)">LOCAL</span><span>{{appVersion}}</span></div>
   </div>
+  <sc-if value="{{searchOpen}}" hint-placeholder-val="{{false}}">
+    <div class="command-palette-backdrop" onClick="{{closeSearch}}" inert="{{searchInert}}" aria-hidden="{{searchInert}}">
+      <div class="command-palette-dialog glass-surface-strong" role="dialog" aria-modal="true" aria-label="Command palette" ref="{{setSearchDialogRef}}" onKeyDown="{{onSearchDialogKeydown}}" onClick="{{stopEvt}}" tabIndex="-1">
+        <div class="command-palette-input-wrap">
+          <svg class="search-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="11" cy="11" r="7"></circle><path d="m20 20-3.5-3.5"></path></svg>
+          <input ref="{{setSearchInputRef}}" role="combobox" aria-label="Search this journal" aria-expanded="true" aria-controls="global-search-results" aria-activedescendant="{{searchActiveId}}" value="{{searchQuery}}" onInput="{{onSearchQuery}}" onKeyDown="{{onSearchKeydown}}" placeholder="Search journal, actions, or pages">
+        </div>
+        <div class="search-popover" id="global-search-results" role="listbox" aria-label="Search results">
+          <sc-for list="{{searchGroups}}" as="group" hint-placeholder-count="3"><div role="group" aria-label="{{group.label}}"><div class="search-group-label">{{group.label}}</div><sc-for list="{{group.items}}" as="item" hint-placeholder-count="4"><button id="{{item.optionId}}" role="option" aria-selected="{{item.selected}}" onMouseEnter="{{item.select}}" onClick="{{item.run}}" class="search-result" style="background:{{item.bg}};border-color:{{item.bd}};color:{{item.fg}}"><span class="search-result-copy"><b>{{item.title}}</b><small>{{item.meta}}</small></span><span class="search-result-hint">{{item.hint}}</span></button></sc-for></div></sc-for>
+          <sc-if value="{{searchEmpty}}" hint-placeholder-val="{{false}}"><div class="search-empty">No results in this journal.</div></sc-if>
+        </div>
+      </div>
+    </div>
+  </sc-if>
   <sc-if value="{{appVisible}}" hint-placeholder-val="{{true}}">
   <div inert="{{appInert}}" aria-hidden="{{appInert}}" style="display:flex;flex:1;align-items:stretch;min-height:0">
 
-  <div data-screen-label="Sidebar" class="glass-surface" style="width:222px;flex:none;border:none;border-right:1px solid var(--bd);padding:20px 14px 12px;display:flex;flex-direction:column;position:sticky;top:44px;height:calc(100vh - 44px);box-sizing:border-box;z-index:1;overflow-y:auto;overscroll-behavior:contain">
+  <div data-screen-label="Sidebar" class="glass-surface" style="width:222px;flex:none;border:none;border-right:1px solid var(--bd);padding:20px 14px 12px;display:flex;flex-direction:column;position:sticky;top:var(--titlebar-offset);height:calc(100vh - var(--titlebar-offset));box-sizing:border-box;z-index:1;overflow-y:auto;overscroll-behavior:contain;transition:top .18s ease,height .18s ease">
     <div style="display:flex;align-items:center;gap:11px;padding:0 12px">
       <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="{{accent}}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex:none;filter:drop-shadow(0 0 8px {{acc44}})"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20V4H6.5A2.5 2.5 0 0 0 4 6.5v13z"></path><path d="M4 19.5A2.5 2.5 0 0 0 6.5 22H20v-5"></path><path d="M15.5 7.5l1.8 1.8-5.3 5.3-2.5.7.7-2.5 5.3-5.3z"></path></svg>
-      <div style="font-size:21px;font-weight:700;letter-spacing:-.5px;line-height:1">Written<span style="color:{{accent}}">.</span></div>
+      <div>
+        <div style="font-size:21px;font-weight:700;letter-spacing:-.5px;line-height:1">Written<span style="color:{{accent}}">.</span></div>
+        <div class="sidebar-brand-version" style="font-family:'Manrope',system-ui,sans-serif;font-size:8px;letter-spacing:1px;color:var(--tx-ghost);margin-top:4px">v1.0.0</div>
+      </div>
     </div>
     <div class="sidebar-section" style="padding:0 14px;margin-top:22px">JOURNAL</div>
     <div style="display:flex;flex-direction:column;gap:4px;margin-top:7px">
@@ -156,14 +187,14 @@ button:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-vis
       </sc-for>
     </div>
     <div style="flex:1"></div>
-    <div class="glass-surface" style="border-radius:14px;padding:9px 10px;margin:10px 2px 2px;display:flex;align-items:center;gap:10px;flex:none;box-shadow:0 10px 28px var(--sh2);transition:border-color .2s;position:relative" style-hover="border-color:var(--bd3)">
+    <div ref="{{setProfileMenuRef}}" class="glass-surface" style="border-radius:14px;padding:9px 10px;margin:10px 2px 2px;display:flex;align-items:center;gap:10px;flex:none;box-shadow:0 10px 28px var(--sh2);transition:border-color .2s;position:relative" style-hover="border-color:var(--bd3)">
       <div onClick="{{goProfile}}" title="Open profile" style="width:34px;height:34px;flex:none;border-radius:50%;background:{{acc16}};border:1px solid {{acc55}};color:{{accent}};font-size:12px;font-weight:700;display:flex;align-items:center;justify-content:center;cursor:pointer;transition:transform .15s;overflow:hidden;position:relative" style-hover="transform:scale(1.08)">
         <sc-if value="{{noAvatar}}" hint-placeholder-val="{{true}}"><span>{{userInitials}}</span></sc-if>
         <sc-for list="{{avatarImgs}}" as="av" hint-placeholder-count="0"><img ref="{{av.setRef}}" alt="avatar" style="width:100%;height:100%;object-fit:cover;position:absolute;inset:0"></sc-for>
       </div>
       <div onClick="{{goProfile}}" style="flex:1;min-width:0;cursor:pointer">
         <div style="font-size:12.5px;font-weight:600;color:var(--tx);white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{userName}}</div>
-        <div class="sidebar-section" style="display:flex;align-items:center;gap:5px;font-size:8.5px;letter-spacing:.8px;color:var(--tx-faint);margin-top:2px;text-transform:none"><span style="width:6px;height:6px;border-radius:50%;background:var(--green);box-shadow:0 0 6px var(--green);animation:pulse 2.6s ease infinite"></span>ONLINE</div>
+        <div class="sidebar-section" style="display:flex;align-items:center;gap:5px;font-size:8.5px;letter-spacing:.8px;color:var(--tx-faint);margin-top:2px;text-transform:none"><span class="local-status-dot"></span>LOCAL</div>
       </div>
       <button onClick="{{toggleProfileMenu}}" title="Profile menu" aria-label="Open profile menu" aria-haspopup="menu" aria-expanded="{{profileMenuOpen}}" style="width:30px;height:30px;flex:none;border-radius:9px;border:1px solid var(--bd2);background:transparent;color:var(--tx-dim);cursor:pointer;transition:all .15s;padding:0;display:flex;align-items:center;justify-content:center" style-hover="color:var(--tx);border-color:var(--bd3)">•••</button>
       <sc-if value="{{profileMenuOpen}}" hint-placeholder-val="{{false}}">
@@ -186,9 +217,9 @@ button:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-vis
     </div>
   </div>
 
-  <div class="app-main" style="flex:1;min-width:0;padding:32px 40px 80px;box-sizing:border-box;position:relative;z-index:1;--focus-accent:{{accent}}">
+  <div class="app-main" ref="{{setAppMainFocusRef}}" tabIndex="-1" style="flex:1;min-width:0;padding:32px 40px 80px;box-sizing:border-box;position:relative;z-index:1;--focus-accent:{{accent}}">
     <div style="max-width:1280px;margin:0 auto">
-      <div style="display:flex;align-items:flex-end;gap:14px;margin-bottom:26px;flex-wrap:wrap;animation:rise .4s ease both">
+      <div class="section-header">
         <div style="flex:1;min-width:220px">
           <div style="font-size:23px;font-weight:700">{{pageTitle}}</div>
           <div style="font-size:12.5px;color:var(--tx-dim);margin-top:4px">{{pageSub}}</div>
@@ -226,7 +257,7 @@ button:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-vis
           </sc-if>
           <div class="widget-grid" style="display:grid;grid-template-columns:repeat(12,minmax(0,1fr));gap:14px;align-items:stretch">
             <sc-for list="{{dashWidgets}}" as="w" hint-placeholder-count="8">
-              <div class="dashboard-widget" draggable="{{w.editing}}" onDragStart="{{w.onDragStart}}" onDragEnter="{{w.onDragEnter}}" onDragOver="{{w.onDragOver}}" onDrop="{{w.onDrop}}" onDragEnd="{{w.onDragEnd}}" style="grid-column:{{w.gridColumn}};grid-row:{{w.gridRow}};min-width:0;position:relative;display:flex;animation:rise .4s ease both;opacity:{{w.dragOpacity}};outline:{{w.dropOutline}};outline-offset:2px;border-radius:16px;transition:opacity .15s,outline-color .15s">
+              <div class="dashboard-widget" data-widget-id="{{w.id}}" draggable="{{w.editing}}" onDragStart="{{w.onDragStart}}" onDragEnter="{{w.onDragEnter}}" onDragOver="{{w.onDragOver}}" onDrop="{{w.onDrop}}" onDragEnd="{{w.onDragEnd}}" style="grid-column:{{w.gridColumn}};grid-row:{{w.gridRow}};min-width:0;position:relative;display:flex;animation:rise .4s ease both;opacity:{{w.dragOpacity}};outline:{{w.dropOutline}};outline-offset:2px;border-radius:16px;transition:opacity .15s,outline-color .15s">
                 <sc-if value="{{w.editing}}" hint-placeholder-val="{{false}}">
                   <button type="button" aria-label="Move widget" title="Move widget" style="position:absolute;top:8px;left:8px;z-index:6;display:flex;align-items:center;gap:5px;font-family:'Manrope',system-ui,sans-serif;font-size:9px;letter-spacing:1px;color:var(--tx-ghost);background:var(--panel-a);border:1px solid var(--bd2);border-radius:7px;padding:3px 8px;cursor:grab"><svg width="10" height="10" viewBox="0 0 24 24" fill="currentColor"><circle cx="8" cy="6" r="1.6"></circle><circle cx="8" cy="12" r="1.6"></circle><circle cx="8" cy="18" r="1.6"></circle><circle cx="16" cy="6" r="1.6"></circle><circle cx="16" cy="12" r="1.6"></circle><circle cx="16" cy="18" r="1.6"></circle></svg></button>
                   <div style="position:absolute;top:8px;right:8px;z-index:6;display:flex;gap:5px">
@@ -272,15 +303,15 @@ button:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-vis
                 <sc-if value="{{w.isScore}}" hint-placeholder-val="{{false}}">
                   <div class="glass-surface" style="flex:1;min-width:0;border-radius:16px;padding:20px 22px;display:flex;flex-direction:column" style-hover="border-color:var(--bd3)">
                     <div style="font-family:'Manrope',system-ui,sans-serif;font-size:10px;letter-spacing:1.5px;color:var(--tx-faint)">TRADING SCORE</div>
-                    <div style="display:flex;align-items:baseline;gap:10px;margin-top:12px">
+                    <div class="widget-toolbar" style="display:flex;align-items:baseline;gap:10px;margin-top:12px">
                       <div style="font-family:'Manrope',system-ui,sans-serif;font-size:40px;font-weight:700;color:{{scoreCol}};line-height:1;text-shadow:0 0 18px var(--accent-glow)">{{overallScore}}</div>
-                      <div style="font-family:'Manrope',system-ui,sans-serif;font-size:14px;color:var(--tx-faint)">/ 100</div>
+                      <div class="widget-secondary" style="font-family:'Manrope',system-ui,sans-serif;font-size:14px;color:var(--tx-faint)">/ 100</div>
                       <div style="flex:1"></div>
                       <div style="font-family:'Manrope',system-ui,sans-serif;font-size:15px;font-weight:700;letter-spacing:1px;color:{{scoreCol}};border:1px solid {{scoreCol}};border-radius:8px;padding:4px 11px">{{scoreGrade}}</div>
                     </div>
-                    <div style="flex:1;display:flex;align-items:center;justify-content:center;min-height:0;margin-top:8px">
-                      <div style="position:relative;width:100%;max-width:250px">
-                        <svg viewBox="0 0 200 200" style="width:100%;height:auto;display:block;overflow:visible" preserveAspectRatio="xMidYMid meet">
+                    <div class="score-components">
+                      <div class="score-radar">
+                        <svg viewBox="0 0 200 200" preserveAspectRatio="xMidYMid meet">
                           <sc-for list="{{radarRings}}" as="ring" hint-placeholder-count="4">
                             <polygon points="{{ring.pts}}" fill="none" stroke="var(--bd2)" stroke-width="0.8"></polygon>
                           </sc-for>
@@ -306,9 +337,9 @@ button:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-vis
                 </sc-if>
                 <sc-if value="{{w.isEquity}}" hint-placeholder-val="{{false}}">
                   <div class="glass-surface" style="flex:1;min-width:0;min-height:0;border-radius:16px;padding:20px 22px;overflow-y:auto" style-hover="border-color:var(--bd3)">
-                    <div style="display:flex;align-items:center;gap:12px">
+                    <div class="widget-toolbar" style="display:flex;align-items:center;gap:12px">
                       <div style="font-size:15px;font-weight:700">P&amp;L</div>
-                      <div style="font-family:'Manrope',system-ui,sans-serif;font-size:10.5px;color:var(--tx-faint);letter-spacing:1px">{{rangeLbl}} · {{chartYLbl}}</div>
+                      <div class="widget-secondary" style="font-family:'Manrope',system-ui,sans-serif;font-size:10.5px;color:var(--tx-faint);letter-spacing:1px">{{rangeLbl}} · {{chartYLbl}}</div>
                       <div style="flex:1"></div>
                       <div style="display:flex;gap:4px;background:var(--input);border:1px solid var(--bd);border-radius:9px;padding:3px">
                         <sc-for list="{{modeOpts}}" as="m" hint-placeholder-count="2"><button onClick="{{m.set}}" style="border:none;background:{{m.bg}};color:{{m.fg}};box-shadow:{{m.glow}};font-size:11.5px;font-weight:600;padding:6px 13px;border-radius:7px;cursor:pointer;transition:all .18s">{{m.label}}</button></sc-for>
@@ -375,16 +406,16 @@ button:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-vis
                   <div class="glass-surface" style="flex:1;min-width:0;border-radius:16px;padding:16px 18px" style-hover="border-color:var(--bd3)"><div style="font-family:'Manrope',system-ui,sans-serif;font-size:9.5px;letter-spacing:1.3px;color:var(--tx-faint)">AVG HOLD TIME</div><div style="font-family:'Manrope',system-ui,sans-serif;font-size:17px;font-weight:600;margin-top:7px;text-shadow:0 0 14px var(--accent-glow)">{{avgDurS}}</div><div style="font-size:10.5px;color:var(--tx-faint);margin-top:4px">per trade</div></div>
                 </sc-if>
                 <sc-if value="{{w.isHeatmap}}" hint-placeholder-val="{{false}}">
-                  <div class="glass-surface" style="flex:1;min-width:0;border-radius:16px;padding:20px 22px" style-hover="border-color:var(--bd3)">
+                  <div class="glass-surface consistency-card" style="flex:1;min-width:0;border-radius:16px;padding:20px 22px" style-hover="border-color:var(--bd3)">
                     <div style="font-size:15px;font-weight:700">Consistency</div>
-                    <div style="font-size:11.5px;color:var(--tx-faint);margin-top:3px">last 13 weeks · green = up day, red = down day</div>
-                    <div style="display:grid;grid-auto-flow:column;grid-template-rows:repeat(7,1fr);gap:4px;margin-top:14px"><sc-for list="{{hmCells}}" as="hm" hint-placeholder-count="91"><div title="{{hm.title}}" style="width:100%;aspect-ratio:1;border-radius:3px;background:{{hm.bg}};border:1px solid var(--bd)"></div></sc-for></div>
+                    <div class="widget-secondary" style="font-size:11.5px;color:var(--tx-faint);margin-top:3px">last 13 weeks · green = up day, red = down day</div>
+                    <div class="consistency-grid-slot"><div class="consistency-grid"><sc-for list="{{hmCells}}" as="hm" hint-placeholder-count="91"><div class="consistency-cell" title="{{hm.title}}" style="border-radius:3px;background:{{hm.bg}};border:1px solid var(--bd)"></div></sc-for></div></div>
                   </div>
                 </sc-if>
                 <sc-if value="{{w.isEcon}}" hint-placeholder-val="{{false}}">
                   <div class="glass-surface" style="flex:1;min-width:0;border-radius:16px;padding:20px 22px" style-hover="border-color:var(--bd3)">
                     <div style="font-size:15px;font-weight:700">Economic calendar</div>
-                    <div style="font-size:11.5px;color:var(--tx-faint);margin-top:3px">high-impact events on watch</div>
+                    <div class="widget-secondary" style="font-size:11.5px;color:var(--tx-faint);margin-top:3px">high-impact events on watch</div>
                     <div style="display:flex;flex-direction:column;margin-top:12px">
                       <sc-for list="{{econRows}}" as="ec" hint-placeholder-count="6">
                         <div style="display:grid;grid-template-columns:52px 16px 1fr auto;gap:10px;align-items:center;padding:9px 0;border-bottom:1px solid var(--grid)">
@@ -399,7 +430,7 @@ button:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-vis
                 </sc-if>
                 <sc-if value="{{w.isChecklist}}" hint-placeholder-val="{{false}}">
                   <div class="glass-surface" style="flex:1;min-width:0;border-radius:16px;padding:20px 22px" style-hover="border-color:var(--bd3)">
-                    <div style="display:flex;align-items:center;gap:10px"><div style="font-size:15px;font-weight:700">Daily checklist</div><div style="flex:1"></div><div style="font-family:'Manrope',system-ui,sans-serif;font-size:12px;font-weight:600;color:{{accent}}">{{checklistCount}}</div></div>
+                    <div class="widget-toolbar" style="display:flex;align-items:center;gap:10px"><div style="font-size:15px;font-weight:700">Daily checklist</div><div style="flex:1"></div><div style="font-family:'Manrope',system-ui,sans-serif;font-size:12px;font-weight:600;color:{{accent}}">{{checklistCount}}</div></div>
                     <div style="height:5px;border-radius:3px;background:var(--chip2);overflow:hidden;margin-top:11px"><div style="height:100%;border-radius:3px;width:{{checklistPct}};background:{{accent}};box-shadow:0 0 10px {{acc44}};transition:width .5s ease"></div></div>
                     <div style="display:flex;flex-direction:column;gap:9px;margin-top:14px">
                       <sc-for list="{{checklistItems}}" as="ck" hint-placeholder-count="7">
@@ -410,7 +441,7 @@ button:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-vis
                 </sc-if>
                 <sc-if value="{{w.isRecent}}" hint-placeholder-val="{{false}}">
                   <div class="glass-surface" style="flex:1;min-width:0;border-radius:16px;padding:20px 22px;overflow-x:auto" style-hover="border-color:var(--bd3)">
-                    <div style="display:flex;align-items:center"><div style="font-size:15px;font-weight:700">Recent trades</div><div style="flex:1"></div><button onClick="{{goTrades}}" style="border:none;background:transparent;color:{{accent}};font-size:12px;font-weight:600;cursor:pointer;padding:4px 6px" style-hover="text-decoration:underline">view all →</button></div>
+                    <div class="widget-toolbar" style="display:flex;align-items:center"><div style="font-size:15px;font-weight:700">Recent trades</div><div style="flex:1"></div><button onClick="{{goTrades}}" style="border:none;background:transparent;color:{{accent}};font-size:12px;font-weight:600;cursor:pointer;padding:4px 6px" style-hover="text-decoration:underline">view all →</button></div>
                     <div style="min-width:700px;display:grid;grid-template-columns:92px 56px 64px 44px minmax(0,1fr) 96px 52px;gap:8px;margin-top:14px;font-family:'Manrope',system-ui,sans-serif;font-size:9.5px;letter-spacing:1.2px;color:var(--tx-faint);padding:0 8px"><div>DATE</div><div>SYM</div><div>SIDE</div><div>QTY</div><div>ENTRY → EXIT</div><div style="text-align:right">P&amp;L</div><div style="text-align:right">R</div></div>
                     <div style="min-width:700px;display:flex;flex-direction:column;margin-top:6px">
                       <sc-for list="{{recentTrades}}" as="rt" hint-placeholder-count="6">
@@ -749,7 +780,7 @@ button:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-vis
             <div style="font-size:15px;font-weight:700">Risk analytics</div>
             <div style="font-size:11.5px;color:var(--tx-faint);margin-top:3px">edge, streaks and how much you're risking</div>
             <sc-if value="{{riskEmpty}}" hint-placeholder-val="{{false}}"><div style="color:var(--tx-faint);font-size:12.5px;padding:18px 0;text-align:center">log stops on your trades to unlock R-based risk stats</div></sc-if>
-            <div style="display:grid;grid-template-columns:1.2fr 1fr;gap:24px;margin-top:16px">
+            <div class="risk-analytics-split" style="display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:24px;margin-top:16px">
               <div style="display:grid;grid-template-columns:1fr 1fr;gap:11px">
                 <sc-for list="{{riskStats}}" as="r" hint-placeholder-count="6">
                   <div style="border:1px solid var(--bd);background:var(--chip);border-radius:11px;padding:11px 13px"><div style="font-family:'Manrope',system-ui,sans-serif;font-size:8.5px;letter-spacing:1.1px;color:var(--tx-faint)">{{r.label}}</div><div style="font-family:'Manrope',system-ui,sans-serif;font-size:15px;font-weight:600;color:{{r.col}};margin-top:5px">{{r.valS}}</div></div>
@@ -793,7 +824,7 @@ button:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-vis
                   <div style="display:flex;align-items:center;gap:14px;border:1px solid var(--bd);background:var(--chip);border-radius:12px;padding:14px 17px">
                     <div style="font-family:'Manrope',system-ui,sans-serif;font-size:10px;letter-spacing:1px;color:var(--tx-faint);width:74px">{{p.lb}}</div>
                     <div style="font-family:'Manrope',system-ui,sans-serif;font-size:19px;font-weight:700;flex:1">{{p.valS}}</div>
-                    <div style="font-family:'Manrope',system-ui,sans-serif;font-size:13px;font-weight:600;color:{{p.col}}">{{p.chg}}</div>
+                    <div class="expectancy-change" style="font-family:'Manrope',system-ui,sans-serif;font-size:13px;font-weight:600;color:{{p.col}};width:72px;text-align:right">{{p.chg}}</div>
                   </div>
                 </sc-for>
                 <div style="font-size:10.5px;color:var(--tx-ghost);text-align:center;margin-top:2px">projection assumes 1% account risk per trade · compounding excluded</div>
@@ -813,6 +844,7 @@ button:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-vis
               <div style="font-size:10.5px;color:var(--tx-ghost);margin-top:11px">Behavioral pattern signal only, not a market prediction.</div>
             </div>
             <sc-if value="{{psychEmpty}}" hint-placeholder-val="{{false}}"><div style="color:var(--tx-faint);font-size:12.5px;padding:18px 0;text-align:center">log your mood on days to see emotional patterns</div></sc-if>
+            <sc-if value="{{psychHasEmo}}" hint-placeholder-val="{{true}}">
             <div style="font-family:'Manrope',system-ui,sans-serif;font-size:9px;letter-spacing:1.2px;color:var(--tx-faint);margin-top:16px">EMOTIONAL TIMELINE · P&amp;L</div>
             <div style="display:flex;align-items:flex-end;gap:5px;height:150px;margin-top:12px;overflow-x:auto;padding-bottom:4px">
               <sc-for list="{{emoTimeline}}" as="e" hint-placeholder-count="20">
@@ -827,6 +859,7 @@ button:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-vis
                 <div style="display:flex;align-items:center;gap:8px;border:1px solid var(--bd);background:var(--chip);border-radius:999px;padding:6px 13px"><span style="font-size:16px">{{e.ch}}</span><span style="font-family:'Manrope',system-ui,sans-serif;font-size:12px;font-weight:600;color:{{e.col}}">{{e.avgS}}</span></div>
               </sc-for>
             </div>
+            </sc-if>
             <sc-if value="{{psychHasViol}}" hint-placeholder-val="{{false}}">
               <div style="font-family:'Manrope',system-ui,sans-serif;font-size:9px;letter-spacing:1.2px;color:var(--tx-faint);margin-top:22px">RULE VIOLATIONS</div>
               <div style="display:flex;flex-direction:column;gap:9px;margin-top:12px">
@@ -870,8 +903,8 @@ button:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-vis
       </sc-if>
 
       <sc-if value="{{tabProfile}}" hint-placeholder-val="{{false}}">
-        <div data-screen-label="Profile" style="display:grid;grid-template-columns:330px minmax(0,1fr);gap:16px;max-width:980px;animation:page-enter .4s ease both">
-          <div class="glass-surface" style="border-radius:16px;padding:24px;animation:rise .4s ease both;align-self:start">
+        <div data-screen-label="Profile" style="display:grid;grid-template-columns:330px minmax(0,1fr);gap:16px;max-width:980px;margin:0 auto;animation:page-enter .4s ease both">
+          <div class="glass-surface" style="border-radius:16px;padding:24px;animation:rise .4s ease both">
             <label title="Edit profile picture" style="position:relative;width:74px;height:74px;display:block;cursor:pointer">
               <div style="width:74px;height:74px;border-radius:50%;background:{{acc16}};border:2px solid {{acc55}};color:{{accent}};font-size:25px;font-weight:700;display:flex;align-items:center;justify-content:center;box-shadow:0 0 28px {{acc16}};overflow:hidden;position:relative;box-sizing:border-box">
                 <sc-if value="{{noAvatar}}" hint-placeholder-val="{{true}}"><span>{{userInitials}}</span></sc-if>
@@ -972,14 +1005,14 @@ button:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-vis
                 <sc-for list="{{accSwatches}}" as="a" hint-placeholder-count="6">
                   <button onClick="{{a.set}}" style="width:34px;height:34px;border-radius:50%;background:{{a.c}};border:2px solid {{a.bd}};box-shadow:{{a.sh}};cursor:pointer;transition:all .15s;padding:0" style-hover="transform:scale(1.15)"></button>
                 </sc-for>
-                <button onClick="{{togPicker}}" title="Pick any color" style="width:34px;height:34px;border-radius:50%;background:conic-gradient(from -90deg,#ff5c5c,#ffd24d,#7ce38a,#4dd6d6,#5eb1ff,#c29bff,#ff7ab8,#ff5c5c);border:2px solid {{pickerBd}};box-shadow:{{pickerSh}};cursor:pointer;transition:all .15s;padding:0;display:flex;align-items:center;justify-content:center;overflow:hidden" style-hover="transform:scale(1.15)"><span style="width:15px;height:15px;border-radius:50%;background:{{accent}};border:2px solid var(--card-a);box-shadow:0 0 6px {{acc44}}"></span></button>
+                <button ref="{{setPickerOpenerRef}}" onClick="{{togPicker}}" title="Pick any color" aria-label="Pick any color" style="width:34px;height:34px;border-radius:50%;background:conic-gradient(from -90deg,#ff5c5c,#ffd24d,#7ce38a,#4dd6d6,#5eb1ff,#c29bff,#ff7ab8,#ff5c5c);border:2px solid {{pickerBd}};box-shadow:{{pickerSh}};cursor:pointer;transition:all .15s;padding:0;display:flex;align-items:center;justify-content:center;overflow:hidden" style-hover="transform:scale(1.15)"></button>
               </div>
               <sc-if value="{{pickerOpen}}" hint-placeholder-val="{{false}}">
-              <div style="max-width:260px;margin-top:14px;animation:rise .25s ease both">
-                <div onPointerDown="{{svStart}}" style="position:relative;height:132px;border-radius:12px;cursor:crosshair;touch-action:none;transition:background .2s ease;background:{{svBg}}">
+              <div ref="{{setPickerRef}}" style="max-width:260px;margin-top:14px;animation:rise .25s ease both">
+                <div class="color-picker-sv" onPointerDown="{{svStart}}" style="position:relative;height:132px;border-radius:12px;cursor:crosshair;touch-action:none;transition:background .2s ease;background:{{svBg}}">
                   <span style="position:absolute;left:{{svX}};top:{{svY}};width:15px;height:15px;border-radius:50%;border:2px solid #FFFFFF;box-shadow:0 0 0 1.5px rgba(0,0,0,.45);transition:left .12s ease,top .12s ease;transform:translate(-8px,-8px);pointer-events:none;background:{{accent}};box-sizing:border-box"></span>
                 </div>
-                <div onPointerDown="{{hueStart}}" style="position:relative;height:14px;border-radius:7px;margin-top:10px;cursor:crosshair;touch-action:none;transition:background .2s ease;background:linear-gradient(to right,#f00,#ff0,#0f0,#0ff,#00f,#f0f,#f00)">
+                <div class="color-picker-hue" onPointerDown="{{hueStart}}" style="position:relative;height:14px;border-radius:7px;margin-top:10px;cursor:crosshair;touch-action:none;transition:background .2s ease;background:linear-gradient(to right,#f00,#ff0,#0f0,#0ff,#00f,#f0f,#f00)">
                   <span style="position:absolute;left:{{hueX}};top:-2px;width:10px;height:18px;border-radius:5px;border:2px solid #FFFFFF;box-shadow:0 0 0 1.5px rgba(0,0,0,.45);transition:left .12s ease,top .12s ease;transform:translateX(-5px);pointer-events:none;background:transparent;box-sizing:border-box"></span>
                 </div>
                 <div style="display:flex;align-items:center;gap:8px;margin-top:10px">
@@ -1079,14 +1112,14 @@ button:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-vis
             </div>
             <div style="padding:16px 0 18px;border-bottom:1px solid var(--grid)">
               <div class="risk-settings-grid" style="display:grid;grid-template-columns:1fr 1fr;gap:14px">
-                <div>
+                <div class="risk-setting-field">
                   <div style="font-family:'Manrope',system-ui,sans-serif;font-size:9px;letter-spacing:1.2px;color:var(--tx-faint)">STARTING BALANCE</div>
-                  <div style="font-size:11.5px;color:var(--tx-faint);margin-top:4px">Starting balance sets the account value used by the risk percentage and plots your account curve.</div>
+                  <div class="risk-setting-help" style="font-size:11.5px;color:var(--tx-faint);margin-top:4px">Starting balance sets the account value used by the risk percentage and plots your account curve.</div>
                   <input value="{{balVal}}" onChange="{{onBal}}" inputMode="decimal" placeholder="e.g. 50000" style="margin-top:10px;background:var(--input);border:1px solid var(--bd2);border-radius:10px;color:var(--tx);font-family:'Manrope',system-ui,sans-serif;font-size:12.5px;padding:9px 12px;width:100%;box-sizing:border-box">
                 </div>
-                <div>
+                <div class="risk-setting-field">
                   <div style="font-family:'Manrope',system-ui,sans-serif;font-size:9px;letter-spacing:1.2px;color:var(--tx-faint)">ACCOUNT RISK PER TRADE</div>
-                  <div style="font-size:11.5px;color:var(--tx-faint);margin-top:4px">Risk percentage sets the budget; each symbol's dollars per point converts the entry-to-stop distance into risk per contract.</div>
+                  <div class="risk-setting-help" style="font-size:11.5px;color:var(--tx-faint);margin-top:4px">Risk percentage sets the budget; each symbol's dollars per point converts the entry-to-stop distance into risk per contract.</div>
                   <div style="display:flex;align-items:center;margin-top:10px"><input value="{{riskPctVal}}" onChange="{{onRiskPct}}" inputMode="decimal" min="0.1" max="10" style="background:var(--input);border:1px solid var(--bd2);border-radius:10px 0 0 10px;color:var(--tx);font-family:'Manrope',system-ui,sans-serif;font-size:12.5px;padding:9px 12px;width:100%;box-sizing:border-box"><span style="border:1px solid var(--bd2);border-left:none;background:var(--chip2);color:var(--tx-dim);font-family:'Manrope',system-ui,sans-serif;font-size:11px;padding:9px 10px;border-radius:0 10px 10px 0">%</span></div>
                 </div>
               </div>
@@ -1094,7 +1127,7 @@ button:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-vis
             <div style="padding:16px 0 18px;border-bottom:1px solid var(--grid)">
               <div style="font-family:'Manrope',system-ui,sans-serif;font-size:9px;letter-spacing:1.2px;color:var(--tx-faint)">QUICK PRESETS</div>
               <div style="font-size:11.5px;color:var(--tx-faint);margin-top:4px">saved from the day editor for repeatable setups</div>
-              <div style="display:flex;flex-wrap:wrap;gap:7px;margin-top:11px">
+              <div class="quick-presets-list" style="display:flex;flex-wrap:wrap;gap:7px;margin-top:11px;align-items:center;min-height:25px">
                 <sc-for list="{{quickPresetChips}}" as="qp" hint-placeholder-count="0">
                   <span style="display:inline-flex;align-items:center;gap:8px;border:1px solid var(--bd2);background:var(--chip);border-radius:999px;padding:6px 7px 6px 11px"><span><span style="font-family:'Manrope',system-ui,sans-serif;font-size:10px;font-weight:700;color:var(--tx-mid)">{{qp.name}}</span><span style="font-family:'Manrope',system-ui,sans-serif;font-size:8.5px;color:var(--tx-faint);margin-left:6px">{{qp.meta}}</span></span><button onClick="{{qp.del}}" title="Remove preset" style="border:none;background:var(--chip2);color:var(--tx-dim);width:17px;height:17px;border-radius:50%;font-size:9px;cursor:pointer;line-height:17px;padding:0">✕</button></span>
                 </sc-for>
@@ -1124,69 +1157,57 @@ button:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-vis
       </sc-if>
 
       <sc-if value="{{tabHelp}}" hint-placeholder-val="{{false}}">
-        <div data-screen-label="Help" class="help-grid" style="display:grid;grid-template-columns:1fr 1fr;gap:16px;max-width:1000px;animation:page-enter .4s ease both">
-          <div class="glass-surface" style="border-radius:16px;padding:20px 22px;animation:rise .4s ease both">
-            <div style="font-size:15px;font-weight:700">Journal a day</div>
-            <div style="display:flex;flex-direction:column;gap:11px;margin-top:14px">
-              <div style="display:flex;gap:11px;align-items:flex-start"><span style="width:20px;height:20px;flex:none;border-radius:50%;background:{{acc16}};color:{{accent}};font-family:'Manrope',system-ui,sans-serif;font-size:10px;font-weight:700;display:flex;align-items:center;justify-content:center">1</span><span style="font-size:12.5px;color:var(--tx-mid);line-height:1.5">Open <b>Calendar</b> and click any day (past or today).</span></div>
-              <div style="display:flex;gap:11px;align-items:flex-start"><span style="width:20px;height:20px;flex:none;border-radius:50%;background:{{acc16}};color:{{accent}};font-family:'Manrope',system-ui,sans-serif;font-size:10px;font-weight:700;display:flex;align-items:center;justify-content:center">2</span><span style="font-size:12.5px;color:var(--tx-mid);line-height:1.5">Pick an emoji — a one-tap read on how the day felt.</span></div>
-              <div style="display:flex;gap:11px;align-items:flex-start"><span style="width:20px;height:20px;flex:none;border-radius:50%;background:{{acc16}};color:{{accent}};font-family:'Manrope',system-ui,sans-serif;font-size:10px;font-weight:700;display:flex;align-items:center;justify-content:center">3</span><span style="font-size:12.5px;color:var(--tx-mid);line-height:1.5">Add trades: symbol, side, contracts, entry, stop, target, exit. P&amp;L auto-calculates from entry → exit × $/point.</span></div>
-              <div style="display:flex;gap:11px;align-items:flex-start"><span style="width:20px;height:20px;flex:none;border-radius:50%;background:{{acc16}};color:{{accent}};font-family:'Manrope',system-ui,sans-serif;font-size:10px;font-weight:700;display:flex;align-items:center;justify-content:center">4</span><span style="font-size:12.5px;color:var(--tx-mid);line-height:1.5">Tag the setup and session, tick the rules you kept, write the lesson, drop chart screenshots.</span></div>
-              <div style="display:flex;gap:11px;align-items:flex-start"><span style="width:20px;height:20px;flex:none;border-radius:50%;background:{{acc16}};color:{{accent}};font-family:'Manrope',system-ui,sans-serif;font-size:10px;font-weight:700;display:flex;align-items:center;justify-content:center">5</span><span style="font-size:12.5px;color:var(--tx-mid);line-height:1.5"><b>Save entry.</b> Dashboard, Insights and Gallery update instantly.</span></div>
+        <div data-screen-label="Help" class="help-faq">
+          <div class="help-search-panel glass-surface">
+            <label for="help-faq-search">Search Help</label>
+            <div class="help-search-row">
+              <input id="help-faq-search" ref="{{setHelpSearchRef}}" type="search" value="{{helpQuery}}" onInput="{{onHelpQuery}}" placeholder="Search questions and answers">
+              <button onClick="{{clearHelpSearch}}" disabled="{{helpClearDisabled}}" aria-label="Clear Help search">Clear</button>
             </div>
+            <div class="help-result-status" aria-live="polite" aria-atomic="true">{{helpResultStatus}}</div>
           </div>
-          <div class="glass-surface" style="border-radius:16px;padding:20px 22px;animation:rise .4s ease both;animation-delay:.05s">
-            <div style="font-size:15px;font-weight:700">The numbers, decoded</div>
-            <div style="display:flex;flex-direction:column;margin-top:8px">
-              <div style="display:grid;grid-template-columns:118px 1fr;gap:10px;padding:8px 0;border-bottom:1px solid var(--grid)"><span style="font-family:'Manrope',system-ui,sans-serif;font-size:10px;letter-spacing:.8px;color:{{accent}};padding-top:1px">WIN RATE</span><span style="font-size:12px;color:var(--tx-mid);line-height:1.5">winning trades ÷ all trades</span></div>
-              <div style="display:grid;grid-template-columns:118px 1fr;gap:10px;padding:8px 0;border-bottom:1px solid var(--grid)"><span style="font-family:'Manrope',system-ui,sans-serif;font-size:10px;letter-spacing:.8px;color:{{accent}};padding-top:1px">PROFIT FACTOR</span><span style="font-size:12px;color:var(--tx-mid);line-height:1.5">gross profit ÷ gross loss — above 1.00 = net profitable</span></div>
-              <div style="display:grid;grid-template-columns:118px 1fr;gap:10px;padding:8px 0;border-bottom:1px solid var(--grid)"><span style="font-family:'Manrope',system-ui,sans-serif;font-size:10px;letter-spacing:.8px;color:{{accent}};padding-top:1px">EXPECTANCY</span><span style="font-size:12px;color:var(--tx-mid);line-height:1.5">average $ result every time you take a trade</span></div>
-              <div style="display:grid;grid-template-columns:118px 1fr;gap:10px;padding:8px 0;border-bottom:1px solid var(--grid)"><span style="font-family:'Manrope',system-ui,sans-serif;font-size:10px;letter-spacing:.8px;color:{{accent}};padding-top:1px">R MULTIPLE</span><span style="font-size:12px;color:var(--tx-mid);line-height:1.5">profit measured in units of risk (entry → stop distance)</span></div>
-              <div style="display:grid;grid-template-columns:118px 1fr;gap:10px;padding:8px 0;border-bottom:1px solid var(--grid)"><span style="font-family:'Manrope',system-ui,sans-serif;font-size:10px;letter-spacing:.8px;color:{{accent}};padding-top:1px">MAX DRAWDOWN</span><span style="font-size:12px;color:var(--tx-mid);line-height:1.5">deepest fall from an equity peak in the range</span></div>
-              <div style="display:grid;grid-template-columns:118px 1fr;gap:10px;padding:8px 0"><span style="font-family:'Manrope',system-ui,sans-serif;font-size:10px;letter-spacing:.8px;color:{{accent}};padding-top:1px">DAY STREAK</span><span style="font-size:12px;color:var(--tx-mid);line-height:1.5">consecutive green (W) or red (L) days, from your latest day back</span></div>
+
+          <sc-for list="{{helpGroups}}" as="category" hint-placeholder-count="6">
+            <section class="help-category" aria-labelledby="{{category.categoryId}}">
+              <h2 id="{{category.categoryId}}">{{category.label}}</h2>
+              <div class="help-accordion glass-surface">
+                <sc-for list="{{category.questions}}" as="faq" hint-placeholder-count="4">
+                  <div class="help-item">
+                    <h3>
+                      <button id="{{faq.questionId}}" class="help-question" onClick="{{faq.toggle}}" aria-expanded="{{faq.expanded}}" aria-controls="{{faq.answerId}}">
+                        <span>{{faq.question}}</span>
+                        <svg class="help-caret" aria-hidden="true" width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" style="transform:{{faq.caretTransform}}"><path d="M4 6.5 8 10.5 12 6.5"></path></svg>
+                      </button>
+                    </h3>
+                    <div id="{{faq.answerId}}" class="help-answer" hidden="{{faq.hidden}}" role="region" aria-labelledby="{{faq.questionId}}">
+                      <sc-for list="{{faq.blocks}}" as="block" hint-placeholder-count="2">
+                        <sc-if value="{{block.isPara}}" hint-placeholder-val="{{true}}">
+                          <p><sc-for list="{{block.runs}}" as="run" hint-placeholder-count="3"><sc-if value="{{run.strong}}" hint-placeholder-val="{{false}}"><strong>{{run.text}}</strong></sc-if><sc-if value="{{run.plain}}" hint-placeholder-val="{{true}}"><span>{{run.text}}</span></sc-if></sc-for></p>
+                        </sc-if>
+                        <sc-if value="{{block.isSteps}}" hint-placeholder-val="{{false}}">
+                          <ol class="help-steps">
+                            <sc-for list="{{block.steps}}" as="step" hint-placeholder-count="5">
+                              <li><sc-for list="{{step.runs}}" as="run" hint-placeholder-count="3"><sc-if value="{{run.strong}}" hint-placeholder-val="{{false}}"><strong>{{run.text}}</strong></sc-if><sc-if value="{{run.plain}}" hint-placeholder-val="{{true}}"><span>{{run.text}}</span></sc-if></sc-for></li>
+                            </sc-for>
+                          </ol>
+                        </sc-if>
+                      </sc-for>
+                      <sc-if value="{{faq.hasAction}}" hint-placeholder-val="{{false}}">
+                        <button class="help-answer-action" onClick="{{faq.action.run}}">{{faq.action.label}}</button>
+                      </sc-if>
+                    </div>
+                  </div>
+                </sc-for>
+              </div>
+            </section>
+          </sc-for>
+
+          <sc-if value="{{helpNoResults}}" hint-placeholder-val="{{false}}">
+            <div class="help-empty glass-surface">
+              <div>No Help answers match that search.</div>
+              <button onClick="{{clearHelpSearch}}">Clear search</button>
             </div>
-          </div>
-          <div class="glass-surface" style="border-radius:16px;padding:20px 22px;animation:rise .4s ease both;animation-delay:.1s">
-            <div style="font-size:15px;font-weight:700">Sessions &amp; setups</div>
-            <div style="font-size:12.5px;color:var(--tx-mid);line-height:1.6;margin-top:10px">Setup tags name the play (ORB, VWAP Fade…); session tags name the clock (Asia, London, NY Open…). Tag both on each day and <b>Insights</b> shows which plays pay and which hours bleed. Both lists are fully yours — add or remove them in <b>Settings → Journal</b>.</div>
-          </div>
-          <div class="glass-surface" style="border-radius:16px;padding:20px 22px;animation:rise .4s ease both;animation-delay:.15s">
-            <div style="font-size:15px;font-weight:700">Make it yours</div>
-            <div style="font-size:12.5px;color:var(--tx-mid);line-height:1.6;margin-top:10px"><b>Settings → Appearance</b>: dark/light theme, any accent color (pick a preset or dial in your own with the color picker), background glow strength, default chart. <b>Settings → Journal</b>: your assets (any market — futures, forex, anything with a $/point), setup tags, starting balance, weekend days. <b>Profile</b>: your name and an optional password that locks the journal behind the login screen.</div>
-          </div>
-          <div class="glass-surface" style="border-radius:16px;padding:20px 22px;animation:rise .4s ease both;animation-delay:.18s">
-            <div style="font-size:15px;font-weight:700">Charts &amp; the Gallery</div>
-            <div style="font-size:12.5px;color:var(--tx-mid);line-height:1.6;margin-top:10px">Drop chart screenshots or short screen clips onto any day under <b>SCREENSHOTS &amp; CLIPS</b>. Every image and clip is collected in the <b>Gallery</b>, tagged with its date, mood and P&amp;L. Click any thumbnail to open it full-screen, or jump straight back to that day's journal.</div>
-          </div>
-          <div class="glass-surface" style="border-radius:16px;padding:20px 22px;animation:rise .4s ease both;animation-delay:.22s">
-            <div style="font-size:15px;font-weight:700">Speed &amp; shortcuts</div>
-            <div style="font-size:12.5px;color:var(--tx-mid);line-height:1.6;margin-top:10px">Use the <b>Day / Week / Month / All</b> range switch to reframe every stat at once. Hit <b>Today</b> on the Calendar to snap back to now. Hover the equity curve for a day-by-day balance readout, and toggle <b>Curve / Bars</b> to switch the P&amp;L view. Click any past or current day to journal it instantly.</div>
-          </div>
-          <div class="glass-surface" style="border-radius:16px;padding:20px 22px;animation:rise .4s ease both">
-            <div style="font-size:15px;font-weight:700">Risk sizing</div>
-            <div style="font-size:12.5px;color:var(--tx-mid);line-height:1.6;margin-top:10px">Set <b>Starting balance</b>, account risk percentage and each symbol's dollars per point in <b>Settings → Journal</b>. Entry and stop then produce a whole-contract size guide. Apply is always explicit, and risk sizing is informational, not financial advice.</div>
-          </div>
-          <div class="glass-surface" style="border-radius:16px;padding:20px 22px;animation:rise .4s ease both">
-            <div style="font-size:15px;font-weight:700">Time edge and weekly review</div>
-            <div style="font-size:12.5px;color:var(--tx-mid);line-height:1.6;margin-top:10px">Add an optional execution time to reveal results by hour in <b>Insights</b>. The Weekly Review Digest summarizes the latest seven calendar days. Tilt status is behavioral pattern detection, not a market prediction.</div>
-          </div>
-          <div class="glass-surface" style="border-radius:16px;padding:20px 22px;animation:rise .4s ease both">
-            <div style="font-size:15px;font-weight:700">Search</div>
-            <div style="font-size:12.5px;color:var(--tx-mid);line-height:1.6;margin-top:10px">Use <b>Search</b> in the title bar or press Ctrl or Cmd plus K outside a form field. Search finds journal entries, actions, saved presets and pages. Presets change only the open draft until you save the journal entry.</div>
-          </div>
-          <div class="glass-surface" style="border-radius:16px;padding:20px 22px;animation:rise .4s ease both">
-            <div style="font-size:15px;font-weight:700">Chart markup</div>
-            <div style="font-size:12.5px;color:var(--tx-mid);line-height:1.6;margin-top:10px">Choose <b>Mark up</b> on a screenshot to place Entry, Stop, Target, Mistake or Lesson markers. Undo, clear or cancel the working copy, then save markup to the draft. Saved markers also appear in the Gallery viewer.</div>
-          </div>
-          <div class="glass-surface" style="border-radius:16px;padding:20px 22px;animation:rise .4s ease both">
-            <div style="font-size:15px;font-weight:700">Walkthrough</div>
-            <div style="font-size:12.5px;color:var(--tx-mid);line-height:1.6;margin-top:10px">Run the four-step tour again any time — it covers search, journaling a day, shaping the dashboard, and turning records into a process. Nothing is changed or cleared.</div>
-            <button onClick="{{replayTour}}" style="margin-top:14px;border:1px solid {{acc55}};background:{{acc16}};color:{{accent}};font-size:12.5px;font-weight:700;padding:10px 15px;border-radius:10px;cursor:pointer;transition:all .15s" style-hover="filter:brightness(1.15)">Replay walkthrough</button>
-          </div>
-          <div class="glass-surface" style="grid-column:1/-1;border-radius:16px;padding:20px 22px;animation:rise .4s ease both;animation-delay:.2s">
-            <div style="font-size:15px;font-weight:700">Your data</div>
-            <div style="font-size:12.5px;color:var(--tx-mid);line-height:1.6;margin-top:10px">Written is a local application — everything is stored in this webview on this device. Nothing is uploaded, ever. Logging out is a privacy curtain, not a server session. <b>Settings → Data</b> can reload the demo journal or wipe everything (both ask twice). Hover the P&amp;L graph for day-by-day balance; set a starting balance to see your real account curve.</div>
-          </div>
+          </sc-if>
         </div>
       </sc-if>
 
@@ -1205,7 +1226,7 @@ button:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-vis
             <div style="height:1px;background:var(--grid);margin:20px 0"></div>
             <div style="font-family:'Manrope',system-ui,sans-serif;font-size:9.5px;letter-spacing:1.6px;color:var(--tx-faint)">CHANGELOG</div>
             <div style="display:flex;flex-direction:column;gap:9px;margin-top:12px">
-              <div style="display:grid;grid-template-columns:52px 1fr;gap:12px"><span style="font-family:'Manrope',system-ui,sans-serif;font-size:11px;font-weight:600;color:{{accent}}">v1.0.0</span><span style="font-size:12px;color:var(--tx-mid);line-height:1.5">first official release &mdash; P&amp;L calendar, equity curve, day journal and insights; profiles, light theme and custom assets; risk sizing, plan scorecards, tilt radar, chart markup and quick capture; native macOS &amp; Windows builds with local file storage</span></div>
+              <div style="display:grid;grid-template-columns:72px 1fr;gap:12px"><span style="font-family:'Manrope',system-ui,sans-serif;font-size:11px;font-weight:600;color:{{accent}}">v1.0.0 &mdash;</span><span style="font-size:12px;color:var(--tx-mid);line-height:1.5">first official release: P&amp;L calendar, equity curve, day journal and insights; profiles, light theme and custom assets; risk sizing, plan scorecards, tilt radar, chart markup and quick capture; native macOS &amp; Windows builds with local file storage</span></div>
                         </div>
             <div style="height:1px;background:var(--grid);margin:20px 0"></div>
             <div style="font-family:'Manrope',system-ui,sans-serif;font-size:9.5px;letter-spacing:1.6px;color:var(--tx-faint)">OPEN SOURCE</div>
@@ -1215,7 +1236,7 @@ button:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-vis
               <div style="display:grid;grid-template-columns:1fr auto;gap:12px;align-items:baseline"><span style="font-size:12.5px;color:var(--tx-mid)">Manrope typeface</span><span style="font-size:10.5px;letter-spacing:.6px;color:var(--tx-faint)">OFL 1.1</span></div>
             </div>
             <sc-if value="{{licensesAvailable}}" hint-placeholder-val="{{true}}">
-              <button onClick="{{openLicenses}}" style="margin-top:13px;border:1px solid var(--bd2);background:transparent;color:var(--tx-dim);font-size:11.5px;font-weight:600;padding:7px 13px;border-radius:9px;cursor:pointer;transition:all .15s" style-hover="border-color:var(--bd3);color:var(--tx)">View full license texts</button>
+              <button onClick="{{openLicenses}}" style="margin:13px auto 0;display:block;border:1px solid var(--bd2);background:transparent;color:var(--tx-dim);font-size:11.5px;font-weight:600;padding:7px 13px;border-radius:9px;cursor:pointer;transition:all .15s" style-hover="border-color:var(--bd3);color:var(--tx)">View full license texts</button>
             </sc-if>
             <div style="height:1px;background:var(--grid);margin:20px 0"></div>
             <div style="font-family:'Manrope',system-ui,sans-serif;font-size:10px;letter-spacing:1px;color:var(--tx-faint);text-align:center">made with intent — trade the plan, then write it down</div>
@@ -1573,14 +1594,14 @@ button:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-vis
                       <sc-for list="{{obAccChips}}" as="oa" hint-placeholder-count="6">
                         <button onClick="{{oa.set}}" style="width:28px;height:28px;border-radius:50%;background:{{oa.c}};border:2px solid {{oa.bd}};box-shadow:{{oa.sh}};cursor:pointer;transition:all .15s;padding:0" style-hover="transform:scale(1.15)"></button>
                       </sc-for>
-                      <button onClick="{{togPicker}}" title="Pick any color" style="width:28px;height:28px;border-radius:50%;background:conic-gradient(from -90deg,#ff5c5c,#ffd24d,#7ce38a,#4dd6d6,#5eb1ff,#c29bff,#ff7ab8,#ff5c5c);border:2px solid {{pickerBd}};box-shadow:{{pickerSh}};cursor:pointer;transition:all .15s;padding:0;display:flex;align-items:center;justify-content:center;overflow:hidden" style-hover="transform:scale(1.15)"><span style="width:12px;height:12px;border-radius:50%;background:{{accent}};border:2px solid var(--card-a)"></span></button>
+                      <button ref="{{setPickerSetupOpenerRef}}" onClick="{{togPicker}}" title="Pick any color" aria-label="Pick any color" style="width:28px;height:28px;border-radius:50%;background:conic-gradient(from -90deg,#ff5c5c,#ffd24d,#7ce38a,#4dd6d6,#5eb1ff,#c29bff,#ff7ab8,#ff5c5c);border:2px solid {{pickerBd}};box-shadow:{{pickerSh}};cursor:pointer;transition:all .15s;padding:0;display:flex;align-items:center;justify-content:center;overflow:hidden" style-hover="transform:scale(1.15)"></button>
                     </div>
                     <sc-if value="{{pickerOpen}}" hint-placeholder-val="{{false}}">
-                      <div style="margin-top:10px;animation:rise .25s ease both">
-                        <div onPointerDown="{{svStart}}" style="position:relative;height:92px;border-radius:10px;cursor:crosshair;touch-action:none;transition:background .2s ease;background:{{svBg}}">
+                      <div ref="{{setPickerSetupRef}}" style="margin-top:10px;animation:rise .25s ease both">
+                        <div class="color-picker-sv" onPointerDown="{{svStart}}" style="position:relative;height:92px;border-radius:10px;cursor:crosshair;touch-action:none;transition:background .2s ease;background:{{svBg}}">
                           <span style="position:absolute;left:{{svX}};top:{{svY}};width:13px;height:13px;border-radius:50%;border:2px solid #FFFFFF;box-shadow:0 0 0 1.5px rgba(0,0,0,.45);transition:left .12s ease,top .12s ease;transform:translate(-7px,-7px);pointer-events:none;background:{{accent}};box-sizing:border-box"></span>
                         </div>
-                        <div onPointerDown="{{hueStart}}" style="position:relative;height:12px;border-radius:6px;margin-top:8px;cursor:crosshair;touch-action:none;transition:background .2s ease;background:linear-gradient(to right,#f00,#ff0,#0f0,#0ff,#00f,#f0f,#f00)">
+                        <div class="color-picker-hue" onPointerDown="{{hueStart}}" style="position:relative;height:12px;border-radius:6px;margin-top:8px;cursor:crosshair;touch-action:none;transition:background .2s ease;background:linear-gradient(to right,#f00,#ff0,#0f0,#0ff,#00f,#f0f,#f00)">
                           <span style="position:absolute;left:{{hueX}};top:-2px;width:9px;height:16px;border-radius:4px;border:2px solid #FFFFFF;box-shadow:0 0 0 1.5px rgba(0,0,0,.45);transition:left .12s ease,top .12s ease;transform:translateX(-4px);pointer-events:none;box-sizing:border-box"></span>
                         </div>
                       </div>
@@ -1705,8 +1726,11 @@ button:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-vis
   </sc-if>
 
   <sc-if value="{{tourOpen}}" hint-placeholder-val="{{false}}">
-    <div style="position:fixed;inset:44px 0 0;background:var(--ovl);backdrop-filter:blur(6px);z-index:129;display:flex;align-items:center;justify-content:center;padding:22px;box-sizing:border-box">
-      <div ref="{{setTourDialogRef}}" onKeyDown="{{onTourDialogKeydown}}" tabIndex="-1" role="dialog" aria-modal="true" aria-label="Written walkthrough" class="glass-surface-strong" style="width:400px;max-width:100%;border-radius:18px;padding:26px;box-shadow:0 28px 80px var(--sh);text-align:center;animation:rise .4s ease both">
+    <div class="tour-overlay" style="background:{{tourOverlayBg}}">
+      <sc-if value="{{tourSpotlightReady}}" hint-placeholder-val="{{false}}">
+        <div class="tour-spotlight" aria-hidden="true" style="top:{{tourSpotlightTop}};left:{{tourSpotlightLeft}};width:{{tourSpotlightWidth}};height:{{tourSpotlightHeight}}"></div>
+      </sc-if>
+      <div ref="{{setTourDialogRef}}" onKeyDown="{{onTourDialogKeydown}}" tabIndex="-1" role="dialog" aria-modal="true" aria-label="Written walkthrough" class="tour-coachmark glass-surface-strong" style="top:{{tourPanelTop}};left:{{tourPanelLeft}};transform:{{tourPanelTransform}};border-radius:18px;padding:26px;box-shadow:0 28px 80px var(--sh);text-align:center;animation:rise .4s ease both">
         <div style="width:44px;height:44px;margin:0 auto;border-radius:50%;background:{{acc16}};color:{{accent}};display:flex;align-items:center;justify-content:center">
           <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20V4H6.5A2.5 2.5 0 0 0 4 6.5v13z"></path><path d="M4 19.5A2.5 2.5 0 0 0 6.5 22H20v-5"></path><path d="M15.5 7.5l1.8 1.8-5.3 5.3-2.5.7.7-2.5 5.3-5.3z"></path></svg>
         </div>
@@ -1775,8 +1799,9 @@ class Component extends DCLogic {
   constructor(p){
     super(p);
     const t=new Date();
-    this.state={days:{},settings:{},profileStore:{version:2,activeProfileId:null,profiles:{}},selectedProfileId:null,pendingProfileId:null,pendingSearchResult:null,profileMenuOpen:false,storageWarning:'',tab:'dash',viewY:t.getFullYear(),viewM:t.getMonth(),range:'month',chartMode:null,symFilter:'ALL',lightbox:null,hov:null,editing:null,draft:null,annotation:null,markKind:'entry',markText:'',confirm:null,booting:true,ob:null,newTag:'',newSym:'',newPv:'',obSym:'',obPv:'',liPw:'',liErr:false,obStarted:false,obStep:0,obProg:0,obDemo:true,launching:false,newMist:'',toast:null,pickH:153,pickS:.72,pickV:.86,pickerOpen:false,bootTxt:'',dashEdit:false,searchOpen:false,searchQuery:'',searchSel:0,tourOpen:false,tourStep:0,addedTradeIndex:null,editorRangesReady:false};
+    this.state={days:{},settings:{},profileStore:{version:2,activeProfileId:null,profiles:{}},selectedProfileId:null,pendingProfileId:null,pendingSearchResult:null,profileMenuOpen:false,storageWarning:'',tab:'dash',viewY:t.getFullYear(),viewM:t.getMonth(),range:'month',chartMode:null,symFilter:'ALL',lightbox:null,hov:null,editing:null,draft:null,annotation:null,markKind:'entry',markText:'',confirm:null,booting:true,ob:null,newTag:'',newSym:'',newPv:'',obSym:'',obPv:'',liPw:'',liErr:false,obStarted:false,obStep:0,obProg:0,obDemo:true,launching:false,newMist:'',toast:null,pickH:153,pickS:.72,pickV:.86,pickerOpen:false,bootTxt:'',dashEdit:false,searchOpen:false,searchQuery:'',searchSel:0,helpQuery:'',helpOpenId:null,tourOpen:false,tourStep:0,tourSpotlight:null,addedTradeIndex:null,editorRangesReady:false,titlebarOffset:'44px'};
     this._onGlobalKeydown=this.handleGlobalKeydown.bind(this);
+    this._onWindowScroll=this.syncTitlebarOffset.bind(this);
     this.BOOTMSGS=['loading modules…','linking market symbols…','reading your ledger…','warming up charts…'];
     this.LOGINMSGS=['verifying local vault…','your ledger is safe on this device','ready when you are'];
     this.LAUNCHMSGS=['preparing your dashboard…','crunching your stats…','almost there…'];
@@ -1798,11 +1823,11 @@ class Component extends DCLogic {
     const kpi={minColumns:3,maxColumns:6,defaultColumns:3,minRows:4,maxRows:6,defaultRows:4};
     this.WIDGETS=[
       {id:'net',label:'Net P&L',...kpi},{id:'win',label:'Win rate',...kpi},{id:'pf',label:'Profit factor',...kpi},{id:'avg',label:'Avg win / loss',...kpi},
-      {id:'score',label:'Trading score',minColumns:4,maxColumns:8,defaultColumns:4,minRows:6,maxRows:10,defaultRows:7},
+      {id:'score',label:'Trading score',minColumns:4,maxColumns:8,defaultColumns:4,minRows:6,maxRows:10,defaultRows:8},
       {id:'equity',label:'P&L chart',minColumns:6,maxColumns:12,defaultColumns:8,minRows:8,maxRows:14,defaultRows:10},
-      {id:'month',label:'This month',minColumns:3,maxColumns:6,defaultColumns:4,minRows:4,maxRows:7,defaultRows:5},
+      {id:'month',label:'This month',minColumns:3,maxColumns:6,defaultColumns:4,minRows:4,maxRows:7,defaultRows:6},
       {id:'streak',label:'Day streak',minColumns:3,maxColumns:6,defaultColumns:4,minRows:4,maxRows:7,defaultRows:5},
-      {id:'expectancy',label:'Expectancy',minColumns:3,maxColumns:6,defaultColumns:3,minRows:4,maxRows:7,defaultRows:5},
+      {id:'expectancy',label:'Expectancy',minColumns:3,maxColumns:6,defaultColumns:4,minRows:4,maxRows:7,defaultRows:5},
       {id:'best',label:'Best day',...kpi},{id:'worst',label:'Worst day',...kpi},{id:'drawdown',label:'Max drawdown',...kpi},{id:'hold',label:'Avg hold time',...kpi},
       {id:'heatmap',label:'Consistency heatmap',minColumns:6,maxColumns:12,defaultColumns:8,minRows:6,maxRows:10,defaultRows:7},
       {id:'econ',label:'Economic calendar',minColumns:4,maxColumns:8,defaultColumns:4,minRows:7,maxRows:12,defaultRows:9},
@@ -1810,6 +1835,8 @@ class Component extends DCLogic {
       {id:'recent',label:'Recent trades',minColumns:6,maxColumns:12,defaultColumns:12,minRows:8,maxRows:15,defaultRows:11},
     ];
     this.DEFWIDGETS=Object.fromEntries(this.WIDGETS.map(widget=>[widget.id,{on:['heatmap','econ','checklist'].includes(widget.id)?0:1,columns:widget.defaultColumns,rows:widget.defaultRows}]));
+    this.WIDGET_LAYOUT_VERSION=1;
+    this.WIDGET_LAYOUT_V1_CHANGES={score:{rows:[7,8]},month:{rows:[5,6]},expectancy:{columns:[3,4]}};
     this.CHECK=['Followed my trading plan','Waited for A+ setups only','Respected every stop','Sized correctly for risk','No revenge / FOMO trades','Journaled every execution','Stopped at my daily limit'];
     this.ECON=[
       {t:'08:30',ccy:'USD',imp:3,name:'Non-Farm Payrolls'},
@@ -1824,10 +1851,193 @@ class Component extends DCLogic {
     this.MO=['January','February','March','April','May','June','July','August','September','October','November','December'];
     this.MOS=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
   }
+  normalizeHelpText(value){
+    return String(value==null?'':value).toLowerCase().replace(/\s+/g,' ').trim();
+  }
+  helpQuestionText(question){
+    const q=question&&typeof question==='object'?question:{},parts=[String(q.question||'')];
+    (Array.isArray(q.blocks)?q.blocks:[]).forEach(block=>{
+      const units=block&&block.kind==='steps'&&Array.isArray(block.steps)?block.steps:[block];
+      units.forEach(unit=>(Array.isArray(unit&&unit.runs)?unit.runs:[]).forEach(run=>parts.push(String(run&&run.text||''))));
+    });
+    if(q.action&&q.action.label)parts.push(String(q.action.label));
+    return parts.join(' ');
+  }
+  filterHelpFaq(collection,rawQuery){
+    const normalized=this.normalizeHelpText(rawQuery),source=Array.isArray(collection)?collection:[];
+    let matchCount=0,firstId=null;
+    const groups=source.map(group=>{
+      const questions=(Array.isArray(group&&group.questions)?group.questions:[]).filter(question=>{
+        if(!normalized)return true;
+        const searchText=typeof question.searchText==='string'
+          ?question.searchText
+          :this.normalizeHelpText(this.helpQuestionText(question));
+        return searchText.includes(normalized);
+      });
+      questions.forEach(question=>{matchCount++;if(firstId==null)firstId=question.id});
+      return{key:group.key,label:group.label,questions};
+    }).filter(group=>group.questions.length);
+    if(!normalized){matchCount=groups.reduce((sum,group)=>sum+group.questions.length,0);firstId=null}
+    return{normalized,matchCount,groups,firstId};
+  }
+  helpFaqData(){
+    if(this._helpFaq)return this._helpFaq;
+    const r=(text,strong=false)=>({text,strong:!!strong});
+    const p=(...runs)=>({kind:'para',runs,steps:[]});
+    const s=(...items)=>({kind:'steps',runs:[],steps:items.map(runs=>({runs}))});
+    const q=(id,question,blocks,action=null)=>{
+      const item={id,question,blocks,action,searchText:''};
+      item.searchText=this.normalizeHelpText(this.helpQuestionText(item));
+      return item;
+    };
+    this._helpFaq=[
+      {
+        key:'getting-started',
+        label:'Getting Started',
+        questions:[
+          q('journal-day','How do I journal a trading day?',[
+            s(
+              [r('Open '),r('Calendar',true),r(' and select any past or current day.')],
+              [r('Choose a mood for the day.')],
+              [r('Add each execution with its symbol, side, quantity, entry, stop, target, exit, and optional time. Written can calculate P&L from the trade prices and the symbol point value.')],
+              [r('Add setup and session tags, plan details, rules, lessons, screenshots, or clips that belong to the review.')],
+              [r('Select '),r('Save entry',true),r('. Dashboard, Insights, Trades, Playbook, and Gallery then read the saved journal data.')]
+            )
+          ]),
+          q('interactive-walkthrough','What does the interactive walkthrough cover?',[
+            p(r('The four-step walkthrough highlights '),r('Dashboard',true),r(', '),r('Calendar',true),r(', '),r('Insights',true),r(', and '),r('Playbook',true),r('. It changes tabs and scroll position but does not edit or clear journal data.'))
+          ],{id:'tour',label:'Replay walkthrough'}),
+          q('quick-presets','How do Quick Presets work?',[
+            p(r('Inside an open journal draft, '),r('SAVE AS QUICK PRESET',true),r(' stores the first trade symbol and quantity, the first setup and session tags, confidence, and checked rules.')),
+            p(r('Applying a preset fills the open draft only. Select '),r('Save entry',true),r(' to persist the journal day. Remove saved presets under '),r('Settings',true),r(' in the Quick Presets section.'))
+          ])
+        ]
+      },
+      {
+        key:'dashboard-insights',
+        label:'Dashboard and Insights',
+        questions:[
+          q('dashboard-widgets','How do I arrange and resize dashboard widgets?',[
+            p(r('On '),r('Dashboard',true),r(', select '),r('Edit layout',true),r(' to move widgets, add hidden widgets, remove visible widgets, and resize them from their edge or corner handles. Select '),r('Done',true),r(' when finished. The layout is saved with the active profile.'))
+          ]),
+          q('core-metrics','What do the core trading metrics mean?',[
+            p(r('Win rate',true),r(' is winning trades divided by all trades. '),r('Profit factor',true),r(' is gross profit divided by gross loss. '),r('Expectancy',true),r(' is the average dollar result per trade.')),
+            p(r('R multiple',true),r(' measures the result in units of entry-to-stop risk. '),r('Max drawdown',true),r(' is the deepest fall from an equity peak. '),r('Day streak',true),r(' counts consecutive green or red trading days from the latest day backward.'))
+          ]),
+          q('trading-score-discipline','How are Trading score and the Tilt and Discipline Radar calculated?',[
+            p(r('Trading score',true),r(' combines consistency, win rate, profit factor, max drawdown, recovery, and average win-to-loss performance for the selected range.')),
+            p(r('Tilt and Discipline Radar',true),r(' reviews the latest five trading days for losing sequences, FOMO or revenge behavior, overtrading, broken rules, high stress, and high trade count. Calm, Watch, and Reset are behavioral review signals, not market predictions.'))
+          ]),
+          q('insight-panels','What do Weekly Review Digest, Time-of-Day Edge, and Tilt and Discipline Radar show?',[
+            p(r('Weekly Review Digest',true),r(' summarizes the latest seven calendar days, including net result, trades, win rate, repeated tags, and a review focus.')),
+            p(r('Time-of-Day Edge',true),r(' groups trades that have an execution time into hourly buckets. Untimed trades are excluded from that panel.')),
+            p(r('Tilt and Discipline Radar',true),r(' summarizes recent behavioral pressure from the latest five trading days.'))
+          ])
+        ]
+      },
+      {
+        key:'trades-setups-risk',
+        label:'Trades, Setups, and Risk',
+        questions:[
+          q('tags-sessions','How do setup and session tags work?',[
+            p(r('Setup tags',true),r(' name the play, such as ORB or VWAP Fade. '),r('Session tags',true),r(' name the trading window, such as London or NY Open. Add them to journal days so Insights and Playbook can compare results by play and session. Configure the available tags under '),r('Settings',true),r('.'))
+          ]),
+          q('risk-sizing','How does risk sizing work?',[
+            p(r('Set a starting balance, account risk percentage, and a positive dollars-per-point value for each symbol under '),r('Settings',true),r('. Entry and stop then produce a whole-contract size guide.')),
+            p(r('Apply',true),r(' is always explicit and changes only the draft quantity. Risk sizing is informational and is not financial advice.'))
+          ]),
+          q('playbook-grading','How does Playbook grade a setup?',[
+            p(r('Playbook',true),r(' creates a row for each configured setup tag that appears on saved journal days. It shows sample size, trades, net P&L, win rate, profit factor, average R, and the strongest weekday in the selected range. A setup with no tagged saved days has no row.'))
+          ])
+        ]
+      },
+      {
+        key:'charts-tools',
+        label:'Charts and Tools',
+        questions:[
+          q('media-gallery','How do screenshots, clips, and Gallery work together?',[
+            p(r('Add chart screenshots or short clips to an open journal day. After the day is saved, '),r('Gallery',true),r(' collects that media with its date, mood, and P&L context. Open an item full-screen or return to its journal day. Media remains local to the device.'))
+          ]),
+          q('chart-markup','How do I mark up a chart?',[
+            p(r('Select '),r('Mark up',true),r(' on a screenshot to place Entry, Stop, Target, Mistake, or Lesson markers. Undo, clear, or cancel affects only the working copy. Save markup updates the journal draft; save the journal entry to persist it.'))
+          ]),
+          q('search','How does Search work?',[
+            p(r('Use the title-bar '),r('Search',true),r(' or press Ctrl or Cmd plus K outside a form field. Search covers the active profile only and finds journal entries, actions, saved presets, and pages.')),
+            p(r('Results that would leave an unsaved journal day require confirmation. Applying a preset changes only the draft until the journal entry is saved.'))
+          ]),
+          q('ranges-chart-views','How do range controls and chart views affect results?',[
+            p(r('Day, Week, Month, and All',true),r(' reframe the range-sensitive statistics and charts. '),r('Curve',true),r(' and '),r('Bars',true),r(' show the same P&L data with different chart presentations. Calendar Today returns the calendar to the current month, and hovering the equity curve shows its day-level value.'))
+          ])
+        ]
+      },
+      {
+        key:'profiles-customization',
+        label:'Profiles and Customization',
+        questions:[
+          q('profiles','How do I create and switch profiles?',[
+            p(r('Open the profile menu and select '),r('Create profile',true),r(' to make another local journal with separate days and settings. Switching profiles changes the active journal. If a journal draft is open, Written asks before discarding it.'))
+          ]),
+          q('lock-journal','What does Lock journal protect?',[
+            p(r('An optional local password can place the selected profile behind the Written login screen. '),r('Lock journal',true),r(' returns to that screen. This is a local privacy curtain, not encryption, account security, cloud authentication, or password recovery.'))
+          ]),
+          q('customization','Where do I customize appearance, symbols, and journal settings?',[
+            p(r('Settings',true),r(' controls theme, accent, glow, default chart, symbols, custom dollars-per-point values, setup tags, starting balance, risk percentage, Quick Presets, and weekend visibility. '),r('Profile',true),r(' controls the profile name and optional local password.'))
+          ])
+        ]
+      },
+      {
+        key:'data-troubleshooting',
+        label:'Data and Troubleshooting',
+        questions:[
+          q('local-data','Where is my data stored?',[
+            p(r('Written stores profiles, settings, journal days, and media in the local application storage on this device. Nothing is uploaded by the app. Locking or logging out hides the journal locally and is not a server session.'))
+          ]),
+          q('storage-warning','What should I do when Written reports a storage warning?',[
+            p(r('A journal save warning that says to reduce stored media means the active profile changed in memory but could not be written durably. Remove unneeded screenshots or clips and try again.')),
+            p(r('A profile-switch warning means local storage could not be updated, so the switch did not complete. A profile-create warning means the new profile is active only in memory and has not been saved durably. Export trade data where useful, reduce stored media, and retry before closing the app.'))
+          ]),
+          q('csv-export','What does CSV export include?',[
+            p(r('Export trades (CSV)',true),r(' downloads saved trade and day fields including date, time, symbol, side, quantity, prices, P&L, R multiple, duration, mood, sessions, tags, mistakes, and notes. It does not include screenshots or clips.'))
+          ]),
+          q('reset-clear','What is the difference between resetting demo data and clearing all data?',[
+            p(r('Reset demo data',true),r(' replaces the active profile’s journal days with the sample journal. '),r('Clear all data',true),r(' replaces the active profile’s journal days with an empty journal. Neither action deletes the profile or its settings, and each requires a second confirming click.'))
+          ])
+        ]
+      }
+    ];
+    return this._helpFaq;
+  }
   emptyProfileStore(){return{version:2,activeProfileId:null,profiles:{}}}
   profileId(now=Date.now()){
     if(typeof crypto!=='undefined'&&crypto&&typeof crypto.randomUUID==='function')return crypto.randomUUID();
     return'profile-'+Number(now).toString(36)+'-'+this.stableId('profile',String(now));
+  }
+  migrateWidgetLayoutSettings(value){
+    const settings=value&&typeof value==='object'&&!Array.isArray(value)?Object.assign({},value):{};
+    const rawVersion=settings.widgetLayoutVersion,version=Number.isFinite(Number(rawVersion))?Math.max(0,Math.floor(Number(rawVersion))):0;
+    if(version>this.WIDGET_LAYOUT_VERSION||rawVersion===this.WIDGET_LAYOUT_VERSION)return{settings,changed:false};
+    const rawWidgets=settings.widgets;
+    if(rawWidgets&&typeof rawWidgets==='object'&&!Array.isArray(rawWidgets)){
+      const widgets=Object.assign({},rawWidgets);
+      Object.keys(this.WIDGET_LAYOUT_V1_CHANGES).forEach(id=>{
+        const raw=widgets[id];if(!raw||typeof raw!=='object'||Array.isArray(raw))return;
+        const next=Object.assign({},raw),changes=this.WIDGET_LAYOUT_V1_CHANGES[id];
+        Object.keys(changes).forEach(key=>{const [before,after]=changes[key];if(Number(next[key])===before)next[key]=after});
+        widgets[id]=next;
+      });
+      settings.widgets=widgets;
+    }
+    settings.widgetLayoutVersion=this.WIDGET_LAYOUT_VERSION;
+    return{settings,changed:true};
+  }
+  migrateWidgetLayoutStore(store){
+    const profiles={};let changed=false;
+    Object.keys(store.profiles||{}).forEach(id=>{
+      const profile=store.profiles[id],migration=this.migrateWidgetLayoutSettings(profile.settings);
+      profiles[id]=migration.changed?Object.assign({},profile,{settings:migration.settings}):profile;
+      changed=changed||migration.changed;
+    });
+    return{store:changed?Object.assign({},store,{profiles}):store,changed};
   }
   normalizeProfileStore(value){
     if(!value||value.version!==2||!value.profiles||typeof value.profiles!=='object'||Array.isArray(value.profiles))return null;
@@ -1865,7 +2075,8 @@ class Component extends DCLogic {
     if(!Array.isArray(settings.quickPresets))settings.quickPresets=[];
     const risk=Number(settings.riskPct);
     if(!Number.isFinite(risk)||risk<=0||risk>10)settings.riskPct=1;
-    return{version:2,activeProfileId:id,profiles:{[id]:{id,createdAt,lastUsedAt:now,settings,days}}};
+    const migratedSettings=this.migrateWidgetLayoutSettings(settings).settings;
+    return{version:2,activeProfileId:id,profiles:{[id]:{id,createdAt,lastUsedAt:now,settings:migratedSettings,days}}};
   }
   activeProfile(store=this.state.profileStore){
     const normalized=this.normalizeProfileStore(store);
@@ -1880,7 +2091,11 @@ class Component extends DCLogic {
     try{const raw=localStorage.getItem(this.PK);rawPresent=raw!=null;if(rawPresent)rawV2=JSON.parse(raw)}
     catch(error){warning='The newer profile store could not be read. Legacy recovery is active.'}
     const normalized=this.normalizeProfileStore(rawV2);
-    if(normalized)return{store:normalized,warning,migrated:false};
+    if(normalized){
+      const migration=this.migrateWidgetLayoutStore(normalized);
+      if(migration.changed&&!this.writeProfileStore(migration.store))warning=warning||'The widget layout upgrade could not be saved. It will be retried next time.';
+      return{store:migration.store,warning,migrated:migration.changed};
+    }
     if(rawPresent&&!warning)warning='The newer profile store is malformed. Legacy recovery is active.';
     let legacySettings={},legacyDays={};
     try{const raw=localStorage.getItem(this.SK);if(raw)legacySettings=JSON.parse(raw)||{}}catch(error){}
@@ -1895,21 +2110,33 @@ class Component extends DCLogic {
     this.setState({profileStore:loaded.store,days,settings,selectedProfileId:profile?profile.id:null,storageWarning:loaded.warning||''});
     this.syncPerfMode();
     this.applyTheme(settings.theme);
+    this.applyDocumentAccentTokens(settings.accent||'#3DDC97');
     this.syncPick(settings.accent||'#3DDC97');
     this.tickMsgs();
     this._bt=setTimeout(()=>this.setState({booting:false}),2100);
     if(typeof window!=='undefined'&&window.addEventListener)window.addEventListener('keydown',this._onGlobalKeydown);
+    if(this.isWindowsPlatform()&&typeof window!=='undefined'&&window.addEventListener){window.addEventListener('scroll',this._onWindowScroll,{passive:true});this.syncTitlebarOffset()}
+    this._onOutsidePointerDown=e=>this.handleOutsidePointerDown(e);
+    if(typeof document!=='undefined'&&document.addEventListener)document.addEventListener('pointerdown',this._onOutsidePointerDown,true);
   }
   componentWillUnmount(){
     if(typeof window!=='undefined'&&window.removeEventListener)window.removeEventListener('keydown',this._onGlobalKeydown);
+    if(typeof window!=='undefined'&&window.removeEventListener)window.removeEventListener('scroll',this._onWindowScroll);
+    if(typeof document!=='undefined'&&document.removeEventListener&&this._onOutsidePointerDown)document.removeEventListener('pointerdown',this._onOutsidePointerDown,true);
+    this.clearDocumentAccentTokens();
     this.clearPointerDrag();
     this.cancelScheduledFocusRestore();
+    this.cancelTourMeasurement();
     clearTimeout(this._bt);clearTimeout(this._tt2);clearTimeout(this._ct);clearTimeout(this._lt);
     clearTimeout(this._rangeReadyTimer);clearTimeout(this._tradeEnterTimer);
     clearInterval(this._ty);clearInterval(this._it);
     if(this._widgetResize)this.finishWidgetResize(false);else this.clearWidgetResizeListeners();
   }
-  componentDidUpdate(){this.applyTheme(this.state.settings.theme);this.tickMsgs()}
+  componentDidUpdate(_prevProps,prevState){
+    this.applyTheme(this.state.settings.theme);this.applyDocumentAccentTokens(this.state.settings.accent||'#3DDC97');this.tickMsgs();
+    const prev=prevState||{};
+    if(this.state.tourOpen&&(!prev.tourOpen||prev.tourStep!==this.state.tourStep||prev.tab!==this.state.tab))this.beginTourMeasurement(this.state.tourStep);
+  }
   tickMsgs(){
     const S=this.state,st=S.settings;
     const loginV=!S.booting&&!S.obStarted&&(!!st.loggedOut||!st.onboarded);
@@ -1931,6 +2158,22 @@ class Component extends DCLogic {
     this.syncPick(hex);
   }
   applyTheme(th){th=th||'dark';if(document.body.dataset.theme!==th)document.body.dataset.theme=th}
+  applyDocumentAccentTokens(accent){
+    const root=typeof document!=='undefined'&&document.documentElement,style=root&&root.style;
+    if(!style||typeof style.setProperty!=='function')return false;
+    const value=/^#[0-9a-f]{6}$/i.test(String(accent||''))?String(accent):'#3DDC97';
+    style.setProperty('--accent',value);
+    style.setProperty('--accent-ink',this.accentInk(value));
+    style.setProperty('--accent-soft',value+'22');
+    style.setProperty('--accent-glow',value+'44');
+    return true;
+  }
+  clearDocumentAccentTokens(){
+    const root=typeof document!=='undefined'&&document.documentElement,style=root&&root.style;
+    if(!style||typeof style.removeProperty!=='function')return false;
+    ['--accent','--accent-ink','--accent-soft','--accent-glow'].forEach(name=>style.removeProperty(name));
+    return true;
+  }
   commitActiveProfile(settings=this.state.settings,days=this.state.days){
     const current=this.normalizeProfileStore(this.state.profileStore)||this.emptyProfileStore();
     const id=current.activeProfileId;
@@ -2019,7 +2262,7 @@ class Component extends DCLogic {
   finishProfileSetup(draft,useDemoData){
     this.cancelScheduledFocusRestore();this.closeSearch(false);
     const ob=draft||this.state.ob||{},now=Date.now(),id=this.profileId(now);
-    const settings={name:String(ob.name||'').trim(),startBalance:ob.bal||'',symbols:ob.syms&&ob.syms.length?ob.syms.slice():this.DEFSYMS.slice(),customPV:Object.assign({},ob.customPV||{}),accent:ob.acc||'#3DDC97',pw:String(ob.pw||'').trim(),onboarded:true,loggedOut:false,tourCompleted:false,createdAt:now,riskPct:1,quickPresets:[]};
+    const settings=this.migrateWidgetLayoutSettings({name:String(ob.name||'').trim(),startBalance:ob.bal||'',symbols:ob.syms&&ob.syms.length?ob.syms.slice():this.DEFSYMS.slice(),customPV:Object.assign({},ob.customPV||{}),accent:ob.acc||'#3DDC97',pw:String(ob.pw||'').trim(),onboarded:true,loggedOut:false,tourCompleted:false,createdAt:now,riskPct:1,quickPresets:[]}).settings;
     const days=useDemoData?this.sample():{};
     const current=this.normalizeProfileStore(this.state.profileStore)||this.emptyProfileStore();
     const profile={id,createdAt:now,lastUsedAt:now,settings,days};
@@ -2041,15 +2284,83 @@ class Component extends DCLogic {
   cancelScheduledFocusRestore(){this._focusRestoreToken=(this._focusRestoreToken||0)+1;if(this._focusRestoreTimer!=null){clearTimeout(this._focusRestoreTimer);this._focusRestoreTimer=null}if(this._focusRestoreFrame!=null&&typeof cancelAnimationFrame==='function'){cancelAnimationFrame(this._focusRestoreFrame);this._focusRestoreFrame=null}return true}
   scheduleAfterCommit(callback){if(typeof callback!=='function')return false;this.cancelScheduledFocusRestore();const token=this._focusRestoreToken,run=()=>{if(token!==this._focusRestoreToken)return;this._focusRestoreTimer=null;this._focusRestoreFrame=null;callback()};if(typeof requestAnimationFrame==='function')this._focusRestoreFrame=requestAnimationFrame(run);else this._focusRestoreTimer=setTimeout(run,0);return true}
   setStateAfterCommit(patch,callback){if(typeof callback!=='function'){this.setState(patch);return true}if(typeof this.setState==='function'&&this.setState.length>=2){this.cancelScheduledFocusRestore();const token=this._focusRestoreToken;this.setState(patch,()=>{if(token===this._focusRestoreToken)callback()})}else{this.setState(patch);this.scheduleAfterCommit(callback)}return true}
+  setTab(tab,extra=null){
+    this.setState(Object.assign({},extra&&typeof extra==='object'?extra:{},{tab,helpQuery:'',helpOpenId:null}));
+    return true;
+  }
+  setHelpSearchRef(element){this._helpSearchInput=element||null}
+  setHelpQuery(rawQuery){
+    const helpQuery=String(rawQuery==null?'':rawQuery),result=this.filterHelpFaq(this.helpFaqData(),helpQuery);
+    this.setState({helpQuery,helpOpenId:result.normalized?result.firstId:null});
+    return result;
+  }
+  toggleHelpFaq(id){
+    if(typeof id!=='string'||!id)return false;
+    this.setState({helpOpenId:this.state.helpOpenId===id?null:id});
+    return true;
+  }
+  clearHelpSearch(){
+    return this.setStateAfterCommit({helpQuery:'',helpOpenId:null},()=>{
+      if(this._helpSearchInput&&typeof this._helpSearchInput.focus==='function')this._helpSearchInput.focus();
+    });
+  }
   rememberSurfaceFocus(name,candidate){this.cancelScheduledFocusRestore();this._surfaceOpeners=this._surfaceOpeners||{};this._surfaceDialogs=this._surfaceDialogs||{};this._surfaceFocusPending=this._surfaceFocusPending||{};this._surfaceOpeners[name]=this.surfaceOpener(candidate);this._surfaceFocusPending[name]=true;return this._surfaceOpeners[name]}
   takeSurfaceFocus(name){this._surfaceFocusPending=this._surfaceFocusPending||{};this._surfaceDialogs=this._surfaceDialogs||{};this._surfaceOpeners=this._surfaceOpeners||{};this._surfaceFocusPending[name]=false;this._surfaceDialogs[name]=null;const opener=this._surfaceOpeners[name]||null;delete this._surfaceOpeners[name];return opener}
-  restoreSurfaceFocus(name){const opener=this.takeSurfaceFocus(name);if(!opener||typeof opener.focus!=='function')return false;return this.scheduleAfterCommit(()=>opener.focus())}
-  setStateAndRestoreSurface(patch,name,restore=true){const opener=this.takeSurfaceFocus(name);if(restore&&opener&&typeof opener.focus==='function')return this.setStateAfterCommit(patch,()=>opener.focus());this.setState(patch);return true}
+  canRestoreFocus(target,excluded=null){if(!target||target===excluded||typeof target.focus!=='function'||target.isConnected===false)return false;if(typeof target.closest==='function'&&target.closest('[inert],[aria-hidden="true"]'))return false;return true}
+  focusRestoreTarget(preferred,excluded=null){if(this.canRestoreFocus(preferred,excluded))return preferred;return this.canRestoreFocus(this._appMainFocus,excluded)?this._appMainFocus:null}
+  restoreSurfaceFocus(name){const opener=this.takeSurfaceFocus(name);if(!opener)return false;return this.scheduleAfterCommit(()=>{const target=this.focusRestoreTarget(opener);if(target)target.focus()})}
+  setStateAndRestoreSurface(patch,name,restore=true){const opener=this.takeSurfaceFocus(name);if(restore&&opener)return this.setStateAfterCommit(patch,()=>{const target=this.focusRestoreTarget(opener);if(target)target.focus()});this.setState(patch);return true}
   captureSurfaceDialog(name,element){this._surfaceDialogs=this._surfaceDialogs||{};this._surfaceFocusPending=this._surfaceFocusPending||{};this._surfaceDialogs[name]=element||null;if(!element||!this._surfaceFocusPending[name])return false;this._surfaceFocusPending[name]=false;const nodes=typeof element.querySelectorAll==='function'?Array.from(element.querySelectorAll('button:not([disabled]),input:not([disabled]),select:not([disabled]),textarea:not([disabled]),a[href],video[controls],[tabindex]:not([tabindex="-1"])')).filter(node=>node&&typeof node.focus==='function'):[],target=nodes[0]||element;if(typeof target.focus!=='function')return false;target.focus();return true}
   handleSurfaceDialogKeydown(name,event,close){if(!event)return false;if(event.key==='Escape'){if(typeof event.preventDefault==='function')event.preventDefault();if(typeof event.stopPropagation==='function')event.stopPropagation();if(typeof close==='function')close();return true}if(event.key!=='Tab')return false;const dialog=this._surfaceDialogs&&this._surfaceDialogs[name];if(!dialog||typeof dialog.querySelectorAll!=='function')return false;const nodes=Array.from(dialog.querySelectorAll('button:not([disabled]),input:not([disabled]),select:not([disabled]),textarea:not([disabled]),a[href],video[controls],[tabindex]:not([tabindex="-1"])')).filter(node=>node&&typeof node.focus==='function');if(!nodes.length){if(typeof event.preventDefault==='function')event.preventDefault();if(typeof event.stopPropagation==='function')event.stopPropagation();if(typeof dialog.focus==='function')dialog.focus();return true}const first=nodes[0],last=nodes[nodes.length-1],wrapBack=!!event.shiftKey&&(event.target===first||!nodes.includes(event.target)),wrapForward=!event.shiftKey&&(event.target===last||!nodes.includes(event.target));if(!wrapBack&&!wrapForward)return false;if(typeof event.preventDefault==='function')event.preventDefault();if(typeof event.stopPropagation==='function')event.stopPropagation();(wrapBack?last:first).focus();return true}
   activateOnKey(event,action){if(!event||!['Enter',' ','Spacebar'].includes(event.key))return false;if(typeof event.preventDefault==='function')event.preventDefault();if(typeof event.stopPropagation==='function')event.stopPropagation();if(typeof action==='function')action();return true}
+  // window.desktopPlatform is exposed by desktop/preload.js; the navigator branch covers
+  // the plain-browser build. The Cmd/Ctrl+K handler already accepts both modifiers — only
+  // the displayed hint was hardcoded to the Apple symbol.
+  // Outside-click dismissal, scoped to POPOVERS only. Modal surfaces (editor, tour,
+  // lightbox, confirmations) are deliberately absent: closing those on a stray click
+  // would discard work. The command palette owns its own backdrop dismissal.
+  // Each ref wraps opener + panel, so a click on the opener reads as "inside" and the
+  // toggle handles it — otherwise dismissal and toggle would fight and the menu could
+  // never be closed by its own button.
+  setDismissRef(name,el){this._dismissRefs=this._dismissRefs||{};this._dismissRefs[name]=el||null}
+  dismissiblePopovers(){
+    return[
+      {open:!!this.state.profileMenuOpen,refs:['profileMenu'],close:()=>this.setState({profileMenuOpen:false})},
+      {open:!!this.state.pickerOpen,refs:['picker','pickerSetup','pickerOpener','pickerSetupOpener'],close:()=>this.setState({pickerOpen:false})}
+    ];
+  }
+  handleOutsidePointerDown(event){
+    if(!event||typeof event.composedPath!=='function')return false;
+    const path=event.composedPath()||[],refs=this._dismissRefs||{};
+    let closed=false;
+    this.dismissiblePopovers().forEach(p=>{
+      if(!p.open)return;
+      if(p.refs.some(name=>refs[name]&&path.indexOf(refs[name])!==-1))return;
+      p.close();closed=true;
+    });
+    return closed;
+  }
+  isMacPlatform(){
+    const w=typeof window!=='undefined'?window:null;
+    if(w&&typeof w.desktopPlatform==='string')return w.desktopPlatform==='darwin';
+    const n=typeof navigator!=='undefined'?navigator:null;
+    const p=(n&&((n.userAgentData&&n.userAgentData.platform)||n.platform))||'';
+    return /mac/i.test(p);
+  }
+  isWindowsPlatform(){
+    const w=typeof window!=='undefined'?window:null;
+    if(w&&typeof w.desktopPlatform==='string')return w.desktopPlatform==='win32';
+    return false;
+  }
+  syncTitlebarOffset(){
+    const offset=this.isWindowsPlatform()&&typeof window!=='undefined'&&Number(window.scrollY)>8?'0px':'44px';
+    if(this.state.titlebarOffset===offset)return false;
+    this.setState({titlebarOffset:offset});
+    return true;
+  }
+  searchHintKey(){return this.isMacPlatform()?'⌘K':'Ctrl K'}
   setSearchInputRef(element){this._searchInput=element||null}
-  setTitlebarFocusRef(element){this._titlebarFocus=element||null}
+  setAppMainFocusRef(element){this._appMainFocus=element||null}
   focusSearch(){
     if(!this._searchInput)return false;
     if(typeof this._searchInput.focus==='function')this._searchInput.focus();
@@ -2184,9 +2495,8 @@ class Component extends DCLogic {
   closeSearchToLiveTarget(){
     const opener=this.takeSurfaceFocus('search'),patch={searchOpen:false,searchQuery:'',searchSel:0};
     return this.setStateAfterCommit(patch,()=>{
-      const openerIsSafe=opener&&opener!==this._searchInput&&typeof opener.focus==='function'&&opener.isConnected!==false;
-      const fallback=this._titlebarFocus,fallbackIsLive=fallback&&typeof fallback.focus==='function'&&fallback.isConnected!==false;
-      if(openerIsSafe)opener.focus();else if(fallbackIsLive)fallback.focus();
+      const target=this.focusRestoreTarget(opener,this._searchInput);
+      if(target)target.focus();
     });
   }
   closeSearch(restore=true){
@@ -2240,7 +2550,7 @@ class Component extends DCLogic {
     const todayKey=this.dk(new Date());
     if(descriptor.type==='log'){this.closeSearch(false);this.openDay(todayKey,searchOpener);return true}
     if(descriptor.type==='preset'&&descriptor.preset){this.closeSearch(false);this.rememberSurfaceFocus('editor',searchOpener);this.applyPresetToDay(todayKey,descriptor.preset);return true}
-    if(descriptor.type==='nav'&&descriptor.tab){this.closeEditor(false);this.setState({tab:descriptor.tab});this.closeSearchToLiveTarget();return true}
+    if(descriptor.type==='nav'&&descriptor.tab){this.closeEditor(false);this.setTab(descriptor.tab);this.closeSearchToLiveTarget();return true}
     if(descriptor.type==='day'&&descriptor.dayKey){
       if(this.state.editing===descriptor.dayKey){this.closeSearch(true);return true}
       if(this.state.editing||this.state.draft)this.closeEditor(false);
@@ -2256,21 +2566,105 @@ class Component extends DCLogic {
     const executed=this.executeSearchResult(entry,true);if(executed)this.takeSurfaceFocus('searchLeave');return executed;
   }
   tourSteps(){return[
-    {id:'search',title:'Find anything fast',body:'Search journal content, pages, and actions from the center of the titlebar.'},
-    {id:'calendar',title:'Log the trading day',body:'Open a calendar day, record executions, context, mindset, and the review.'},
-    {id:'widgets',title:'Shape the dashboard',body:'Enter layout edit mode to move widgets and resize them from their edges.'},
-    {id:'review',title:'Turn records into a process',body:'Use Insights and Playbook to find repeated strengths, mistakes, and setups.'},
+    {id:'dashboard',tab:'dash',target:'[data-screen-label="Dashboard"] .dashboard-widget',title:'Read the dashboard',body:'Use the score and journal widgets to see process quality before focusing on individual trades.'},
+    {id:'calendar',tab:'cal',target:'[data-screen-label="Calendar"] .calendar-scroll',title:'Log the trading day',body:'Open a calendar day to record executions, context, mindset, and the review.'},
+    {id:'insights',tab:'insights',target:'[data-screen-label="Insights"] .insights-full',title:'Find repeated patterns',body:'Use full-width analysis to compare outcomes and identify patterns worth acting on.'},
+    {id:'playbook',tab:'playbook',target:'[data-screen-label="Playbook"]',title:'Grade each setup',body:'Use the Playbook to compare setup quality, sample size, and net performance.'},
   ]}
-  openTour(replay=false,opener=null){if(!this.canUsePrivateUI())return false;this.rememberSurfaceFocus('tour',opener);this.setState({tourOpen:true,tourStep:0,tourReplay:!!replay,searchOpen:false});return true}
-  closeTour(markComplete=true){
-    if(markComplete&&!this.state.settings.tourCompleted)this.setSetting('tourCompleted',true);
-    return this.setStateAndRestoreSurface({tourOpen:false,tourStep:0},'tour');
+  tourCssTimeList(value){return String(value||'').split(',').map(part=>{const text=part.trim();if(!text)return 0;const n=parseFloat(text);if(!Number.isFinite(n))return 0;return text.endsWith('ms')?n:n*1000})}
+  tourAnimationWaitMs(style){
+    const durations=this.tourCssTimeList(style&&style.animationDuration),delays=this.tourCssTimeList(style&&style.animationDelay);
+    const count=Math.max(durations.length,delays.length),durationCount=durations.length||1,delayCount=delays.length||1;
+    let wait=0;for(let i=0;i<count;i++)wait=Math.max(wait,(durations[i%durationCount]||0)+(delays[i%delayCount]||0));
+    return wait;
   }
-  previousTour(){this.setState({tourStep:Math.max(0,this.state.tourStep-1)});return true}
+  tourAncestorAnimationWaitMs(target){
+    if(typeof getComputedStyle!=='function')return 0;
+    let wait=0,node=target;
+    while(node&&node.nodeType===1){wait=Math.max(wait,this.tourAnimationWaitMs(getComputedStyle(node)));node=node.parentElement}
+    return wait;
+  }
+  sameTourRect(a,b,tolerance=.5){
+    if(!a||!b)return false;
+    return['left','top','width','height'].every(key=>Math.abs(Number(a[key])-Number(b[key]))<=tolerance);
+  }
+  tourRectWithinViewport(rect,viewportWidth,viewportHeight,margin=12){
+    return !!rect&&rect.width>0&&rect.height>0&&rect.left>=margin&&rect.top>=margin&&rect.right<=viewportWidth-margin&&rect.bottom<=viewportHeight-margin;
+  }
+  tourPanelPosition(rect,viewportWidth,viewportHeight,panelWidth=400,panelHeight=230){
+    const gap=24,margin=16,clamp=(value,min,max)=>Math.max(min,Math.min(max,value));
+    const top=clamp(rect.top,margin,Math.max(margin,viewportHeight-panelHeight-margin));
+    if(rect.right+gap+panelWidth<=viewportWidth-margin)return{left:rect.right+gap,top};
+    if(rect.left-gap-panelWidth>=margin)return{left:rect.left-gap-panelWidth,top};
+    const left=clamp(rect.left+(rect.width-panelWidth)/2,margin,Math.max(margin,viewportWidth-panelWidth-margin));
+    if(rect.bottom+gap+panelHeight<=viewportHeight-margin)return{left,top:rect.bottom+gap};
+    return{left,top:Math.max(margin,rect.top-gap-panelHeight)};
+  }
+  cancelTourMeasurement(){
+    this._tourMeasureToken=(this._tourMeasureToken||0)+1;
+    if(this._tourMeasureTimer!=null){clearTimeout(this._tourMeasureTimer);this._tourMeasureTimer=null}
+    if(this._tourMeasureFrame!=null&&typeof cancelAnimationFrame==='function'){cancelAnimationFrame(this._tourMeasureFrame);this._tourMeasureFrame=null}
+    return true;
+  }
+  scheduleTourFrame(callback){
+    if(typeof requestAnimationFrame==='function')this._tourMeasureFrame=requestAnimationFrame(callback);
+    else this._tourMeasureTimer=setTimeout(callback,0);
+  }
+  beginTourMeasurement(index=this.state.tourStep){
+    this.cancelTourMeasurement();
+    if(!this.state.tourOpen||typeof document==='undefined')return false;
+    const token=this._tourMeasureToken,step=this.tourSteps()[index];if(!step)return false;
+    let attempts=0;
+    const findTarget=()=>{
+      this._tourMeasureFrame=null;this._tourMeasureTimer=null;
+      if(token!==this._tourMeasureToken||!this.state.tourOpen||this.state.tourStep!==index)return;
+      const target=document.querySelector(step.target);
+      if(!target){if(attempts++<24)this.scheduleTourFrame(findTarget);return}
+      target.scrollIntoView({block:'center',inline:'nearest',behavior:'auto'});
+      const wait=this.tourAncestorAnimationWaitMs(target),measure=()=>{this._tourMeasureTimer=null;this.waitForStableTourRect(target,token,index)};
+      if(wait>0)this._tourMeasureTimer=setTimeout(measure,Math.ceil(wait)+34);else this.scheduleTourFrame(measure);
+    };
+    this.scheduleTourFrame(findTarget);return true;
+  }
+  waitForStableTourRect(target,token,index,previousRect=null,stableFrames=0,attempts=0){
+    if(token!==this._tourMeasureToken||!this.state.tourOpen||this.state.tourStep!==index)return false;
+    this.scheduleTourFrame(()=>{
+      this._tourMeasureFrame=null;this._tourMeasureTimer=null;
+      if(token!==this._tourMeasureToken||!this.state.tourOpen||this.state.tourStep!==index||!target||!target.isConnected)return;
+      const rect=target.getBoundingClientRect(),viewportWidth=window.innerWidth,viewportHeight=window.innerHeight;
+      const stable=this.sameTourRect(rect,previousRect)?stableFrames+1:0;
+      if(stable<1||!this.tourRectWithinViewport(rect,viewportWidth,viewportHeight,12)){
+        if(attempts>=30)return;
+        if(stable>=1)target.scrollIntoView({block:'center',inline:'nearest',behavior:'auto'});
+        this.waitForStableTourRect(target,token,index,rect,stable>=1?0:stable,attempts+1);return;
+      }
+      const pad=8,left=Math.max(pad,rect.left-pad),top=Math.max(pad,rect.top-pad);
+      const right=Math.min(viewportWidth-pad,rect.right+pad),bottom=Math.min(viewportHeight-pad,rect.bottom+pad);
+      const panel=this.tourPanelPosition({left,top,right,bottom,width:right-left,height:bottom-top},viewportWidth,viewportHeight);
+      this.setState({tourSpotlight:{left,top,width:right-left,height:bottom-top,panelLeft:panel.left,panelTop:panel.top}});
+    });
+    return true;
+  }
+  goTourStep(index){
+    if(!this.state.tourOpen)return false;
+    const steps=this.tourSteps(),next=Math.max(0,Math.min(steps.length-1,Math.floor(Number(index)||0))),step=steps[next];
+    this.cancelTourMeasurement();this.setTab(step.tab,{tourStep:next,tourSpotlight:null});return true;
+  }
+  openTour(replay=false,opener=null){
+    if(!this.canUsePrivateUI())return false;
+    const step=this.tourSteps()[0];this.cancelTourMeasurement();this.rememberSurfaceFocus('tour',opener);
+    this.setTab(step.tab,{tourOpen:true,tourStep:0,tourSpotlight:null,tourReplay:!!replay,searchOpen:false});return true;
+  }
+  closeTour(markComplete=true){
+    this.cancelTourMeasurement();
+    if(markComplete&&!this.state.settings.tourCompleted)this.setSetting('tourCompleted',true);
+    return this.setStateAndRestoreSurface({tourOpen:false,tourStep:0,tourSpotlight:null},'tour');
+  }
+  previousTour(){return this.goTourStep(this.state.tourStep-1)}
   nextTour(){
     const last=this.tourSteps().length-1;
     if(this.state.tourStep>=last)return this.closeTour(true);
-    this.setState({tourStep:this.state.tourStep+1});return true;
+    return this.goTourStep(this.state.tourStep+1);
   }
   widgetRegistry(id){return this.WIDGETS.find(widget=>widget.id===id)||null}
   normalizeWidgetConfig(id,value){
@@ -2373,6 +2767,17 @@ class Component extends DCLogic {
       frosted:{surfaceBg:'var(--glass2)',surfaceBgStrong:'var(--glass2-strong)',surfaceFx:'blur(26px) saturate(1.6)',surfaceFxStrong:'blur(30px) saturate(1.65)'},
     };
     return modes[mode]||modes.frosted;
+  }
+  accentInk(hex){
+    const raw=String(hex||'').trim(),short=/^#([0-9a-f]{3})$/i.exec(raw),full=/^#([0-9a-f]{6})$/i.exec(raw);
+    const value=full?full[1]:short?short[1].split('').map(ch=>ch+ch).join(''):null;
+    if(!value)return'#07130C';
+    const channel=n=>{const s=n/255;return s<=0.04045?s/12.92:Math.pow((s+0.055)/1.055,2.4)};
+    const luminance=rgb=>0.2126*channel(rgb[0])+0.7152*channel(rgb[1])+0.0722*channel(rgb[2]);
+    const accent=[0,2,4].map(i=>parseInt(value.slice(i,i+2),16)),dark=[7,19,12];
+    const accentLum=luminance(accent),darkLum=luminance(dark);
+    const contrast=inkLum=>(Math.max(accentLum,inkLum)+0.05)/(Math.min(accentLum,inkLum)+0.05);
+    return contrast(darkLum)>=contrast(1)?'#07130C':'#FFFFFF';
   }
   mistakes(){const m=this.state.settings.mistakes;return Array.isArray(m)?m:this.MISTAKES}
   togMist(n){const d=this.state.draft,cur=d.mistakes||[],mistakes=cur.includes(n)?cur.filter(x=>x!==n):cur.concat([n]);this.setState({draft:Object.assign({},d,{mistakes})})}
@@ -2706,7 +3111,7 @@ class Component extends DCLogic {
   }
   initials(nm){nm=(nm||'').trim();if(!nm)return'PL';const parts=nm.split(/\s+/);return(parts[0][0]+(parts[1]?parts[1][0]:'')).toUpperCase()}
   finishOb(demo){return this.finishProfileSetup(this.state.ob,demo)}
-  logout(){const durable=this.setSettings({loggedOut:true});this.setState({editing:null,draft:null,annotation:null,markKind:'entry',markText:'',tab:'dash',liPw:'',searchOpen:false,searchQuery:'',searchSel:0,profileMenuOpen:false,pendingProfileId:null,pendingSearchResult:null,confirm:null,tourOpen:false,lightbox:null});return durable}
+  logout(){const durable=this.setSettings({loggedOut:true});this.setTab('dash',{editing:null,draft:null,annotation:null,markKind:'entry',markText:'',liPw:'',searchOpen:false,searchQuery:'',searchSel:0,profileMenuOpen:false,pendingProfileId:null,pendingSearchResult:null,confirm:null,tourOpen:false,lightbox:null});return durable}
   rng(seed){let s=seed>>>0;return()=>{s=(s*1664525+1013904223)>>>0;return s/4294967296}}
   dk(d){return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0')}
   rt(v,sym){const tk=this.TICK[sym];return Math.round(Math.round(v/tk)*tk*1000)/1000}
@@ -2839,9 +3244,16 @@ class Component extends DCLogic {
     const checks=[];
     const rk=Object.keys(dr.rules||{}).filter(k=>dr.rules[k]);
     this.RULES.forEach(ru=>checks.push({label:ru,ok:!!(dr.rules&&dr.rules[ru])}));
-    const noMist=!(dr.mistakes&&dr.mistakes.length);
-    checks.push({label:noMist?'No mistakes logged':'Logged '+(dr.mistakes.length)+' mistake'+(dr.mistakes.length>1?'s':''),ok:noMist});
     const journaled=!!((dr.review&&(dr.review.well||dr.review.improve||dr.review.goal))||(dr.notes&&dr.notes.trim())||(dr.noteSet&&Object.keys(dr.noteSet).some(k=>dr.noteSet[k]&&dr.noteSet[k].trim())));
+    // "No mistakes logged" must not pass vacuously: an untouched day has nothing to
+    // have made mistakes about, and crediting it scored a blank day 1/6 = 17.
+    // shapeDay() is the app's own "does this day have content" filter (see saveDay),
+    // so the blank seeded trade row from draftForDay is discarded here too.
+    const mistCount=(dr.mistakes&&dr.mistakes.length)||0;
+    const shaped=this.shapeDay(dr,'');
+    const hasTrades=!!(shaped.trades&&shaped.trades.length);
+    const noMist=(hasTrades||journaled)&&!mistCount;
+    checks.push({label:mistCount?('Logged '+mistCount+' mistake'+(mistCount>1?'s':'')):'No mistakes logged',ok:noMist});
     checks.push({label:'Journal completed',ok:journaled});
     const passed=checks.filter(c=>c.ok).length;
     const score=checks.length?Math.round(passed/checks.length*100):0;
@@ -2954,6 +3366,7 @@ class Component extends DCLogic {
   renderVals(){
     const S=this.state,st=S.settings;
     const acc=st.accent||this.props.accent||'#3DDC97';
+    const accentInk=this.accentInk(acc);
     const surfaceVars=this.surfaceBindings(st.glass||'frosted');
     const showWk=st.showWeekends==null?(this.props.showWeekends??true):st.showWeekends;
     const mode=S.chartMode||st.chartDefault||(this.props.chartDefault??'area');
@@ -3131,13 +3544,22 @@ class Component extends DCLogic {
     const riskEmpty=!rsAll.length;
     // ---- Psychology (29) ----
     const emoScale={'😄':5,'🙂':4,'😐':3,'🙁':2,'😡':1};
-    const emoAbsMax=Math.max.apply(null,chrono.map(d=>Math.abs(d.pnl)).concat([1]));
-    const emoTimeline=chrono.slice(-24).map(d=>{const e=days[d.k];const ch=e.emoji||'😐';const lvl=emoScale[ch]||3;return{ch,pnl:d.pnl,barH:(6+Math.min(1,Math.abs(d.pnl)/emoAbsMax)*40).toFixed(0),col:d.pnl>=0?'var(--green)':'var(--red)',emoTop:((5-lvl)*13)+'px'}});
-    const emoAgg=Object.keys(emoScale).map(ch=>{const ds2=chrono.filter(d=>(days[d.k].emoji||'😐')===ch);const avg=ds2.length?ds2.reduce((a,d)=>a+d.pnl,0)/ds2.length:0;return{ch,n:ds2.length,avgS:ds2.length?this.fk(avg)+' avg':'—',col:ds2.length?this.col(avg):'var(--tx-faint)'}}).filter(x=>x.n);
+    // One range-filtered mood dataset feeds every derivation below. Previously these
+    // mapped `chrono` (TRADE days) and substituted `emoji || '😐'`, so a journal with
+    // trades but no moods rendered fabricated neutral faces, and psychEmpty actually
+    // meant "no trade days". Days are included on the strength of a SUPPORTED mood, so
+    // a mood-only day with no trades counts (its pnl is 0 -> minimum bar height, since
+    // bar height encodes P&L while the face encodes mood) and an unrecognised legacy
+    // emoji is excluded from the timeline and the aggregate alike — they can no longer
+    // disagree, which is the inconsistency this replaces.
+    const moodDays=Object.keys(days).filter(k=>inR(k)&&emoScale[days[k].emoji]).sort().map(k=>({k,ch:days[k].emoji,pnl:this.dp(days[k])}));
+    const emoAbsMax=Math.max.apply(null,moodDays.map(d=>Math.abs(d.pnl)).concat([1]));
+    const emoTimeline=moodDays.slice(-24).map(d=>{const lvl=emoScale[d.ch];return{ch:d.ch,pnl:d.pnl,barH:(6+Math.min(1,Math.abs(d.pnl)/emoAbsMax)*40).toFixed(0),col:d.pnl>=0?'var(--green)':'var(--red)',emoTop:((5-lvl)*13)+'px'}});
+    const emoAgg=Object.keys(emoScale).map(ch=>{const ds2=moodDays.filter(d=>d.ch===ch);const avg=ds2.length?ds2.reduce((a,d)=>a+d.pnl,0)/ds2.length:0;return{ch,n:ds2.length,avgS:ds2.length?this.fk(avg)+' avg':'—',col:ds2.length?this.col(avg):'var(--tx-faint)'}}).filter(x=>x.n);
     const violRows=this.mistakes().map(nm=>{const c=list.filter(d=>(days[d.k].mistakes||[]).includes(nm)).length;return{nm,c}}).filter(x=>x.c).sort((a,b)=>b.c-a.c);
     const violMax=Math.max.apply(null,violRows.concat([{c:1}]).map(x=>x.c));
     const violations=violRows.map(x=>({name:x.nm,cnt:x.c,w:Math.max(6,x.c/violMax*100).toFixed(0)+'%'}));
-    const psychEmpty=!emoTimeline.length;
+    const psychEmpty=!emoTimeline.length;const psychHasEmo=!psychEmpty;
     const weeklyV=this.weeklyDigestBindings(days,new Date());
     const timeEdgeV=this.timeEdgeBindings(all);
     const tiltV=this.tiltRadarBindings(this.tiltRadar(days));
@@ -3251,7 +3673,7 @@ class Component extends DCLogic {
         eRevGoal:(dr.review&&dr.review.goal)||'',onRevGoal:e=>this.setReview('goal',e.target.value),
         eTags:this.tags().map(name=>{const on=dr.tags.includes(name);return{name,bg:on?acc+'1E':'transparent',fg:on?acc:'var(--tx-dim)',bd:on?acc+'66':'var(--bd2)',tog:()=>this.togTag(name)}}),
         eTagsVisible:this.tags().length>0,
-        eRules:this.RULES.map(name=>{const on=!!dr.rules[name];return{name,bg:on?acc:'transparent',bd:on?acc:'var(--bd3)',mark:on?'✓':'',fg:on?'var(--tx)':'var(--tx-dim)',tog:()=>this.togRule(name)}}),
+        eRules:this.RULES.map(name=>{const on=!!dr.rules[name];return{name,bg:on?acc:'transparent',bd:on?acc:'var(--bd3)',mark:on?'✓':'',fg:on?accentInk:'var(--tx-dim)',tog:()=>this.togRule(name)}}),
         quickPresetDisabled:!(dr.trades[0]&&dr.trades[0].sym),quickPresetFg:dr.trades[0]&&dr.trades[0].sym?acc:'var(--tx-ghost)',quickPresetCursor:dr.trades[0]&&dr.trades[0].sym?'pointer':'not-allowed',saveQuickPreset:()=>this.saveDraftPreset(),
         addTrade:()=>this.addTrade(),saveDay:()=>this.saveDay(),clearDay:()=>this.clearDay()};
       Object.assign(eV,this.disciplineVals(dr,acc));
@@ -3261,11 +3683,11 @@ class Component extends DCLogic {
     const NAV=[['dash','Dashboard','M3 3h7v7H3z M14 3h7v7h-7z M14 14h7v7h-7z M3 14h7v7H3z','Your performance at a glance'],['cal','Calendar','M8 2v4 M16 2v4 M3 9h18 M5 4h14a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2z','Daily P&L, moods and weekly totals'],['trades','Trades','M8 6h13 M8 12h13 M8 18h13 M3 6h.01 M3 12h.01 M3 18h.01','Every execution in detail'],['gallery','Gallery','M3 5h18v14H3z M8.5 11a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3z M21 15l-5-5L5 21','Your charts & clips'],['insights','Insights','M22 7l-8.5 8.5-5-5L2 17 M16 7h6v6','Patterns across your trading'],['playbook','Playbook','M4 19.5A2.5 2.5 0 0 1 6.5 17H20V4H6.5A2.5 2.5 0 0 0 4 6.5v13z M4 19.5A2.5 2.5 0 0 0 6.5 22H20v-5','Your setups, graded like strategies']];
     const NAVP=[['profile','Profile','M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2 M12 11a4 4 0 1 0 0-8 4 4 0 0 0 0 8','Your identity & all-time record'],['settings','Settings','M4 21v-7 M4 10V3 M12 21v-9 M12 8V3 M20 21v-5 M20 12V3 M1 14h6 M9 8h6 M17 16h6','Personalize Written']];
     const NAVS=[['help','Help','M12 22a10 10 0 1 0 0-20 10 10 0 0 0 0 20z M9.1 9a3 3 0 0 1 5.8 1c0 2-3 3-3 3 M12 17h.01','How to use Written'],['about','About','M12 22a10 10 0 1 0 0-20 10 10 0 0 0 0 20z M12 16v-4 M12 8h.01','Version, privacy & credits']];
-    const mkNav=o=>({label:o[1],icd:o[2],tip:o[3],bg:S.tab===o[0]?acc+'16':'transparent',fg:S.tab===o[0]?acc:'var(--tx-dim)',bd:S.tab===o[0]?acc+'40':'transparent',sh:S.tab===o[0]?'0 0 22px '+acc+'1A, inset 3px 0 0 '+acc:'none',go:()=>this.setState({tab:o[0]})});
-    const privateAllowed=this.canUsePrivateUI(),searchAllowed=this.canUseSearch(),searchRaw=searchAllowed?this.searchEntries(this.buildSearchIndex(),S.searchQuery,30):[],searchSel=searchRaw.length?Math.max(0,Math.min(searchRaw.length-1,Math.floor(Number(S.searchSel)||0))):0;
-    const searchRows=searchRaw.map((entry,index)=>Object.assign({},entry,{optionId:this.searchOptionId(entry.id),selected:index===searchSel,bg:index===searchSel?acc+'16':'transparent',bd:index===searchSel?acc+'55':'var(--bd)',hint:entry.group||'',select:()=>this.setState({searchSel:index}),run:event=>this.executeSearchResult(entry,false,event&&event.currentTarget)}));
+    const mkNav=o=>({label:o[1],icd:o[2],tip:o[3],bg:S.tab===o[0]?acc+'16':'transparent',fg:S.tab===o[0]?acc:'var(--tx-dim)',bd:S.tab===o[0]?acc+'40':'transparent',sh:S.tab===o[0]?'0 0 22px '+acc+'1A, inset 3px 0 0 '+acc:'none',go:()=>this.setTab(o[0])});
+    const privateAllowed=this.canUsePrivateUI(),searchAllowed=this.canUseSearch(),searchNested=!!S.searchOpen&&S.confirm==='search-leave'&&!!S.pendingSearchResult,searchVisible=!!S.searchOpen&&(searchAllowed||searchNested),searchRaw=searchVisible?this.searchEntries(this.buildSearchIndex(),S.searchQuery,30):[],searchSel=searchRaw.length?Math.max(0,Math.min(searchRaw.length-1,Math.floor(Number(S.searchSel)||0))):0;
+    const searchRows=searchRaw.map((entry,index)=>Object.assign({},entry,{optionId:this.searchOptionId(entry.id),selected:index===searchSel,bg:index===searchSel?acc:'transparent',bd:index===searchSel?acc:'var(--bd)',fg:index===searchSel?this.accentInk(acc):'var(--tx)',hint:entry.group||'',select:()=>this.setState({searchSel:index}),run:event=>this.executeSearchResult(entry,false,event&&event.currentTarget)}));
     const searchGroups=['Actions','Journal','Navigation'].map(label=>({label,items:searchRows.filter(row=>row.group===label)})).filter(group=>group.items.length);
-    const searchV={searchOpen:searchAllowed&&!!S.searchOpen,searchQuery:S.searchQuery||'',searchRows,searchGroups,searchActiveId:searchRows[searchSel]?searchRows[searchSel].optionId:'',searchEmpty:searchRaw.length===0,setSearchInputRef:el=>this.setSearchInputRef(el),setTitlebarFocusRef:el=>this.setTitlebarFocusRef(el),focusSearch:()=>this.focusSearch(),openSearch:e=>this.openSearch(e),onSearchQuery:e=>this.setState({searchQuery:e&&e.target?e.target.value:'',searchSel:0}),onSearchKeydown:e=>this.handleSearchKeydown(e,searchRows)};
+    const searchV={searchOpen:searchVisible,searchInert:searchNested,searchQuery:S.searchQuery||'',searchRows,searchGroups,searchActiveId:searchRows[searchSel]?searchRows[searchSel].optionId:'',searchEmpty:searchRaw.length===0,setSearchInputRef:el=>this.setSearchInputRef(el),setSearchDialogRef:el=>this.captureSurfaceDialog('search',el),setAppMainFocusRef:el=>this.setAppMainFocusRef(el),focusSearch:()=>this.focusSearch(),openSearch:e=>this.openSearch(e),closeSearch:()=>this.closeSearch(),onSearchDialogKeydown:e=>this.handleSurfaceDialogKeydown('search',e,()=>this.closeSearch()),onSearchQuery:e=>this.setState({searchQuery:e&&e.target?e.target.value:'',searchSel:0}),onSearchKeydown:e=>this.handleSearchKeydown(e,searchRows)};
     const annotationAllowed=privateAllowed&&!!ed&&!!dr,annotationIndex=annotationAllowed?this.annotationPhotoIndex(S.annotation,dr.photos,ed):-1,annotation=annotationIndex>=0?S.annotation:null;
     const annotationPhoto=annotation?this.normalizePhoto(dr.photos[annotationIndex],annotationIndex,ed):null,annotationMarks=this.annotationMarkViews(annotation?annotation.workingMarks:[],acc);
     const annotationV={annotationOpen:!!annotation,annotationImgs:annotationPhoto?[{setRef:el=>{const src=annotationPhoto.src;if(el&&el.src!==src)el.src=src}}]:[],annotationMarks,
@@ -3300,6 +3722,9 @@ class Component extends DCLogic {
     const consistency=list.length?clampS((posDays.length/list.length)*58+(1-bigShare)*42):0;
     const sWin=clampS(wr/55*100),sPf=clampS(pfv/2*100),sPay=clampS(payoff/2*100);
     const ddPct=peakEq>0?dd/peakEq:0,sDd=clampS(100-ddPct*200),sRec=clampS(recov/3*100),sCons=consistency;
+    // With no trades peakEq=0 -> ddPct=0 -> sDd=100 while every other component is 0,
+    // which drew the radar as a single Max-drawdown spike. Zero them all together.
+    const scoreEmpty=!list.length;
     const comps=[
       {label:'Consistency',score:sCons,valS:Math.round(sCons)},
       {label:'Win %',score:sWin,valS:(wr).toFixed(0)+'%'},
@@ -3307,7 +3732,7 @@ class Component extends DCLogic {
       {label:'Max drawdown',score:sDd,valS:(ddPct*100).toFixed(0)+'%'},
       {label:'Recovery factor',score:sRec,valS:dd>0?recov.toFixed(2):(net>0?'\u221e':'\u2014')},
       {label:'Avg W / L',score:sPay,valS:al>0?payoff.toFixed(2):(aw>0?'\u221e':'\u2014')}
-    ];
+    ].map(c=>scoreEmpty?Object.assign({},c,{score:0}):c);
     const overallScore=list.length?Math.round(comps.reduce((a,c)=>a+c.score,0)/comps.length):0;
     const grade=overallScore>=88?'A+':overallScore>=78?'A':overallScore>=68?'B':overallScore>=56?'C':overallScore>=44?'D':'E';
     const scoreCol=overallScore>=68?'var(--green)':overallScore>=44?'var(--amber)':'var(--red)';
@@ -3320,13 +3745,16 @@ class Component extends DCLogic {
     const compCol=v=>v>=66?'var(--green)':v>=40?'var(--amber)':'var(--red)';
     const radarRings=[0.25,0.5,0.75,1].map(f=>({pts:comps.map((_,i)=>rPt(rMax*f,i).map(v=>v.toFixed(1)).join(',')).join(' ')}));
     const radarSpokes=comps.map((_,i)=>{const p=rPt(rMax,i);return{x1:rCx,y1:rCy,x2:p[0].toFixed(1),y2:p[1].toFixed(1)}});
-    const radarData=comps.map((c,i)=>rPt(rMax*Math.max(0.04,Math.min(1,c.score/100)),i).map(v=>v.toFixed(1)).join(',')).join(' ');
-    const radarDots=comps.map((c,i)=>{const p=rPt(rMax*Math.max(0.04,Math.min(1,c.score/100)),i);return{cx:p[0].toFixed(1),cy:p[1].toFixed(1),col:compCol(c.score)}});
+    // The 0.04 floor keeps a zero-score axis visible on a populated radar, but with no
+    // data at all it would leave a small hexagon instead of collapsing to the centre.
+    const rRad=c=>scoreEmpty?0:rMax*Math.max(0.04,Math.min(1,c.score/100));
+    const radarData=comps.map((c,i)=>rPt(rRad(c),i).map(v=>v.toFixed(1)).join(',')).join(' ');
+    const radarDots=comps.map((c,i)=>{const p=rPt(rRad(c),i);return{cx:p[0].toFixed(1),cy:p[1].toFixed(1),col:compCol(c.score)}});
     const rShort={'Consistency':'Consistency','Win %':'Win %','Profit factor':'Profit','Max drawdown':'Max DD','Recovery factor':'Recovery','Avg W / L':'Avg W/L'};
     const radarLabels=comps.map((c,i)=>{const p=rPt(rMax+17,i);return{lx:(p[0]/200*100).toFixed(2)+'%',ly:(p[1]/200*100).toFixed(2)+'%',label:rShort[c.label]||c.label,val:c.valS,col:compCol(c.score)}});
     const todayK=this.dk(new Date());
     const chkDay=(st.checklist||{})[todayK]||{};
-    const checklistItems=this.CHECK.map((t2,i)=>({label:t2,on:!!chkDay[i],mark:chkDay[i]?'\u2713':'',bg:chkDay[i]?acc:'transparent',bd:chkDay[i]?acc:'var(--bd3)',fg:chkDay[i]?'var(--tx)':'var(--tx-dim)',tog:()=>this.togCheck(i)}));
+    const checklistItems=this.CHECK.map((t2,i)=>({label:t2,on:!!chkDay[i],mark:chkDay[i]?'\u2713':'',bg:chkDay[i]?acc:'transparent',bd:chkDay[i]?acc:'var(--bd3)',fg:chkDay[i]?accentInk:'var(--tx-dim)',tog:()=>this.togCheck(i)}));
     const chkDone=this.CHECK.filter((_,i)=>chkDay[i]).length;
     const checklistPct=Math.round(chkDone/this.CHECK.length*100)+'%';
     const checklistCount=chkDone+' / '+this.CHECK.length;
@@ -3346,7 +3774,58 @@ class Component extends DCLogic {
       return Object.assign({id:w.id,label:w.label,columns:w.columns,rows:w.rows,gridColumn:w.column+' / span '+previewColumns,gridRow:w.row+' / span '+previewRows,editing:S.dashEdit,dragging:S.dragId===w.id,over:S.overId===w.id&&S.dragId!==w.id,dragOpacity:S.dragId===w.id?'0.4':'1',dropOutline:(S.overId===w.id&&S.dragId!==w.id)?'2px solid '+acc:'2px solid transparent',remove:()=>this.toggleWidget(w.id),onDragStart:(e)=>{this.setState({dragId:w.id});try{e.dataTransfer.effectAllowed='move';e.dataTransfer.setData('text/plain',w.id)}catch(_){}},onDragEnter:()=>{if(S.dragId)this.setState({overId:w.id})},onDragOver:(e)=>{e.preventDefault()},onDrop:(e)=>{e.preventDefault();if(S.dragId)this.moveWidget(S.dragId,w.id)},onDragEnd:()=>this.setState({dragId:null,overId:null}),resizeRight:(e)=>this.beginWidgetResize(w.id,'right',e),resizeBottom:(e)=>this.beginWidgetResize(w.id,'bottom',e),resizeCorner:(e)=>this.beginWidgetResize(w.id,'corner',e),resizeRightKey:(e)=>this.handleWidgetResizeKeydown(w.id,'right',e),resizeBottomKey:(e)=>this.handleWidgetResizeKeydown(w.id,'bottom',e),resizeCornerKey:(e)=>this.handleWidgetResizeKeydown(w.id,'corner',e)},mkFlags(w.id));
     });
     const addableWidgets=this.WIDGETS.filter(w=>!this.widgetCfg(w.id).on).map(w=>({id:w.id,label:w.label,add:()=>this.toggleWidget(w.id)}));
-    const tourStepsList=this.tourSteps(),tourLast=tourStepsList.length-1,tourIdx=Math.max(0,Math.min(tourLast,Math.floor(Number(S.tourStep)||0))),tourStepData=tourStepsList[tourIdx]||tourStepsList[0];
+    const tourStepsList=this.tourSteps(),tourLast=tourStepsList.length-1,tourIdx=Math.max(0,Math.min(tourLast,Math.floor(Number(S.tourStep)||0))),tourStepData=tourStepsList[tourIdx]||tourStepsList[0],tourSpotlight=S.tourSpotlight;
+    const replayTour=e=>this.openTour(true,e);
+    const helpFiltered=this.filterHelpFaq(this.helpFaqData(),S.helpQuery);
+    const helpRun=run=>({text:String(run&&run.text||''),strong:!!(run&&run.strong),plain:!(run&&run.strong)});
+    const helpBlock=block=>{
+      const isSteps=!!block&&block.kind==='steps';
+      return{
+        isPara:!isSteps,
+        isSteps,
+        runs:isSteps?[]:(Array.isArray(block&&block.runs)?block.runs:[]).map(helpRun),
+        steps:isSteps?(Array.isArray(block.steps)?block.steps:[]).map((step,index)=>({
+          number:String(index+1),
+          runs:(Array.isArray(step&&step.runs)?step.runs:[]).map(helpRun),
+        })):[],
+      };
+    };
+    const helpGroups=helpFiltered.groups.map(group=>({
+      key:group.key,
+      categoryId:'help-faq-category-'+group.key,
+      label:group.label,
+      questions:group.questions.map(question=>{
+        const expanded=S.helpOpenId===question.id,action=question.action;
+        return{
+          id:question.id,
+          question:question.question,
+          questionId:'help-faq-q-'+question.id,
+          answerId:'help-faq-a-'+question.id,
+          expanded,
+          hidden:!expanded,
+          caretTransform:expanded?'rotate(180deg)':'none',
+          toggle:()=>this.toggleHelpFaq(question.id),
+          blocks:question.blocks.map(helpBlock),
+          hasAction:!!action,
+          action:action?{label:action.label,run:action.id==='tour'?replayTour:()=>false}:{label:'',run:()=>false},
+        };
+      }),
+    }));
+    const helpMatchCount=helpFiltered.matchCount;
+    const helpResultStatus=helpFiltered.normalized
+      ?helpMatchCount+' '+(helpMatchCount===1?'result':'results')
+      :helpMatchCount+' questions';
+    const helpV={
+      helpQuery:S.helpQuery||'',
+      helpGroups,
+      helpMatchCount,
+      helpResultStatus,
+      helpNoResults:helpMatchCount===0,
+      helpClearDisabled:!helpFiltered.normalized,
+      setHelpSearchRef:element=>this.setHelpSearchRef(element),
+      onHelpQuery:event=>this.setHelpQuery(event&&event.target?event.target.value:''),
+      clearHelpSearch:()=>this.clearHelpSearch(),
+    };
     return Object.assign({
       overallScore,scoreGrade:grade,scoreCol,scoreComps,scoreDash,scoreCirc:scoreCirc.toFixed(1),scoreFillW,scoreZones,
       radarRings,radarSpokes,radarData,radarDots,radarLabels,
@@ -3354,25 +3833,33 @@ class Component extends DCLogic {
       dashWidgets,addableWidgets,hasAddable:addableWidgets.length>0,
       dashEdit:S.dashEdit,togDashEdit:()=>this.setState({dashEdit:!S.dashEdit}),dashEditLbl:S.dashEdit?'Done':'Edit layout',
       dashEditBg:S.dashEdit?acc+'22':'transparent',dashEditFg:S.dashEdit?acc:'var(--tx-dim)',dashEditBd:S.dashEdit?acc+'66':'var(--bd2)',noAddable:!(addableWidgets.length>0),
-      accent:acc,acc44:acc+'44',acc55:acc+'55',acc16:acc+'16',
+      accent:acc,accentInk,acc44:acc+'44',acc55:acc+'55',acc16:acc+'16',
       glowOp:({off:'0',soft:'0.55',medium:'0.8',strong:'1'})[st.glow||'soft']||'0.55',
       auroraOp:({off:'0',soft:'0.85',medium:'1',strong:'1'})[st.glow||'soft']||'0.85',
       glowA:acc+'2E',glowB:acc+'1C',glowC:acc+'22',accentGlow:acc+'44',accentSoft:acc+'22',
-      booting:S.booting,appVersion:'v1.0.0',
+      booting:S.booting,appVersion:'v1.0.0',searchHint:this.searchHintKey(),titlebarOffset:S.titlebarOffset||'44px',
+      setProfileMenuRef:el=>this.setDismissRef('profileMenu',el),
+      setPickerRef:el=>this.setDismissRef('picker',el),
+      setPickerSetupRef:el=>this.setDismissRef('pickerSetup',el),
+      setPickerOpenerRef:el=>this.setDismissRef('pickerOpener',el),
+      setPickerSetupOpenerRef:el=>this.setDismissRef('pickerSetupOpener',el),
       licensesAvailable:typeof window!=='undefined'&&!!(window.desktopApp&&window.desktopApp.openLicenses),
       openLicenses:()=>{const a=typeof window!=='undefined'&&window.desktopApp;if(a&&a.openLicenses)a.openLicenses()},
       userName:uname||'Personal Ledger.',userInitials:this.initials(uname),
-      logout:()=>this.logout(),goProfile:()=>this.setState({tab:'profile'}),
+      logout:()=>this.logout(),goProfile:()=>this.setTab('profile'),
       activeProfile,profileOptions,loginProfiles,profileMenuOpen:!!S.profileMenuOpen,toggleProfileMenu:()=>this.setState({profileMenuOpen:!S.profileMenuOpen}),closeProfileMenu:()=>this.setState({profileMenuOpen:false}),createProfile:()=>this.beginProfileSetup(),lockJournal:()=>this.logout(),
       switchConfirmOpen:S.confirm==='switch-profile'&&!!S.pendingProfileId,confirmProfileSwitch:()=>this.confirmProfileSwitch(),cancelProfileSwitch:()=>this.cancelProfileSwitch(),setSwitchProfileDialogRef:el=>this.captureSurfaceDialog('switchProfile',el),onSwitchProfileDialogKeydown:e=>this.handleSurfaceDialogKeydown('switchProfile',e,()=>this.cancelProfileSwitch()),
       searchLeaveConfirmOpen:S.confirm==='search-leave'&&!!S.pendingSearchResult,confirmPendingSearchResult:()=>this.confirmPendingSearchResult(),cancelPendingSearchResult:()=>this.cancelPendingSearchResult(),setSearchLeaveDialogRef:el=>this.captureSurfaceDialog('searchLeave',el),onSearchLeaveDialogKeydown:e=>this.handleSurfaceDialogKeydown('searchLeave',e,()=>this.cancelPendingSearchResult()),
       tourOpen:!!S.tourOpen,tourStepTitle:tourStepData.title,tourStepBody:tourStepData.body,
+      tourSpotlightReady:!!tourSpotlight,tourOverlayBg:tourSpotlight?'transparent':'var(--ovl)',
+      tourSpotlightTop:tourSpotlight?tourSpotlight.top+'px':'0px',tourSpotlightLeft:tourSpotlight?tourSpotlight.left+'px':'0px',tourSpotlightWidth:tourSpotlight?tourSpotlight.width+'px':'0px',tourSpotlightHeight:tourSpotlight?tourSpotlight.height+'px':'0px',
+      tourPanelTop:tourSpotlight?tourSpotlight.panelTop+'px':'50%',tourPanelLeft:tourSpotlight?tourSpotlight.panelLeft+'px':'50%',tourPanelTransform:tourSpotlight?'none':'translate(-50%,-50%)',
       tourProgressDots:tourStepsList.map((step,i)=>({active:i===tourIdx,current:i===tourIdx,w:i===tourIdx?'18px':'6px',bg:i===tourIdx?acc:'var(--chip2)'})),
       tourBack:()=>this.previousTour(),tourBackDisabled:tourIdx===0,tourBackFg:tourIdx===0?'var(--tx-ghost)':'var(--tx-dim)',tourBackCursor:tourIdx===0?'default':'pointer',
       tourNext:()=>this.nextTour(),tourNextLabel:tourIdx===tourLast?'Finish':'Next',
       tourSkip:()=>this.closeTour(true),
       setTourDialogRef:el=>this.captureSurfaceDialog('tour',el),onTourDialogKeydown:e=>this.handleSurfaceDialogKeydown('tour',e,()=>this.closeTour(false)),
-      replayTour:e=>this.openTour(true,e),
+      replayTour,
       storageWarningOpen:!!S.storageWarning,storageWarning:S.storageWarning||'',dismissStorageWarning:()=>this.setState({storageWarning:''}),
       navMain:NAV.map(mkNav),navPers:NAVP.map(mkNav),navSup:NAVS.map(mkNav),
       winTitle:(S.booting||loginOpenV||obOpenV||S.launching)?'Written.':TITLES[S.tab][0],
@@ -3406,7 +3893,7 @@ class Component extends DCLogic {
       calCols:'repeat('+(showWk?7:5)+',minmax(0,1fr)) 112px',
       weeks,goPrev:()=>nav(-1),goNext:()=>nav(1),
       goToday:()=>{const t2=new Date();this.setState({viewY:t2.getFullYear(),viewM:t2.getMonth()})},
-      goTrades:()=>this.setState({tab:'trades'}),goCal:()=>this.setState({tab:'cal'}),
+      goTrades:()=>this.setTab('trades'),goCal:()=>this.setTab('cal'),
       recentTrades,tradeRows,symChips,tradesEmpty:tradeRows.length===0,
       gallery,galleryEmpty:gallery.length===0,
       lightboxOpen:!!S.lightbox,
@@ -3414,7 +3901,7 @@ class Component extends DCLogic {
       lightboxVids:S.lightbox&&S.lightbox.t==='v'?[{setRef:el=>{const s=S.lightbox.src;if(el&&el.src!==s)el.src=s}}]:[],
       setLightboxDialogRef:el=>this.captureSurfaceDialog('lightbox',el),onLightboxDialogKeydown:e=>this.handleSurfaceDialogKeydown('lightbox',e,()=>this.closeLightbox()),closeLightbox:()=>this.closeLightbox(),stopEvt:e=>e.stopPropagation(),
       byEmoji,byTag,byTagEmpty:byTag.length===0,byRule,bySym,byDow,byLS,bySess,bySessEmpty:!bySessAny,byMist,byMistEmpty:!byMist.length,
-      attribution,attrEmpty,riskStats,rHist,riskEmpty,emoTimeline,emoAgg,violations,psychEmpty,psychHasViol:violations.length>0,
+      attribution,attrEmpty,riskStats,rHist,riskEmpty,emoTimeline,emoAgg,violations,psychEmpty,psychHasEmo,psychHasViol:violations.length>0,
       achievements,achDoneS:achDone+' / '+achievements.length,
       recAvgRS:rAvgR!=null?(rAvgR>=0?'+':'')+rAvgR.toFixed(2)+'R':'—',recAvgRCol:this.col(rAvgR||0),
       recWinS:all.length?this.fmt(Math.max.apply(null,all.map(t=>t.pnl))):'—',
@@ -3440,7 +3927,7 @@ class Component extends DCLogic {
       quickPresetsEmpty:!(Array.isArray(st.quickPresets)&&st.quickPresets.length),
       accSwatches:this.ACCENTS.map(c=>({c,bd:acc.toLowerCase()===c.toLowerCase()?'var(--tx)':'var(--bd2)',sh:acc.toLowerCase()===c.toLowerCase()?'0 0 18px '+c+'66':'none',set:()=>{this.setAccent(c);this.setState({pickerOpen:false})}})),
       hexVal:acc.toUpperCase(),wordTxt:S.wordTxt||'',
-      appVisible:!S.booting&&!S.launching&&!loginOpenV&&!obOpenV,appInert:!!S.editing||!!S.lightbox||!!S.tourOpen||(S.confirm==='switch-profile'&&!!S.pendingProfileId)||(S.confirm==='search-leave'&&!!S.pendingSearchResult),drawerInert:!!annotation||!!S.lightbox||(S.confirm==='search-leave'&&!!S.pendingSearchResult),
+      appVisible:!S.booting&&!S.launching&&!loginOpenV&&!obOpenV,appInert:!!S.searchOpen||!!S.editing||!!S.lightbox||!!S.tourOpen||(S.confirm==='switch-profile'&&!!S.pendingProfileId)||(S.confirm==='search-leave'&&!!S.pendingSearchResult),drawerInert:!!S.searchOpen||!!annotation||!!S.lightbox||(S.confirm==='search-leave'&&!!S.pendingSearchResult),
       pickerOpen:S.pickerOpen,togPicker:()=>this.setState({pickerOpen:!S.pickerOpen}),
       pickerBd:this.ACCENTS.some(c=>c.toLowerCase()===acc.toLowerCase())?(S.pickerOpen?'var(--tx-dim)':'var(--bd2)'):'var(--tx)',
       pickerSh:this.ACCENTS.some(c=>c.toLowerCase()===acc.toLowerCase())?'none':'0 0 18px '+acc+'66',
@@ -3518,7 +4005,7 @@ class Component extends DCLogic {
       obContinueLbl:Object.keys(days).length?'Continue →':'Load demo data →',
       obFinishDemo:()=>this.finishOb(true),obFinishFresh:()=>this.finishOb(false),
       editorOpen:!!(ed&&dr),closeEditor:()=>this.closeEditor()
-    },hovV,eV,expEV,weeklyV,timeEdgeV,tiltV,searchV,annotationV);
+    },hovV,eV,expEV,weeklyV,timeEdgeV,tiltV,searchV,annotationV,helpV);
   }
 }
 </script>

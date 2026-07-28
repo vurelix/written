@@ -5,6 +5,10 @@ node_modules/
 desktop/dist/
 desktop/app-src/
 
+# Playwright smoke-test output
+desktop/test-results/
+desktop/playwright-report/
+
 # ⚠️ Installers are NOT committed.
 # The Windows installer is ~153 MB, which exceeds GitHub's hard 100 MB per-file limit,
 # and binaries do not belong in git history regardless. Build them locally

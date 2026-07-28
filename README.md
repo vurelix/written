@@ -8,7 +8,7 @@
 
 ![Platform](https://img.shields.io/badge/platform-macOS%20%7C%20Windows-0B0E13?style=for-the-badge)
 ![Electron](https://img.shields.io/badge/Electron-31-3DDC97?style=for-the-badge&logo=electron&logoColor=0B0E13)
-![Tests](https://img.shields.io/badge/tests-123%20passing-3DDC97?style=for-the-badge)
+![Tests](https://img.shields.io/badge/tests-191%20passing-3DDC97?style=for-the-badge)
 ![License](https://img.shields.io/badge/license-MIT-3DDC97?style=for-the-badge)
 
 </div>
@@ -136,8 +136,17 @@ npx electron-builder --win --x64 --arm64 --config.directories.output=dist/Window
 
 ### Test
 
+Logic suite — runs straight from the repo, no install needed:
+
 ```bash
-node --test test/written.logic.test.cjs     # 123 tests
+node --test test/written.logic.test.cjs     # 176 tests
+```
+
+End-to-end smoke suite — runs against the *built* renderer, so it has to run from the
+synced build copy (Electron cannot be packaged or signed from inside iCloud):
+
+```bash
+cd desktop && npm run sync && cd ~/Developer/written-desktop && npm run test:smoke   # 15 tests
 ```
 
 ---
