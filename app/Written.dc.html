@@ -1188,7 +1188,7 @@ html{--accent:#3DDC97;scrollbar-gutter:stable;scrollbar-color:var(--accent) tran
                   <svg class="help-caret" aria-hidden="true" width="18" height="18" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" style="transform:{{category.caretTransform}}"><path d="M4 6.5 8 10.5 12 6.5"></path></svg>
                 </button>
               </h2>
-              <div id="{{category.panelId}}" class="help-category-panel" data-open="{{category.open}}" aria-labelledby="{{category.buttonId}}" aria-hidden="{{category.collapsed}}" inert="{{category.collapsed}}">
+              <div id="{{category.panelId}}" class="help-category-panel" data-open="{{category.open}}" aria-labelledby="{{category.buttonId}}" aria-hidden="{{category.collapsed}}" inert="{{category.panelInert}}">
                 <div class="help-category-panel-inner">
                   <div class="help-route">
                     <svg class="help-route-svg help-route-svg-wide" aria-hidden="true" viewBox="{{category.routeViewBox}}" preserveAspectRatio="none"><path d="{{category.routePath}}"></path></svg>
@@ -1205,7 +1205,7 @@ html{--accent:#3DDC97;scrollbar-gutter:stable;scrollbar-color:var(--accent) tran
             </section>
           </sc-for>
 
-          <div class="help-article-backdrop" data-open="{{helpArticleOpen}}" aria-hidden="{{helpArticleClosed}}" inert="{{helpArticleClosed}}" onClick="{{closeHelpArticle}}">
+          <div class="help-article-backdrop" data-open="{{helpArticleOpen}}" aria-hidden="{{helpArticleClosed}}" inert="{{helpArticleInert}}" onClick="{{closeHelpArticle}}">
             <div class="help-article-dialog glass-surface-strong" ref="{{setHelpArticleDialogRef}}" onKeyDown="{{onHelpArticleDialogKeydown}}" onClick="{{stopHelpArticleClick}}" tabIndex="-1" role="dialog" aria-modal="true" aria-labelledby="help-article-title">
               <div class="help-article-header">
                 <h2 id="help-article-title">{{helpArticleTitle}}</h2>
@@ -3928,6 +3928,7 @@ class Component extends DCLogic {
         panelId:'help-category-panel-'+group.key,
         open,
         collapsed:!open,
+        panelInert:open?undefined:'',
         caretTransform:open?'rotate(180deg)':'none',
         toggle:()=>this.toggleHelpCategory(group.key),
         routeViewBox:route.viewBox,
@@ -3965,6 +3966,7 @@ class Component extends DCLogic {
       helpClearDisabled:!helpFiltered.normalized,
       helpArticleOpen:!!selectedHelpArticle,
       helpArticleClosed:!selectedHelpArticle,
+      helpArticleInert:selectedHelpArticle?undefined:'',
       helpArticleTitle:selectedHelpArticle?selectedHelpArticle.question:'',
       helpArticleBlocks:selectedHelpArticle?selectedHelpArticle.blocks.map(helpBlock):[],
       helpArticleHasAction:!!(selectedHelpArticle&&selectedHelpArticle.action),

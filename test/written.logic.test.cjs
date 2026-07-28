@@ -3468,7 +3468,7 @@ test('Help route model orders nodes and handles one-node categories', () => {
 test('Help markup exposes exclusive category controls and an accessible article modal', () => {
   const html = fs.readFileSync(htmlPath, 'utf8');
   assert.match(html, /class="help-category-toggle"[^>]+aria-expanded="\{\{category\.open\}\}"[^>]+aria-controls="\{\{category\.panelId\}\}"/);
-  assert.match(html, /id="\{\{category\.panelId\}\}"[^>]+aria-labelledby="\{\{category\.buttonId\}\}"[^>]+inert="\{\{category\.collapsed\}\}"/);
+  assert.match(html, /id="\{\{category\.panelId\}\}"[^>]+aria-labelledby="\{\{category\.buttonId\}\}"[^>]+inert="\{\{category\.panelInert\}\}"/);
   assert.match(html, /class="help-route-node[^"]*"[^>]+onClick="\{\{faq\.open\}\}"/);
   assert.match(html, /class="help-route-svg help-route-svg-wide"/);
   assert.match(html, /class="help-route-svg help-route-svg-mobile"/);
@@ -3580,6 +3580,34 @@ test('Help render bindings expose a complete recursive view model', () => {
   assert.equal(modalValues.helpArticleAction.label, 'Replay walkthrough');
   assert.equal(modalValues.helpArticleAction.run, modalValues.replayTour);
   assert.ok(modalValues.helpArticleBlocks.length > 0);
+});
+
+test('Help inert bindings emit string attributes only while mounted surfaces are hidden', () => {
+  const component = loadComponent();
+  seedActiveProfile(component, { onboarded: true, loggedOut: false }, {});
+  component.state.booting = false;
+  component.state.tab = 'help';
+
+  const closedValues = component.renderVals();
+  assert.equal(closedValues.helpArticleInert, '');
+  for (const group of closedValues.helpGroups) {
+    assert.equal(group.panelInert, '');
+  }
+
+  component.toggleHelpCategory('getting-started');
+  const categoryValues = component.renderVals();
+  const openGroup = categoryValues.helpGroups.find(group => group.key === 'getting-started');
+  const closedGroup = categoryValues.helpGroups.find(group => group.key === 'dashboard-insights');
+  assert.equal(openGroup.panelInert, undefined);
+  assert.equal(closedGroup.panelInert, '');
+
+  component.openHelpArticle('journal-day', { focus() {} });
+  const articleValues = component.renderVals();
+  assert.equal(articleValues.helpArticleInert, undefined);
+
+  const html = fs.readFileSync(htmlPath, 'utf8');
+  assert.match(html, /class="help-category-panel"[^>]+inert="\{\{category\.panelInert\}\}"/);
+  assert.match(html, /class="help-article-backdrop"[^>]+inert="\{\{helpArticleInert\}\}"/);
 });
 
 test('Help FAQ markup exposes search accessibility without duplicating article copy', () => {
