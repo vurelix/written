@@ -3864,7 +3864,15 @@ test('native glyph renderers cover mood, checklist, and onboarding values', () =
   assert.equal((html.match(/<(?:span|div) class="native-emoji"[^>]*>\{\{e\.ch\}\}<\/(?:span|div)>/g) || []).length, 3);
   assert.match(html, /<button class="native-emoji" onClick="\{\{m\.set\}\}" aria-label="\{\{m\.label\}\}" title="\{\{m\.label\}\}"[^>]*>\{\{m\.ch\}\}<\/button>/);
   assert.match(html, /<span class="native-symbol"[^>]*>\{\{ck\.mark\}\}<\/span>/);
-  assert.doesNotMatch(html, /class="native-symbol"[^>]*font-family:'Manrope'[^>]*>\{\{sp\.num\}\}<\/span>/);
+  assert.match(html, /class="onboarding-step-number"[^>]*>[\s\S]*class="onboarding-step-glyph native-symbol"[^>]*>✓<\/span>/);
+  assert.match(html, /class="onboarding-step-glyph"[^>]*>\{\{sp\.num\}\}<\/span>/);
+  assert.doesNotMatch(html, /class="onboarding-step-number native-symbol"/);
+
+  const component = loadComponent();
+  component.state.obStep = 1;
+  const steps = component.renderVals().obStepList;
+  assert.deepEqual(plain(steps.map(step => step.done)), [true, false, false, false, false]);
+  assert.deepEqual(plain(steps.map(step => step.numbered)), [false, true, true, true, true]);
 });
 
 test('searchHint is an exposed binding, not just a template reference', () => {

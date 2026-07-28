@@ -80,6 +80,28 @@ async function boot(page, store) {
 }
 
 test.describe('built renderer', () => {
+  test('installer step numbers are optically centered without emoji-font digits', async ({ page }) => {
+    await page.goto(RENDERER);
+    await page.getByRole('button', { name: 'Install Written →' }).click();
+    const circles = page.locator('.onboarding-step-number');
+    await expect(circles).toHaveCount(5);
+    const metrics = await circles.evaluateAll(elements => elements.map(circle => {
+      const glyph = circle.querySelector('.onboarding-step-glyph');
+      const outer = circle.getBoundingClientRect();
+      const inner = glyph.getBoundingClientRect();
+      return {
+        dx: Math.abs((outer.left + outer.width / 2) - (inner.left + inner.width / 2)),
+        dy: Math.abs((outer.top + outer.height / 2) - (inner.top + inner.height / 2)),
+        fontFamily: getComputedStyle(glyph).fontFamily,
+      };
+    }));
+    expect(metrics.every(item => item.dx <= 1 && item.dy <= 1)).toBe(true);
+    expect(metrics.every(item => !/Emoji|Segoe UI Symbol/.test(item.fontFamily))).toBe(true);
+
+    await page.getByRole('button', { name: 'Next ›' }).click();
+    await expect(circles.first().locator('.native-symbol')).toHaveText('✓');
+  });
+
   test('boots to the dashboard with no errors after hydration', async ({ page }) => {
     const errors = watch(page);
     await boot(page, profileFixture());
