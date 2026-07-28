@@ -1805,7 +1805,7 @@ class Component extends DCLogic {
   constructor(p){
     super(p);
     const t=new Date();
-    this.state={days:{},settings:{},profileStore:{version:2,activeProfileId:null,profiles:{}},selectedProfileId:null,pendingProfileId:null,pendingSearchResult:null,profileMenuOpen:false,storageWarning:'',tab:'dash',viewY:t.getFullYear(),viewM:t.getMonth(),range:'month',chartMode:null,symFilter:'ALL',lightbox:null,hov:null,editing:null,draft:null,annotation:null,markKind:'entry',markText:'',confirm:null,booting:true,ob:null,newTag:'',newSym:'',newPv:'',obSym:'',obPv:'',liPw:'',liErr:false,obStarted:false,obStep:0,obProg:0,obDemo:true,launching:false,newMist:'',toast:null,pickH:153,pickS:.72,pickV:.86,pickerOpen:false,bootTxt:'',dashEdit:false,searchOpen:false,searchQuery:'',searchSel:0,helpQuery:'',helpOpenId:null,tourOpen:false,tourStep:0,tourSpotlight:null,addedTradeIndex:null,editorRangesReady:false,titlebarOffset:'44px'};
+    this.state={days:{},settings:{},profileStore:{version:2,activeProfileId:null,profiles:{}},selectedProfileId:null,pendingProfileId:null,pendingSearchResult:null,profileMenuOpen:false,storageWarning:'',tab:'dash',viewY:t.getFullYear(),viewM:t.getMonth(),range:'month',chartMode:null,symFilter:'ALL',lightbox:null,hov:null,editing:null,draft:null,annotation:null,markKind:'entry',markText:'',confirm:null,booting:true,ob:null,newTag:'',newSym:'',newPv:'',obSym:'',obPv:'',liPw:'',liErr:false,obStarted:false,obStep:0,obProg:0,obDemo:true,launching:false,newMist:'',toast:null,pickH:153,pickS:.72,pickV:.86,pickerOpen:false,bootTxt:'',dashEdit:false,searchOpen:false,searchQuery:'',searchSel:0,helpQuery:'',helpOpenId:null,tourOpen:false,tourStep:0,tourSpotlight:null,addedTradeIndex:null,editorRangesReady:false,insightsRangesReady:false,titlebarOffset:'44px'};
     this._onGlobalKeydown=this.handleGlobalKeydown.bind(this);
     this._onWindowScroll=this.syncTitlebarOffset.bind(this);
     this.BOOTMSGS=['loading modules…','linking market symbols…','reading your ledger…','warming up charts…'];
@@ -2147,7 +2147,7 @@ class Component extends DCLogic {
     this.cancelScheduledFocusRestore();
     this.cancelTourMeasurement();
     clearTimeout(this._bt);clearTimeout(this._tt2);clearTimeout(this._ct);clearTimeout(this._lt);
-    clearTimeout(this._rangeReadyTimer);clearTimeout(this._tradeEnterTimer);
+    clearTimeout(this._rangeReadyTimer);clearTimeout(this._insightsRangeTimer);clearTimeout(this._tradeEnterTimer);
     clearInterval(this._ty);clearInterval(this._it);
     if(this._widgetResize)this.finishWidgetResize(false);else this.clearWidgetResizeListeners();
   }
@@ -2305,6 +2305,22 @@ class Component extends DCLogic {
   setStateAfterCommit(patch,callback){if(typeof callback!=='function'){this.setState(patch);return true}if(typeof this.setState==='function'&&this.setState.length>=2){this.cancelScheduledFocusRestore();const token=this._focusRestoreToken;this.setState(patch,()=>{if(token===this._focusRestoreToken)callback()})}else{this.setState(patch);this.scheduleAfterCommit(callback)}return true}
   setTab(tab,extra=null){
     this.setState(Object.assign({},extra&&typeof extra==='object'?extra:{},{tab,helpQuery:'',helpOpenId:null}));
+    if(tab==='insights')this.armInsightsRanges();
+    return true;
+  }
+  // Same two-phase trick as armEditorRanges: emit 0% for one frame so the CSS transition
+  // on .range-fill/.range-thumb has somewhere to animate FROM. Without it the first
+  // render already carries the final value and the sliders simply appear, filled.
+  armInsightsRanges(){
+    clearTimeout(this._insightsRangeTimer);
+    this.setState({insightsRangesReady:false});
+    this._insightsRangeTimer=setTimeout(()=>{if(this.state.tab==='insights')this.setState({insightsRangesReady:true})},16);
+    return true;
+  }
+  clearInsightsRanges(){
+    clearTimeout(this._insightsRangeTimer);
+    this._insightsRangeTimer=null;
+    this.setState({insightsRangesReady:false});
     return true;
   }
   setHelpSearchRef(element){this._helpSearchInput=element||null}
@@ -3593,7 +3609,7 @@ class Component extends DCLogic {
     const projRows=[['1 month',simTW*4.3],['6 months',simTW*4.3*6],['1 year',simTW*4.3*12]].map(p=>{const gain=perTradeDollar*p[1];return{lb:p[0],valS:this.fmt(simBase+gain),chg:this.fk(gain),col:this.col(gain)}});
     const expEV={simWin,simR:+(+simR).toFixed(2),simTW,expPerTradeS:(expPerTrade>=0?'+':'')+expPerTrade.toFixed(2)+'R',expCol:this.col(expPerTrade),perTradeDollarS:this.fk(perTradeDollar),
       simWinSet:e=>this.setState({simWin:+e.target.value}),simRSet:e=>this.setState({simR:+e.target.value}),simTWSet:e=>this.setState({simTW:+e.target.value}),
-      simWinFill:this.rangePercent(simWin,20,90)+'%',simRFill:this.rangePercent(simR,0.3,4)+'%',simTWFill:this.rangePercent(simTW,1,40)+'%',projRows};
+      simWinFill:(S.insightsRangesReady?this.rangePercent(simWin,20,90):0)+'%',simRFill:(S.insightsRangesReady?this.rangePercent(simR,0.3,4):0)+'%',simTWFill:(S.insightsRangesReady?this.rangePercent(simTW,1,40):0)+'%',projRows};
     const playRows=this.tags().map(tg=>{
       const ds2=list.filter(d=>(days[d.k].tags||[]).includes(tg));
       if(!ds2.length)return null;

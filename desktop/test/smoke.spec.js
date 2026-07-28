@@ -309,6 +309,44 @@ test.describe('built renderer', () => {
     }
   });
 
+  test('insights sliders sweep from zero when the page is opened', async ({ page }) => {
+    // The fills were computed unconditionally, so the very first render already carried
+    // the final width and the CSS transition had nothing to animate from — the sliders
+    // just appeared, filled. Sampling every frame is the only way to see the difference:
+    // the settled value is identical either way.
+    await page.setViewportSize({ width: 1440, height: 900 });
+    await boot(page, profileFixture());
+
+    await page.evaluate(() => {
+      window.__fillSamples = [];
+      const tick = () => {
+        const el = document.querySelector('.range-fill');
+        if (el) window.__fillSamples.push(el.getBoundingClientRect().width);
+        window.__fillRaf = requestAnimationFrame(tick);
+      };
+      tick();
+    });
+
+    await page.getByRole('button', { name: 'Insights', exact: true }).click();
+    await page.waitForSelector('.range-control', { timeout: 15000 });
+    await page.waitForTimeout(700); // the fill transition is 320ms
+
+    const samples = await page.evaluate(() => {
+      cancelAnimationFrame(window.__fillRaf);
+      return window.__fillSamples;
+    });
+
+    expect(samples.length, 'frames were sampled').toBeGreaterThan(5);
+    const settled = samples[samples.length - 1];
+    expect(settled, 'the slider ends up filled').toBeGreaterThan(10);
+    // It must have started at zero...
+    expect(Math.min(...samples), 'the fill starts empty').toBeLessThanOrEqual(1);
+    // ...and passed through intermediate widths rather than snapping. A jump straight to
+    // the final value would show only two distinct widths.
+    const distinct = new Set(samples.map(w => Math.round(w))).size;
+    expect(distinct, 'the fill animates through intermediate widths').toBeGreaterThanOrEqual(5);
+  });
+
   test('command palette owns focus and restores its titlebar trigger', async ({ page }) => {
     await boot(page, profileFixture());
     const trigger = page.getByRole('button', { name: 'Search this journal' });

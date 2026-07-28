@@ -2747,6 +2747,57 @@ test('document-level accent tokens mirror the active accent for root-owned contr
   assert.match(html, /componentWillUnmount\(\)\{[\s\S]*this\.clearDocumentAccentTokens\(\)/);
 });
 
+test('insights sliders animate on arrival, not only on drag', () => {
+  const timers = [];
+  const component = loadComponent({
+    setTimeout: (fn, ms) => { timers.push({ fn, ms }); return timers.length; },
+    clearTimeout: () => {},
+  });
+  seedActiveProfile(component, { onboarded: true, loggedOut: false, quickPresets: [], accent: '#3DDC97' }, {});
+  component.state = Object.assign({}, component.state, { booting: false });
+
+  assert.equal(component.state.insightsRangesReady, false, 'starts unarmed');
+
+  // Landing on any other tab must not arm it.
+  component.setTab('dash');
+  assert.equal(timers.length, 0);
+
+  component.setTab('insights');
+  assert.equal(component.state.insightsRangesReady, false, 'still 0% on the first frame');
+  assert.equal(timers.length, 1);
+  // One frame, matching armEditorRanges — long enough for the browser to paint 0% and
+  // start the transition, short enough to be invisible as a delay.
+  assert.equal(timers[0].ms, 16);
+
+  // While unarmed every fill is 0%, so the CSS transition has somewhere to animate from.
+  const before = component.renderVals();
+  assert.equal(before.simWinFill, '0%');
+  assert.equal(before.simRFill, '0%');
+  assert.equal(before.simTWFill, '0%');
+
+  timers[0].fn();
+  assert.equal(component.state.insightsRangesReady, true);
+  const after = component.renderVals();
+  for (const key of ['simWinFill', 'simRFill', 'simTWFill']) {
+    assert.match(after[key], /^\d+(\.\d+)?%$/);
+    assert.notEqual(after[key], '0%', `${key} settles on a real value`);
+  }
+
+  // Navigating away before the timer fires must not arm a tab the user has left.
+  component.setTab('insights');
+  const pending = timers[timers.length - 1];
+  component.state = Object.assign({}, component.state, { tab: 'dash', insightsRangesReady: false });
+  pending.fn();
+  assert.equal(component.state.insightsRangesReady, false);
+
+  const html = fs.readFileSync(htmlPath, 'utf8');
+  // The timer has to be cleared on unmount alongside the editor's.
+  const unmount = /componentWillUnmount\(\)\{([\s\S]*?)\n  \}/.exec(html);
+  assert.ok(unmount, 'componentWillUnmount was found');
+  assert.match(unmount[1], /clearTimeout\(this\._insightsRangeTimer\)/);
+  assert.match(html, /class="range-control" style="--range-progress:\{\{simWinFill\}\}"/);
+});
+
 test('the consistency heatmap ships larger and existing profiles are migrated once', () => {
   const component = loadComponent();
   const heatmap = component.WIDGETS.find(w => w.id === 'heatmap');
