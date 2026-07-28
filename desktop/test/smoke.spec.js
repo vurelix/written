@@ -547,71 +547,57 @@ test.describe('built renderer', () => {
     expect(Math.abs(heights[0] - heights[1]), 'cards share the first grid row height').toBeLessThanOrEqual(1);
   });
 
-  test('Help FAQ searches answers, keeps one answer open, and resets on navigation', async ({ page }) => {
+  test('Help categories reveal treasure-map articles and open one focus-managed modal', async ({ page }) => {
     await page.setViewportSize({ width: 1280, height: 800 });
     await boot(page, profileFixture());
     await page.getByRole('button', { name: 'Help', exact: true }).click();
 
-    const search = page.getByRole('searchbox', { name: 'Search Help' });
-    const questions = page.locator('.help-question');
-    const answers = page.locator('.help-answer');
-    await expect(questions).toHaveCount(21);
-    await expect(page.locator('.help-answer:not([hidden])')).toHaveCount(0);
+    const gettingStarted = page.getByRole('button', { name: 'Getting Started' });
+    const dashboard = page.getByRole('button', { name: 'Dashboard and Insights' });
+    await gettingStarted.click();
+    await expect(gettingStarted).toHaveAttribute('aria-expanded', 'true');
+    await dashboard.click();
+    await expect(gettingStarted).toHaveAttribute('aria-expanded', 'false');
+    await expect(dashboard).toHaveAttribute('aria-expanded', 'true');
 
-    await search.fill('active only in memory');
-    await expect(search).toBeFocused();
-    await expect(page.locator('.help-result-status')).toHaveText('1 result');
-    const warningQuestion = page.getByRole('button', { name: 'What should I do when Written reports a storage warning?' });
-    await expect(warningQuestion).toHaveAttribute('aria-expanded', 'true');
-    await expect(page.locator('#help-faq-a-storage-warning')).toBeVisible();
+    await gettingStarted.click();
+    const articleNode = page.getByRole('button', { name: 'How do I journal a trading day?' });
+    await articleNode.focus();
+    await articleNode.press('Enter');
 
-    await warningQuestion.click();
-    await expect(warningQuestion).toHaveAttribute('aria-expanded', 'false');
-    await expect(page.locator('.help-answer:not([hidden])')).toHaveCount(0);
+    const dialog = page.getByRole('dialog', { name: 'How do I journal a trading day?' });
+    await expect(dialog).toBeVisible();
+    await expect(page.locator('body')).toHaveCSS('overflow', 'hidden');
+    await expect(dialog.getByRole('button', { name: 'Close Help article' })).toBeFocused();
+    await dialog.press('Escape');
+    await expect(dialog).toBeHidden();
+    await expect(articleNode).toBeFocused();
+    await expect(page.locator('body')).not.toHaveCSS('overflow', 'hidden');
+    await expect(gettingStarted).toHaveAttribute('aria-expanded', 'true');
 
-    await search.fill('journal');
-    await expect.poll(async () => Number((await page.locator('.help-result-status').textContent()).match(/\d+/)[0])).toBeGreaterThan(1);
-    await expect(page.locator('.help-answer:not([hidden])')).toHaveCount(1);
-    await page.getByRole('button', { name: 'How do Quick Presets work?' }).click();
-    await expect(page.locator('.help-answer:not([hidden])')).toHaveCount(1);
-    await expect(page.locator('#help-faq-a-quick-presets')).toBeVisible();
-
-    await page.getByRole('button', { name: 'Clear Help search' }).click();
-    await expect(search).toBeFocused();
-    await expect(search).toHaveValue('');
-    await expect(questions).toHaveCount(21);
-    await expect(page.locator('.help-answer:not([hidden])')).toHaveCount(0);
-
-    await search.fill('no matching help answer phrase');
-    await expect(page.getByText('No Help answers match that search.')).toBeVisible();
-    await page.getByRole('button', { name: 'Dashboard', exact: true }).click();
-    await page.getByRole('button', { name: 'Help', exact: true }).click();
-    await expect(search).toHaveValue('');
-    await expect(questions).toHaveCount(21);
-    await expect(page.locator('.help-answer:not([hidden])')).toHaveCount(0);
-
-    const journalQuestion = page.getByRole('button', { name: 'How do I journal a trading day?' });
-    await journalQuestion.focus();
-    await journalQuestion.press('Enter');
-    await expect(journalQuestion).toHaveAttribute('aria-expanded', 'true');
-    await journalQuestion.press('Space');
-    await expect(journalQuestion).toHaveAttribute('aria-expanded', 'false');
-
-    const idrefs = await answers.evaluateAll(elements => elements.map(answer => {
-      const button = document.getElementById(answer.getAttribute('aria-labelledby'));
-      return {
-        answerId: answer.id,
-        buttonControls: button && button.getAttribute('aria-controls'),
-      };
-    }));
-    expect(idrefs).toHaveLength(21);
-    expect(idrefs.every(item => item.answerId === item.buttonControls)).toBe(true);
+    await articleNode.click();
+    await dialog.getByRole('button', { name: 'Close Help article' }).click();
+    await expect(dialog).toBeHidden();
+    await articleNode.click();
+    await page.locator('.help-article-backdrop').click({ position: { x: 4, y: 4 } });
+    await expect(dialog).toBeHidden();
   });
 
-  test('Help FAQ fits narrow screens and uses shared sequential answer spacing', async ({ page }) => {
+  test('Help search reveals its matching category without opening an article', async ({ page }) => {
+    await boot(page, profileFixture());
+    await page.getByRole('button', { name: 'Help', exact: true }).click();
+
+    const search = page.getByRole('searchbox', { name: 'Search Help' });
+    await search.fill('active only in memory');
+    await expect(page.getByRole('button', { name: 'Data and Troubleshooting' })).toHaveAttribute('aria-expanded', 'true');
+    await expect(page.locator('.help-article-backdrop')).toHaveAttribute('data-open', 'false');
+  });
+
+  test('Help treasure map fits narrow screens and gives every route node space', async ({ page }) => {
     await page.setViewportSize({ width: 720, height: 800 });
     await boot(page, profileFixture());
     await page.getByRole('button', { name: 'Help', exact: true }).click();
+    await page.getByRole('button', { name: 'Getting Started' }).click();
 
     const overflow = await page.locator('[data-screen-label="Help"]').evaluate(el => ({
       own: el.scrollWidth - el.clientWidth,
@@ -620,43 +606,42 @@ test.describe('built renderer', () => {
     expect(overflow.own).toBeLessThanOrEqual(1);
     expect(overflow.document).toBeLessThanOrEqual(1);
 
-    const measure = async questionName => {
-      await page.getByRole('button', { name: questionName }).click();
-      return page.locator('.help-answer:not([hidden])').evaluate(el => {
-        const style = getComputedStyle(el);
-        // The question button is wrapped in an <h3>, so it is not a direct sibling.
-        const item = el.closest('.help-item');
-        const questionText = item && item.querySelector('.help-question span');
-        const answerText = el.firstElementChild;
-        return {
-          paddingTop: style.paddingTop,
-          paddingLeft: style.paddingLeft,
-          paddingRight: style.paddingRight,
-          paddingBottom: style.paddingBottom,
-          fontSize: style.fontSize,
-          lineHeight: style.lineHeight,
-          // The real visual gap: bottom of the question's text to top of the answer's
-          // first block. Padding alone does not describe it — the button's own bottom
-          // padding and the h3's margin are both in between.
-          textToText: questionText && answerText
-            ? answerText.getBoundingClientRect().top - questionText.getBoundingClientRect().bottom
-            : null,
-        };
-      });
-    };
-    const journal = await measure('How do I journal a trading day?');
-    const metrics = await measure('What do the core trading metrics mean?');
-    expect(metrics).toEqual(journal);
-
-    // Regression: .help-answer had padding-top:0, so the only thing separating the answer
-    // from the dropdown button was the button's own 13px bottom padding.
-    expect(parseFloat(journal.paddingTop), 'answer has padding below the button').toBeGreaterThanOrEqual(8);
-    expect(journal.textToText, 'answer text sits clear of the question text').toBeGreaterThanOrEqual(20);
-
-    const questionGeometry = await page.$$eval('.help-question', elements =>
+    await expect(page.locator('.help-route-svg-mobile').first()).toBeVisible();
+    await expect(page.locator('.help-route-svg-wide').first()).toBeHidden();
+    const nodeGeometry = await page.$$eval('.help-route-node', elements =>
       elements.map(el => ({ height: el.getBoundingClientRect().height, width: el.getBoundingClientRect().width }))
     );
-    expect(questionGeometry.every(item => item.height >= 44 && item.width > 0)).toBe(true);
+    expect(nodeGeometry.length).toBeGreaterThan(0);
+    expect(nodeGeometry.every(item => item.height > 0 && item.width > 0)).toBe(true);
+  });
+
+  test('Performance settings stay visible and update the renderer mode', async ({ page }) => {
+    await boot(page, profileFixture());
+    await page.getByRole('button', { name: 'Settings', exact: true }).click();
+
+    await expect(page.getByText('Performance', { exact: true })).toBeVisible();
+    await page.getByRole('button', { name: 'Maximum performance' }).click();
+    await expect(page.locator('html')).toHaveAttribute('data-perf', 'max');
+  });
+
+  test('Economic calendar is absent from dashboard add-widget controls', async ({ page }) => {
+    await boot(page, profileFixture());
+    await page.getByRole('button', { name: 'Edit layout' }).click();
+
+    const addWidgetControls = page.getByText('ADD A WIDGET', { exact: true }).locator('..');
+    await expect(addWidgetControls.getByRole('button', { name: 'Economic calendar' })).toHaveCount(0);
+    await expect(addWidgetControls.getByText('Economic calendar', { exact: true })).toHaveCount(0);
+  });
+
+  test('Help category transitions stop under reduced motion', async ({ page }) => {
+    await page.emulateMedia({ reducedMotion: 'reduce' });
+    await boot(page, profileFixture());
+    await page.getByRole('button', { name: 'Help', exact: true }).click();
+    await page.getByRole('button', { name: 'Getting Started' }).click();
+    const duration = await page.locator('.help-category-panel').first().evaluate(element =>
+      getComputedStyle(element).transitionDuration
+    );
+    expect(duration.split(',').every(value => parseFloat(value) <= 0.001)).toBe(true);
   });
 
   test('the walkthrough coachmark is never visible before it is positioned', async ({ page }) => {
@@ -689,6 +674,7 @@ test.describe('built renderer', () => {
     });
 
     await page.getByRole('button', { name: 'Help', exact: true }).click();
+    await page.getByRole('button', { name: 'Getting Started' }).click();
     await page.getByRole('button', { name: 'What does the interactive walkthrough cover?' }).click();
     await page.getByRole('button', { name: 'Replay walkthrough' }).click();
 
@@ -717,6 +703,7 @@ test.describe('built renderer', () => {
     await page.setViewportSize({ width: 1280, height: 800 });
     await boot(page, profileFixture());
     await page.getByRole('button', { name: 'Help', exact: true }).click();
+    await page.getByRole('button', { name: 'Getting Started' }).click();
     await page.getByRole('button', { name: 'What does the interactive walkthrough cover?' }).click();
     await page.getByRole('button', { name: 'Replay walkthrough' }).click();
 
@@ -813,6 +800,7 @@ test.describe('built renderer', () => {
     await page.setViewportSize({ width: 1280, height: 800 });
     await boot(page, profileFixture());
     await page.getByRole('button', { name: 'Help', exact: true }).click();
+    await page.getByRole('button', { name: 'Getting Started' }).click();
     await page.getByRole('button', { name: 'What does the interactive walkthrough cover?' }).click();
     await page.getByRole('button', { name: 'Replay walkthrough' }).click();
 
