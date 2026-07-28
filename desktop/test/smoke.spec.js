@@ -756,7 +756,14 @@ test.describe('built renderer', () => {
 
     const dialog = page.getByRole('dialog', { name: 'Written walkthrough' });
     await expect(dialog).toContainText('Read the dashboard');
-    for (const title of ['Log the trading day', 'Find repeated patterns', 'Grade each setup']) {
+    for (const title of [
+      'Log the trading day',
+      'Find repeated patterns',
+      'Grade each setup',
+      'Review your journal identity',
+      'Tune Written to your workflow',
+      'Replay this walkthrough anytime',
+    ]) {
       await dialog.getByRole('button', { name: 'Next' }).click();
       await expect(dialog).toContainText(title);
     }
@@ -775,7 +782,7 @@ test.describe('built renderer', () => {
     expect(samples.some(s => s.opacity > 0.9 && s.positioned), 'the panel became visible').toBe(true);
   });
 
-  test('walkthrough spotlights stable targets across four separately mounted tabs', async ({ page }) => {
+  test('walkthrough spotlights stable targets across seven separately mounted tabs', async ({ page }) => {
     await page.setViewportSize({ width: 1280, height: 800 });
     await boot(page, profileFixture());
     await page.getByRole('button', { name: 'Help', exact: true }).click();
@@ -860,6 +867,25 @@ test.describe('built renderer', () => {
       screen: 'Playbook',
       target: '[data-screen-label="Playbook"]',
     });
+    await dialog.getByRole('button', { name: 'Next' }).click();
+    await assertStep({
+      title: 'Review your journal identity',
+      screen: 'Profile',
+      target: '[data-screen-label="Profile"] > .glass-surface',
+    });
+    await dialog.getByRole('button', { name: 'Next' }).click();
+    await assertStep({
+      title: 'Tune Written to your workflow',
+      screen: 'Settings',
+      target: '[data-screen-label="Settings"] > .glass-surface',
+    });
+    await dialog.getByRole('button', { name: 'Next' }).click();
+    await assertStep({
+      title: 'Replay this walkthrough anytime',
+      screen: 'Help',
+      target: '[data-screen-label="Help"] .help-search-panel',
+    });
+    await expect(dialog).toContainText('Replay walkthrough');
 
     await dialog.getByRole('button', { name: 'Finish' }).click();
     await expect(dialog).toBeHidden();

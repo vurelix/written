@@ -3139,7 +3139,7 @@ test('widget template exposes labelled move and three resize handles without DRA
   assert.match(html,/@container widget/);
 });
 
-test('walkthrough has four steps and completion persists only on the active profile', () => {
+test('walkthrough has seven steps and completion persists only on the active profile', () => {
   const component=loadComponent({localStorage:{setItem(){}}});
   component.state.booting=false;
   component.state.launching=false;
@@ -3147,17 +3147,18 @@ test('walkthrough has four steps and completion persists only on the active prof
   component.state.settings=component.state.profileStore.profiles.one.settings;
   component.state.days={};
   const steps=component.tourSteps();
-  assert.equal(steps.length,4);
-  assert.deepEqual(plain(steps.map(step=>step.tab)),['dash','cal','insights','playbook']);
-  assert.equal(new Set(steps.map(step=>step.tab)).size,4);
+  assert.equal(steps.length,7);
+  assert.deepEqual(plain(steps.map(step=>step.tab)),['dash','cal','insights','playbook','profile','settings','help']);
+  assert.equal(new Set(steps.map(step=>step.tab)).size,7);
   assert.ok(steps.every(step=>step.target&&step.title&&step.body));
+  assert.match(steps.at(-1).body,/Replay walkthrough/);
   component.openTour();
   assert.equal(component.state.tourOpen,true);
   assert.equal(component.state.tab,'dash');
   component.closeTour(false);
   assert.equal(component.state.settings.tourCompleted,false);
   component.openTour();
-  component.nextTour();component.nextTour();component.nextTour();component.nextTour();
+  for(let i=0;i<7;i++)component.nextTour();
   assert.equal(component.state.tourOpen,false);
   assert.equal(component.state.settings.tourCompleted,true);
 });
@@ -3250,6 +3251,11 @@ test('Help FAQ exposes six ordered categories, twenty-one stable questions, and 
     'Replay walkthrough',
   ]) {
     assert.ok(allText.includes(label), `FAQ includes exact visible label: ${label}`);
+  }
+  const walkthrough=questions.find(question=>question.id==='interactive-walkthrough');
+  const walkthroughText=component.helpQuestionText(walkthrough);
+  for(const label of ['seven-step','Profile','Settings','Help','Replay walkthrough']){
+    assert.ok(walkthroughText.includes(label),`walkthrough Help article includes: ${label}`);
   }
   assert.ok(questions.every(question =>
     question.id &&

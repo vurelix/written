@@ -1974,7 +1974,7 @@ class Component extends DCLogic {
             )
           ]),
           q('interactive-walkthrough','What does the interactive walkthrough cover?',[
-            p(r('The four-step walkthrough highlights '),r('Dashboard',true),r(', '),r('Calendar',true),r(', '),r('Insights',true),r(', and '),r('Playbook',true),r('. It changes tabs and scroll position but does not edit or clear journal data.'))
+            p(r('The seven-step walkthrough highlights '),r('Dashboard',true),r(', '),r('Calendar',true),r(', '),r('Insights',true),r(', '),r('Playbook',true),r(', '),r('Profile',true),r(', '),r('Settings',true),r(', and '),r('Help',true),r('. It changes tabs and scroll position but does not edit or clear journal data. Return to this Help article and select '),r('Replay walkthrough',true),r(' whenever you need a refresher.'))
           ],{id:'tour',label:'Replay walkthrough'}),
           q('quick-presets','How do Quick Presets work?',[
             p(r('Inside an open journal draft, '),r('SAVE AS QUICK PRESET',true),r(' stores the first trade symbol and quantity, the first setup and session tags, confidence, and checked rules.')),
@@ -2703,6 +2703,9 @@ class Component extends DCLogic {
     {id:'calendar',tab:'cal',target:'[data-screen-label="Calendar"] .calendar-scroll',actionable:true,title:'Log the trading day',body:'Open a calendar day to record executions, context, mindset, and the review.'},
     {id:'insights',tab:'insights',target:'[data-screen-label="Insights"] .insights-full',title:'Find repeated patterns',body:'Use full-width analysis to compare outcomes and identify patterns worth acting on.'},
     {id:'playbook',tab:'playbook',target:'[data-screen-label="Playbook"]',title:'Grade each setup',body:'Use the Playbook to compare setup quality, sample size, and net performance.'},
+    {id:'profile',tab:'profile',target:'[data-screen-label="Profile"] > .glass-surface',title:'Review your journal identity',body:'Manage the active profile, local lock, lifetime record, and milestones without mixing one journal with another.'},
+    {id:'settings',tab:'settings',target:'[data-screen-label="Settings"] > .glass-surface',title:'Tune Written to your workflow',body:'Adjust appearance, performance, symbols, risk guidance, presets, and local data controls in Settings.'},
+    {id:'help',tab:'help',target:'[data-screen-label="Help"] .help-search-panel',title:'Replay this walkthrough anytime',body:'Search Help for detailed answers, then open the walkthrough article and choose Replay walkthrough whenever you need a refresher.'},
   ]}
   tourCssTimeList(value){return String(value||'').split(',').map(part=>{const text=part.trim();if(!text)return 0;const n=parseFloat(text);if(!Number.isFinite(n))return 0;return text.endsWith('ms')?n:n*1000})}
   tourAnimationWaitMs(style){
