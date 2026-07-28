@@ -8,7 +8,7 @@
 
 ![Platform](https://img.shields.io/badge/platform-macOS%20%7C%20Windows-0B0E13?style=for-the-badge)
 ![Electron](https://img.shields.io/badge/Electron-31-3DDC97?style=for-the-badge&logo=electron&logoColor=0B0E13)
-![Tests](https://img.shields.io/badge/tests-231%20passing-3DDC97?style=for-the-badge)
+![Tests](https://img.shields.io/badge/tests-232%20passing-3DDC97?style=for-the-badge)
 ![License](https://img.shields.io/badge/license-MIT-3DDC97?style=for-the-badge)
 
 </div>
@@ -157,7 +157,7 @@ Logic suite — runs straight from the repo, no install needed:
 node --test test/written.logic.test.cjs
 ```
 
-198 tests. Loads the app's `x-dc` logic block into a Node `vm`, so it covers state, migrations
+199 tests. Loads the app's `x-dc` logic block into a Node `vm`, so it covers state, migrations
 and view-model shape — but no DOM, CSS or geometry.
 
 End-to-end smoke suite — drives the *built* renderer over `file://` in Chromium, which is the

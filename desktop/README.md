@@ -249,7 +249,7 @@ file still works anywhere.
 | **Data survives a full app restart** (fresh process read it back) | ✅ |
 | Wrapping never alters the app's logic block (sha256, enforced by the build script) | ✅ |
 | In-app Settings → Performance renders, applies, and stays in sync with the menu | ✅ verified both directions |
-| Logic suite `node --test test/written.logic.test.cjs` | ✅ 198/198 pass |
+| Logic suite `node --test test/written.logic.test.cjs` | ✅ 199/199 pass |
 | Render smoke suite `npm run test:smoke` (built renderer, Chromium over `file://`) | ✅ 33/33 pass |
 | Wrapper files present inside the packaged `app.asar` | ✅ |
 | **Packaged `.app` boots and writes its own store on first run** | ✅ wrote a valid `{"version":2,…}` profile store |
