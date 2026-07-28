@@ -39,6 +39,7 @@ input,select,textarea,button{font-family:inherit}
 input::placeholder,textarea::placeholder{color:var(--tx-ghost)}
 input:focus,select:focus,textarea:focus{outline:none;border-color:var(--bd3)!important}
 button:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-visible,[tabindex]:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.native-symbol{font-family:'Apple Color Emoji','Segoe UI Emoji','Segoe UI Symbol',system-ui,sans-serif;font-style:normal;font-variant:normal;line-height:1}.native-emoji{font-family:'Apple Color Emoji','Segoe UI Emoji','Segoe UI Symbol',system-ui,sans-serif;font-style:normal;font-variant:normal;line-height:1}
 .insights-full{grid-column:1/-1}
 .section-header{display:flex;align-items:center;gap:14px;min-height:48px;margin-bottom:26px;flex-wrap:wrap;animation:rise .4s ease both}
 .risk-setting-field{display:flex;flex-direction:column}.risk-setting-help{flex:1}
@@ -58,8 +59,12 @@ button:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-vis
 .annotation-stage-wrap{min-height:0;flex:1;display:flex;align-items:center;justify-content:center;overflow:hidden}
 .color-picker-sv,.color-picker-hue{border:1px solid var(--bd3);box-sizing:border-box}
 .help-faq{display:flex;flex-direction:column;gap:18px;max-width:1000px;animation:page-enter .4s ease both}
-.help-search-panel{border-radius:16px;padding:20px 22px}.help-search-panel label{display:block;font-size:15px;font-weight:700}.help-search-row{display:flex;gap:9px;margin-top:12px}.help-search-row input{flex:1;min-width:0;background:var(--input);border:1px solid var(--bd2);border-radius:10px;color:var(--tx);font-size:13px;padding:10px 12px}.help-search-row button,.help-empty button{border:1px solid var(--bd2);background:var(--chip);color:var(--tx-dim);border-radius:10px;padding:9px 13px;font-size:12px;font-weight:700;cursor:pointer}.help-search-row button:disabled{color:var(--tx-ghost);cursor:default}.help-result-status{font-size:11px;color:var(--tx-faint);margin-top:8px}.help-category h2{font-size:12px;letter-spacing:.9px;color:var(--tx-dim);margin:0 0 8px}.help-accordion{border-radius:16px;overflow:hidden}.help-item+.help-item{border-top:1px solid var(--grid)}.help-item h3{margin:0}.help-question{width:100%;min-height:48px;display:flex;align-items:center;justify-content:space-between;gap:14px;border:0;background:transparent;color:var(--tx);padding:13px 18px;text-align:left;font-size:13px;font-weight:700;cursor:pointer}.help-question:hover{background:var(--chip2)}.help-caret{flex:none;color:var(--tx-faint);transition:transform .18s ease}.help-answer{padding:10px 18px 18px;color:var(--tx-mid);font-size:12.5px;line-height:1.65}.help-answer[hidden]{display:none}.help-answer p{margin:0}.help-answer p+p,.help-answer p+.help-steps,.help-steps+p{margin-top:10px}.help-steps{margin:0;padding-left:24px}.help-steps li+li{margin-top:8px}.help-answer-action{margin-top:14px;border:1px solid var(--accent);background:var(--accent-soft);color:var(--accent);font-size:12.5px;font-weight:700;padding:10px 15px;border-radius:10px;cursor:pointer}.help-empty{border-radius:16px;padding:24px;text-align:center;color:var(--tx-dim);font-size:12.5px}.help-empty button{margin-top:12px}
-@media(max-width:760px){.app-main{padding:20px 12px 56px!important}.app-titlebar{grid-template-columns:52px minmax(0,1fr) 52px;padding:0 10px}.titlebar-status span:not(.local-status-dot){display:none}.insights-grid{grid-template-columns:1fr!important}.help-faq{gap:14px}.help-search-panel{padding:16px}.help-search-row{align-items:stretch}.help-question{min-height:44px;padding:12px 14px}.help-answer{padding:9px 14px 16px}.help-question span{min-width:0;white-space:normal}.insights-full{grid-column:1}.time-edge-row{grid-template-areas:"label count net" "bar bar win";grid-template-columns:52px 1fr auto!important}.time-edge-label{grid-area:label}.time-edge-bar{grid-area:bar}.time-edge-count{grid-area:count}.time-edge-net{grid-area:net}.time-edge-win{grid-area:win}.journal-drawer{width:100%!important;max-width:none!important;padding:18px 14px 28px!important}.trade-detail-grid{grid-template-columns:repeat(2,minmax(0,1fr))!important}.annotation-overlay{padding:10px}.annotation-dialog{width:calc(100vw - 20px);max-height:calc(100vh - 64px);border-radius:14px;padding:10px}.annotation-toolbar{align-items:stretch!important}.annotation-actions{width:100%;flex-wrap:wrap}.plan-fields{grid-template-columns:1fr!important}.plan-score-head,.risk-guide-head{flex-wrap:wrap}.risk-settings-grid{grid-template-columns:1fr!important}.risk-guide-grid{grid-template-columns:repeat(2,minmax(0,1fr))!important}}
+.help-search-panel{border-radius:16px;padding:20px 22px}.help-search-panel label{display:block;font-size:15px;font-weight:700}.help-search-row{display:flex;gap:9px;margin-top:12px}.help-search-row input{flex:1;min-width:0;background:var(--input);border:1px solid var(--bd2);border-radius:10px;color:var(--tx);font-size:13px;padding:10px 12px}.help-search-row button,.help-empty button{border:1px solid var(--bd2);background:var(--chip);color:var(--tx-dim);border-radius:10px;padding:9px 13px;font-size:12px;font-weight:700;cursor:pointer}.help-search-row button:disabled{color:var(--tx-ghost);cursor:default}.help-result-status{font-size:11px;color:var(--tx-faint);margin-top:8px}
+.help-category{border-radius:16px;overflow:hidden}.help-category h2{margin:0}.help-category-toggle{width:100%;min-height:58px;display:flex;align-items:center;justify-content:space-between;gap:14px;border:0;background:transparent;color:var(--tx);padding:16px 20px;text-align:left;font-size:14px;font-weight:750;cursor:pointer;transition:background .16s ease,color .16s ease}.help-category-toggle:hover{background:var(--chip2);color:var(--accent)}.help-category-toggle:focus-visible,.help-route-node:focus-visible,.help-article-close:focus-visible{outline:2px solid var(--accent);outline-offset:-3px}.help-caret{flex:none;color:var(--tx-faint);transition:transform .18s ease}
+.help-category-panel{display:grid;grid-template-rows:0fr;opacity:0;transform:translateY(-6px);transition:grid-template-rows .26s cubic-bezier(.2,.8,.2,1),opacity .2s ease,transform .26s cubic-bezier(.2,.8,.2,1)}.help-category-panel[data-open="true"]{grid-template-rows:1fr;opacity:1;transform:none}.help-category-panel-inner{min-height:0;overflow:hidden}
+.help-route{position:relative;min-height:250px;margin:0 20px 20px}.help-route-svg{position:absolute;inset:0;width:100%;height:100%;overflow:visible;pointer-events:none}.help-route-svg path{fill:none;stroke:var(--bd3);stroke-width:3;stroke-linecap:round;stroke-dasharray:4 10;transition:stroke .18s ease,filter .18s ease}.help-route:has(.help-route-node:hover) .help-route-svg path,.help-route:has(.help-route-node:focus-visible) .help-route-svg path{stroke:var(--accent);filter:drop-shadow(0 0 5px var(--accent-soft))}.help-route-node{position:absolute;transform:translate(-50%,-50%);width:min(190px,22%);border:0;background:transparent;color:var(--tx);padding:0;cursor:pointer;text-align:center;transition:transform .16s cubic-bezier(.2,.8,.2,1),filter .16s ease,color .16s ease}.help-route-node:hover,.help-route-node:focus-visible{transform:translate(-50%,-56%) scale(1.035);color:var(--accent);filter:drop-shadow(0 10px 16px var(--sh))}.help-route-number{width:42px;height:42px;margin:0 auto 9px;border:2px solid currentColor;border-radius:50%;display:grid;place-items:center;background:var(--surface-strong);font-size:15px;font-weight:800;box-shadow:0 0 0 5px var(--accent-soft)}.help-route-label{display:block;font-size:12px;font-weight:700;line-height:1.4}.help-route-svg-mobile{display:none}
+.help-article-backdrop{position:fixed;inset:var(--titlebar-offset) 0 0;z-index:125;display:grid;place-items:center;padding:20px;background:var(--ovl);backdrop-filter:blur(7px);visibility:hidden;opacity:0;pointer-events:none;transition:visibility 0s linear .2s,opacity .2s ease}.help-article-backdrop[data-open="true"]{visibility:visible;opacity:1;pointer-events:auto;transition-delay:0s}.help-article-dialog{width:min(680px,calc(100vw - 32px));max-height:min(720px,calc(100vh - var(--titlebar-offset) - 40px));overflow:auto;border-radius:18px;box-shadow:0 30px 90px var(--sh);transform:translateY(10px) scale(.975);opacity:0;transition:transform .2s cubic-bezier(.2,.8,.2,1),opacity .18s ease}.help-article-backdrop[data-open="true"] .help-article-dialog{transform:none;opacity:1}.help-article-header{position:sticky;top:0;display:flex;align-items:center;justify-content:space-between;gap:18px;padding:20px 22px;border-bottom:1px solid var(--bd);background:var(--surface-strong);z-index:1}.help-article-header h2{margin:0;font-size:17px}.help-article-close{width:34px;height:34px;flex:none;border:1px solid var(--bd2);border-radius:10px;background:var(--chip);color:var(--tx-dim);cursor:pointer}.help-article-content{padding:20px 22px 24px;color:var(--tx-mid);font-size:12.5px;line-height:1.7}.help-article-content p{margin:0}.help-article-content p+p,.help-article-content p+.help-steps,.help-steps+p{margin-top:10px}.help-steps{margin:0;padding-left:24px}.help-steps li+li{margin-top:8px}.help-answer-action{margin-top:14px;border:1px solid var(--accent);background:var(--accent-soft);color:var(--accent);font-size:12.5px;font-weight:700;padding:10px 15px;border-radius:10px;cursor:pointer}.help-empty{border-radius:16px;padding:24px;text-align:center;color:var(--tx-dim);font-size:12.5px}.help-empty button{margin-top:12px}body:has(.help-article-backdrop[data-open="true"]){overflow:hidden}
+@media(max-width:760px){.app-main{padding:20px 12px 56px!important}.app-titlebar{grid-template-columns:52px minmax(0,1fr) 52px;padding:0 10px}.titlebar-status span:not(.local-status-dot){display:none}.insights-grid{grid-template-columns:1fr!important}.help-faq{gap:14px}.help-search-panel{padding:16px}.help-search-row{align-items:stretch}.help-route{min-height:0;margin:0 14px 18px;padding:14px 0}.help-route-svg-wide{display:none}.help-route-svg-mobile{display:block;left:0;width:72px;height:100%}.help-route-node{position:relative;left:auto!important;top:auto!important;transform:none;width:100%;min-height:76px;display:grid;grid-template-columns:54px minmax(0,1fr);align-items:center;text-align:left}.help-route-node:hover,.help-route-node:focus-visible{transform:translateX(4px)}.help-route-number{margin:0}.insights-full{grid-column:1}.time-edge-row{grid-template-areas:"label count net" "bar bar win";grid-template-columns:52px 1fr auto!important}.time-edge-label{grid-area:label}.time-edge-bar{grid-area:bar}.time-edge-count{grid-area:count}.time-edge-net{grid-area:net}.time-edge-win{grid-area:win}.journal-drawer{width:100%!important;max-width:none!important;padding:18px 14px 28px!important}.trade-detail-grid{grid-template-columns:repeat(2,minmax(0,1fr))!important}.annotation-overlay{padding:10px}.annotation-dialog{width:calc(100vw - 20px);max-height:calc(100vh - 64px);border-radius:14px;padding:10px}.annotation-toolbar{align-items:stretch!important}.annotation-actions{width:100%;flex-wrap:wrap}.plan-fields{grid-template-columns:1fr!important}.plan-score-head,.risk-guide-head{flex-wrap:wrap}.risk-settings-grid{grid-template-columns:1fr!important}.risk-guide-grid{grid-template-columns:repeat(2,minmax(0,1fr))!important}}
 html{--accent:#3DDC97;scrollbar-gutter:stable;scrollbar-color:var(--accent) transparent;scrollbar-width:thin}
 ::-webkit-scrollbar{width:12px;height:12px}::-webkit-scrollbar-thumb{background:var(--accent);border:3px solid transparent;background-clip:padding-box;border-radius:999px}::-webkit-scrollbar-thumb:hover{background:var(--accent);background-clip:padding-box}::-webkit-scrollbar-track{background:transparent}
 @keyframes rise{0%{opacity:0;transform:translateY(20px) scale(.97)}70%{opacity:1}100%{opacity:1;transform:none}}
@@ -103,7 +108,7 @@ html{--accent:#3DDC97;scrollbar-gutter:stable;scrollbar-color:var(--accent) tran
 .range-control:focus-within .range-thumb,.range-control:hover .range-thumb{box-shadow:0 0 0 4px var(--accent-soft),0 0 20px var(--accent-glow)}
 .trade-card{border:1px solid var(--bd);background:var(--chip);border-radius:13px;padding:11px}
 .trade-card.trade-enter{animation:trade-enter .36s cubic-bezier(.2,.8,.2,1) both}
-@media (prefers-reduced-motion: reduce){*,*::before,*::after{animation-duration:.01ms!important;animation-iteration-count:1!important;scroll-behavior:auto!important;transition-duration:.01ms!important}.tour-spotlight.is-actionable{animation:none!important;border-width:3px}}
+@media (prefers-reduced-motion:reduce){.help-category-panel,.help-route-node,.help-route-svg path,.help-article-backdrop,.help-article-dialog,.help-caret{transition-duration:.01ms!important}.help-route-node,.help-route-node:hover,.help-route-node:focus-visible,.help-article-dialog,.help-article-backdrop[data-open="true"] .help-article-dialog{transform:none!important}*,*::before,*::after{animation-duration:.01ms!important;animation-iteration-count:1!important;scroll-behavior:auto!important;transition-duration:.01ms!important}.tour-spotlight.is-actionable{animation:none!important;border-width:3px}}
 .calendar-scroll{min-height:0;overflow:auto;overscroll-behavior:contain}
 .calendar-grid{min-width:760px;display:flex;flex-direction:column;min-height:100%}
 .calendar-weeks{display:flex;flex-direction:column;gap:9px;margin-top:2px;padding:7px 3px 3px;flex:1;min-height:0;overflow:auto;overscroll-behavior:contain}
@@ -129,7 +134,7 @@ html{--accent:#3DDC97;scrollbar-gutter:stable;scrollbar-color:var(--accent) tran
 @container widget (max-width:360px){.widget-secondary{display:none}.score-components{margin-top:4px}.widget-toolbar{flex-wrap:wrap}}
 </style>
 </helmet>
-<div style="display:flex;flex-direction:column;min-height:100vh;font-family:'Manrope',system-ui,sans-serif;color:var(--tx);background:linear-gradient(160deg,var(--card-b) 0%,var(--bg) 46%,var(--panel-b) 100%);--surface-bg:{{surfaceBg}};--surface-bg-strong:{{surfaceBgStrong}};--surface-fx:{{surfaceFx}};--surface-fx-strong:{{surfaceFxStrong}};--accent:{{accent}};--accent-ink:{{accentInk}};--on-acc:{{accentInk}};--accent-glow:{{accentGlow}};--accent-soft:{{accentSoft}};--titlebar-offset:{{titlebarOffset}}">
+<div style="display:flex;flex-direction:column;min-height:100vh;font-family:'Manrope',system-ui,sans-serif;color:var(--tx);background:linear-gradient(160deg,var(--card-b) 0%,var(--bg) 46%,var(--panel-b) 100%);--surface-bg:{{surfaceBg}};--surface-bg-strong:{{surfaceBgStrong}};--surface-strong:{{surfaceBgStrong}};--surface-fx:{{surfaceFx}};--surface-fx-strong:{{surfaceFxStrong}};--accent:{{accent}};--accent-ink:{{accentInk}};--on-acc:{{accentInk}};--accent-glow:{{accentGlow}};--accent-soft:{{accentSoft}};--titlebar-offset:{{titlebarOffset}}">
   <div class="bg-aurora {{glowOffClass}}" style="position:fixed;inset:-25%;pointer-events:none;z-index:0;overflow:hidden">
     <div style="position:absolute;top:0;left:0;width:70%;height:75%;border-radius:50%;filter:blur(30px);opacity:{{auroraOp}};background:radial-gradient(circle at 30% 30%,{{glowA}},transparent 66%);animation:aurora 28s ease-in-out infinite,glowpulse 9s ease-in-out infinite"></div>
     <div style="position:absolute;top:-10%;right:-5%;width:65%;height:70%;border-radius:50%;filter:blur(30px);opacity:{{auroraOp}};background:radial-gradient(circle at 60% 40%,{{glowC}},transparent 64%);animation:auroraB 34s ease-in-out infinite,glowpulse 11s ease-in-out infinite"></div>
@@ -143,7 +148,7 @@ html{--accent:#3DDC97;scrollbar-gutter:stable;scrollbar-color:var(--accent) tran
       <button class="global-search-trigger" onClick="{{openSearch}}" aria-label="Search this journal" aria-haspopup="dialog" aria-expanded="{{searchOpen}}">
         <svg class="search-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="11" cy="11" r="7"></circle><path d="m20 20-3.5-3.5"></path></svg>
         <span class="search-placeholder">Search journal, actions, or pages</span>
-        <kbd>{{searchHint}}</kbd>
+        <kbd class="native-symbol">{{searchHint}}</kbd>
       </button>
     </div>
     <div class="titlebar-status"><span class="local-status-dot"></span><span class="sidebar-section" style="font-size:9px;letter-spacing:1px;color:var(--tx-faint)">LOCAL</span><span>{{appVersion}}</span></div>
@@ -277,7 +282,7 @@ html{--accent:#3DDC97;scrollbar-gutter:stable;scrollbar-color:var(--accent) tran
                 <sc-if value="{{w.editing}}" hint-placeholder-val="{{false}}">
                   <button type="button" aria-label="Move widget" title="Move widget" style="position:absolute;top:8px;left:8px;z-index:6;display:flex;align-items:center;gap:5px;font-family:'Manrope',system-ui,sans-serif;font-size:9px;letter-spacing:1px;color:var(--tx-ghost);background:var(--panel-a);border:1px solid var(--bd2);border-radius:7px;padding:3px 8px;cursor:grab"><svg width="10" height="10" viewBox="0 0 24 24" fill="currentColor"><circle cx="8" cy="6" r="1.6"></circle><circle cx="8" cy="12" r="1.6"></circle><circle cx="8" cy="18" r="1.6"></circle><circle cx="16" cy="6" r="1.6"></circle><circle cx="16" cy="12" r="1.6"></circle><circle cx="16" cy="18" r="1.6"></circle></svg></button>
                   <div style="position:absolute;top:8px;right:8px;z-index:6;display:flex;gap:5px">
-                    <button onClick="{{w.remove}}" title="Remove" style="width:24px;height:24px;border-radius:7px;border:1px solid rgba(255,92,122,.4);background:var(--panel-a);color:var(--red);font-size:11px;cursor:pointer;display:flex;align-items:center;justify-content:center;padding:0" style-hover="background:rgba(255,92,122,.12)">✕</button>
+                    <button class="native-symbol" onClick="{{w.remove}}" title="Remove" style="width:24px;height:24px;border-radius:7px;border:1px solid rgba(255,92,122,.4);background:var(--panel-a);color:var(--red);font-size:11px;cursor:pointer;display:flex;align-items:center;justify-content:center;padding:0" style-hover="background:rgba(255,92,122,.12)">✕</button>
                   </div>
                   <div class="widget-resize widget-resize-right" role="separator" tabIndex="0" aria-orientation="vertical" aria-label="Resize width" data-resize-edge="right" onPointerDown="{{w.resizeRight}}" onKeyDown="{{w.resizeRightKey}}"></div>
                   <div class="widget-resize widget-resize-bottom" role="separator" tabIndex="0" aria-orientation="horizontal" aria-label="Resize height" data-resize-edge="bottom" onPointerDown="{{w.resizeBottom}}" onKeyDown="{{w.resizeBottomKey}}"></div>
@@ -450,7 +455,7 @@ html{--accent:#3DDC97;scrollbar-gutter:stable;scrollbar-color:var(--accent) tran
                     <div style="height:5px;border-radius:3px;background:var(--chip2);overflow:hidden;margin-top:11px"><div style="height:100%;border-radius:3px;width:{{checklistPct}};background:{{accent}};box-shadow:0 0 10px {{acc44}};transition:width .5s ease"></div></div>
                     <div style="display:flex;flex-direction:column;gap:9px;margin-top:14px">
                       <sc-for list="{{checklistItems}}" as="ck" hint-placeholder-count="7">
-                        <button onClick="{{ck.tog}}" style="display:flex;align-items:center;gap:11px;border:none;background:transparent;cursor:pointer;padding:2px;text-align:left"><span style="width:19px;height:19px;flex:none;border-radius:6px;border:1.5px solid {{ck.bd}};background:{{ck.bg}};color:var(--on-acc);font-size:11px;font-weight:700;display:flex;align-items:center;justify-content:center;transition:all .15s">{{ck.mark}}</span><span style="font-size:12.5px;color:{{ck.fg}}">{{ck.label}}</span></button>
+                        <button onClick="{{ck.tog}}" style="display:flex;align-items:center;gap:11px;border:none;background:transparent;cursor:pointer;padding:2px;text-align:left"><span class="native-symbol" style="width:19px;height:19px;flex:none;border-radius:6px;border:1.5px solid {{ck.bd}};background:{{ck.bg}};color:var(--on-acc);font-size:11px;font-weight:700;display:flex;align-items:center;justify-content:center;transition:all .15s">{{ck.mark}}</span><span style="font-size:12.5px;color:{{ck.fg}}">{{ck.label}}</span></button>
                       </sc-for>
                     </div>
                   </div>
@@ -508,7 +513,7 @@ html{--accent:#3DDC97;scrollbar-gutter:stable;scrollbar-color:var(--accent) tran
                       <div class="calendar-cell" onClick="{{d.open}}" style="overflow:hidden;border-radius:13px;border:1px solid {{d.bd}};background:{{d.bg}};padding:9px 11px;cursor:{{d.cur}};opacity:{{d.op}};transition:transform .18s,border-color .18s,box-shadow .18s;display:flex;flex-direction:column;min-width:0" style-hover="transform:translateY(-2px);border-color:var(--bd3);box-shadow:0 10px 24px var(--sh2)">
                         <div style="display:flex;align-items:center;justify-content:space-between">
                           <span style="font-family:'Manrope',system-ui,sans-serif;font-size:11px;color:{{d.numCol}}">{{d.n}}</span>
-                          <span style="font-size:16px;line-height:1">{{d.emoji}}</span>
+                          <span class="native-emoji" style="font-size:16px;line-height:1">{{d.emoji}}</span>
                         </div>
                         <div style="flex:1;display:flex;align-items:center;justify-content:center;font-family:'Manrope',system-ui,sans-serif;font-weight:600;font-size:15px;color:{{d.col}};text-shadow:{{d.glow}}">{{d.pnlS}}</div>
                         <div style="font-size:10.5px;color:var(--tx-faint);text-align:center;min-height:13px">{{d.sub}}</div>
@@ -581,7 +586,7 @@ html{--accent:#3DDC97;scrollbar-gutter:stable;scrollbar-color:var(--accent) tran
                   </div>
                 </sc-if>
                 <div style="display:flex;align-items:center;gap:8px;padding:11px 13px">
-                  <span style="font-size:15px;line-height:1">{{ph.emoji}}</span>
+                  <span class="native-emoji" style="font-size:15px;line-height:1">{{ph.emoji}}</span>
                   <span style="font-size:12px;color:var(--tx-dim)">{{ph.date}}</span>
                   <span style="font-family:'Manrope',system-ui,sans-serif;font-size:12px;font-weight:600;color:{{ph.col}}">{{ph.pnlS}}</span>
                   <div style="flex:1"></div>
@@ -622,7 +627,7 @@ html{--accent:#3DDC97;scrollbar-gutter:stable;scrollbar-color:var(--accent) tran
             <div style="display:flex;flex-direction:column;gap:12px;margin-top:16px">
               <sc-for list="{{byEmoji}}" as="e" hint-placeholder-count="5">
                 <div style="display:grid;grid-template-columns:34px 1fr 148px;gap:10px;align-items:center">
-                  <span style="font-size:19px;line-height:1">{{e.ch}}</span>
+                  <span class="native-emoji" style="font-size:19px;line-height:1">{{e.ch}}</span>
                   <div style="height:9px;border-radius:5px;background:var(--chip2);overflow:hidden"><div style="width:{{e.w}};height:100%;border-radius:5px;background:{{e.col}};box-shadow:0 0 10px {{e.col}};transition:width .5s ease"></div></div>
                   <div style="text-align:right"><span style="font-family:'Manrope',system-ui,sans-serif;font-size:12px;font-weight:600;color:{{e.col}}">{{e.valS}}</span> <span style="font-size:10.5px;color:var(--tx-faint)">{{e.cnt}}</span></div>
                 </div>
@@ -865,14 +870,14 @@ html{--accent:#3DDC97;scrollbar-gutter:stable;scrollbar-color:var(--accent) tran
             <div style="display:flex;align-items:flex-end;gap:5px;height:150px;margin-top:12px;overflow-x:auto;padding-bottom:4px">
               <sc-for list="{{emoTimeline}}" as="e" hint-placeholder-count="20">
                 <div style="flex:1;min-width:16px;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;height:100%">
-                  <div style="font-size:14px;margin-bottom:4px">{{e.ch}}</div>
+                  <div class="native-emoji" style="font-size:14px;margin-bottom:4px">{{e.ch}}</div>
                   <div style="width:70%;height:{{e.barH}}px;background:{{e.col}};border-radius:3px;transition:height .4s ease"></div>
                 </div>
               </sc-for>
             </div>
             <div style="display:flex;flex-wrap:wrap;gap:9px;margin-top:16px">
               <sc-for list="{{emoAgg}}" as="e" hint-placeholder-count="5">
-                <div style="display:flex;align-items:center;gap:8px;border:1px solid var(--bd);background:var(--chip);border-radius:999px;padding:6px 13px"><span style="font-size:16px">{{e.ch}}</span><span style="font-family:'Manrope',system-ui,sans-serif;font-size:12px;font-weight:600;color:{{e.col}}">{{e.avgS}}</span></div>
+                <div style="display:flex;align-items:center;gap:8px;border:1px solid var(--bd);background:var(--chip);border-radius:999px;padding:6px 13px"><span class="native-emoji" style="font-size:16px">{{e.ch}}</span><span style="font-family:'Manrope',system-ui,sans-serif;font-size:12px;font-weight:600;color:{{e.col}}">{{e.avgS}}</span></div>
               </sc-for>
             </div>
             </sc-if>
@@ -1057,17 +1062,15 @@ html{--accent:#3DDC97;scrollbar-gutter:stable;scrollbar-color:var(--accent) tran
                 </sc-for>
               </div>
             </div>
-            <sc-if value="{{perfAvailable}}" hint-placeholder-val="{{true}}">
-              <div style="padding:16px 0 18px;border-bottom:1px solid var(--grid)">
-                <div style="font-size:13px;font-weight:600">Performance</div>
-                <div style="font-size:11.5px;color:var(--tx-faint);margin-top:2px">{{perfHint}}</div>
-                <div style="display:flex;gap:6px;margin-top:10px;flex-wrap:wrap">
-                  <sc-for list="{{perfOpts}}" as="pf" hint-placeholder-count="3">
-                    <button onClick="{{pf.set}}" style="border:1px solid {{pf.bd}};background:{{pf.bg}};color:{{pf.fg}};font-size:12px;font-weight:600;padding:8px 15px;border-radius:9px;cursor:pointer;transition:all .15s">{{pf.label}}</button>
-                  </sc-for>
-                </div>
+            <div style="padding:16px 0 18px;border-bottom:1px solid var(--grid)">
+              <div style="font-size:13px;font-weight:600">Performance</div>
+              <div style="font-size:11.5px;color:var(--tx-faint);margin-top:2px">{{perfHint}}</div>
+              <div style="display:flex;gap:6px;margin-top:10px;flex-wrap:wrap">
+                <sc-for list="{{perfOpts}}" as="pf" hint-placeholder-count="3">
+                  <button onClick="{{pf.set}}" style="border:1px solid {{pf.bd}};background:{{pf.bg}};color:{{pf.fg}};font-size:12px;font-weight:600;padding:8px 15px;border-radius:9px;cursor:pointer;transition:all .15s">{{pf.label}}</button>
+                </sc-for>
               </div>
-            </sc-if>
+            </div>
             <div style="padding:16px 0 4px">
               <div style="font-size:13px;font-weight:600">Default P&amp;L view</div>
               <div style="font-size:11.5px;color:var(--tx-faint);margin-top:2px">what the dashboard graph opens with</div>
@@ -1101,7 +1104,7 @@ html{--accent:#3DDC97;scrollbar-gutter:stable;scrollbar-color:var(--accent) tran
                 <sc-for list="{{tagList}}" as="tg" hint-placeholder-count="6">
                   <span style="display:inline-flex;align-items:center;gap:7px;border:1px solid var(--bd2);background:var(--chip);color:var(--tx-mid);font-size:11.5px;font-weight:600;padding:6px 8px 6px 12px;border-radius:999px">
                     {{tg.name}}
-                    <button onClick="{{tg.del}}" title="Remove tag" style="border:none;background:var(--chip2);color:var(--tx-dim);width:16px;height:16px;border-radius:50%;font-size:9px;cursor:pointer;line-height:16px;padding:0;transition:all .15s" style-hover="background:rgba(255,92,122,.25);color:var(--red)">✕</button>
+                    <button class="native-symbol" onClick="{{tg.del}}" title="Remove tag" style="border:none;background:var(--chip2);color:var(--tx-dim);width:16px;height:16px;border-radius:50%;font-size:9px;cursor:pointer;line-height:16px;padding:0;transition:all .15s" style-hover="background:rgba(255,92,122,.25);color:var(--red)">✕</button>
                   </span>
                 </sc-for>
               </div>
@@ -1117,7 +1120,7 @@ html{--accent:#3DDC97;scrollbar-gutter:stable;scrollbar-color:var(--accent) tran
                 <sc-for list="{{mistList}}" as="ml" hint-placeholder-count="8">
                   <span style="display:inline-flex;align-items:center;gap:7px;border:1px solid var(--bd2);background:var(--chip);color:var(--tx-mid);font-size:11.5px;font-weight:600;padding:6px 8px 6px 12px;border-radius:999px">
                     {{ml.name}}
-                    <button onClick="{{ml.del}}" title="Remove" style="border:none;background:var(--chip2);color:var(--tx-dim);width:16px;height:16px;border-radius:50%;font-size:9px;cursor:pointer;line-height:16px;padding:0;transition:all .15s" style-hover="background:rgba(255,92,122,.25);color:var(--red)">✕</button>
+                    <button class="native-symbol" onClick="{{ml.del}}" title="Remove" style="border:none;background:var(--chip2);color:var(--tx-dim);width:16px;height:16px;border-radius:50%;font-size:9px;cursor:pointer;line-height:16px;padding:0;transition:all .15s" style-hover="background:rgba(255,92,122,.25);color:var(--red)">✕</button>
                   </span>
                 </sc-for>
               </div>
@@ -1145,7 +1148,7 @@ html{--accent:#3DDC97;scrollbar-gutter:stable;scrollbar-color:var(--accent) tran
               <div style="font-size:11.5px;color:var(--tx-faint);margin-top:4px">saved from the day editor for repeatable setups</div>
               <div class="quick-presets-list" style="display:flex;flex-wrap:wrap;gap:7px;margin-top:11px;align-items:center;min-height:25px">
                 <sc-for list="{{quickPresetChips}}" as="qp" hint-placeholder-count="0">
-                  <span style="display:inline-flex;align-items:center;gap:8px;border:1px solid var(--bd2);background:var(--chip);border-radius:999px;padding:6px 7px 6px 11px"><span><span style="font-family:'Manrope',system-ui,sans-serif;font-size:10px;font-weight:700;color:var(--tx-mid)">{{qp.name}}</span><span style="font-family:'Manrope',system-ui,sans-serif;font-size:8.5px;color:var(--tx-faint);margin-left:6px">{{qp.meta}}</span></span><button onClick="{{qp.del}}" title="Remove preset" style="border:none;background:var(--chip2);color:var(--tx-dim);width:17px;height:17px;border-radius:50%;font-size:9px;cursor:pointer;line-height:17px;padding:0">✕</button></span>
+                  <span style="display:inline-flex;align-items:center;gap:8px;border:1px solid var(--bd2);background:var(--chip);border-radius:999px;padding:6px 7px 6px 11px"><span><span style="font-family:'Manrope',system-ui,sans-serif;font-size:10px;font-weight:700;color:var(--tx-mid)">{{qp.name}}</span><span style="font-family:'Manrope',system-ui,sans-serif;font-size:8.5px;color:var(--tx-faint);margin-left:6px">{{qp.meta}}</span></span><button class="native-symbol" onClick="{{qp.del}}" title="Remove preset" style="border:none;background:var(--chip2);color:var(--tx-dim);width:17px;height:17px;border-radius:50%;font-size:9px;cursor:pointer;line-height:17px;padding:0">✕</button></span>
                 </sc-for>
                 <sc-if value="{{quickPresetsEmpty}}" hint-placeholder-val="{{true}}"><span style="font-size:11.5px;color:var(--tx-ghost);padding:4px 0">No presets yet. Save one from a journal day.</span></sc-if>
               </div>
@@ -1184,39 +1187,55 @@ html{--accent:#3DDC97;scrollbar-gutter:stable;scrollbar-color:var(--accent) tran
           </div>
 
           <sc-for list="{{helpGroups}}" as="category" hint-placeholder-count="6">
-            <section class="help-category" aria-labelledby="{{category.categoryId}}">
-              <h2 id="{{category.categoryId}}">{{category.label}}</h2>
-              <div class="help-accordion glass-surface">
-                <sc-for list="{{category.questions}}" as="faq" hint-placeholder-count="4">
-                  <div class="help-item">
-                    <h3>
-                      <button id="{{faq.questionId}}" class="help-question" onClick="{{faq.toggle}}" aria-expanded="{{faq.expanded}}" aria-controls="{{faq.answerId}}">
-                        <span>{{faq.question}}</span>
-                        <svg class="help-caret" aria-hidden="true" width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" style="transform:{{faq.caretTransform}}"><path d="M4 6.5 8 10.5 12 6.5"></path></svg>
+            <section class="help-category glass-surface">
+              <h2>
+                <button id="{{category.buttonId}}" class="help-category-toggle" onClick="{{category.toggle}}" aria-expanded="{{category.open}}" aria-controls="{{category.panelId}}">
+                  <span>{{category.label}}</span>
+                  <svg class="help-caret" aria-hidden="true" width="18" height="18" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" style="transform:{{category.caretTransform}}"><path d="M4 6.5 8 10.5 12 6.5"></path></svg>
+                </button>
+              </h2>
+              <div id="{{category.panelId}}" class="help-category-panel" data-open="{{category.open}}" aria-labelledby="{{category.buttonId}}" aria-hidden="{{category.collapsed}}" inert="{{category.collapsed}}">
+                <div class="help-category-panel-inner">
+                  <div class="help-route">
+                    <svg class="help-route-svg help-route-svg-wide" aria-hidden="true" viewBox="{{category.routeViewBox}}" preserveAspectRatio="none"><path d="{{category.routePath}}"></path></svg>
+                    <svg class="help-route-svg help-route-svg-mobile" aria-hidden="true" viewBox="{{category.mobileRouteViewBox}}" preserveAspectRatio="none"><path d="{{category.mobileRoutePath}}"></path></svg>
+                    <sc-for list="{{category.questions}}" as="faq" hint-placeholder-count="4">
+                      <button class="help-route-node" style="left:{{faq.left}};top:{{faq.top}}" onClick="{{faq.open}}" aria-haspopup="dialog">
+                        <span class="help-route-number native-symbol" aria-hidden="true">{{faq.number}}</span>
+                        <span class="help-route-label">{{faq.question}}</span>
                       </button>
-                    </h3>
-                    <div id="{{faq.answerId}}" class="help-answer" hidden="{{faq.hidden}}" role="region" aria-labelledby="{{faq.questionId}}">
-                      <sc-for list="{{faq.blocks}}" as="block" hint-placeholder-count="2">
-                        <sc-if value="{{block.isPara}}" hint-placeholder-val="{{true}}">
-                          <p><sc-for list="{{block.runs}}" as="run" hint-placeholder-count="3"><sc-if value="{{run.strong}}" hint-placeholder-val="{{false}}"><strong>{{run.text}}</strong></sc-if><sc-if value="{{run.plain}}" hint-placeholder-val="{{true}}"><span>{{run.text}}</span></sc-if></sc-for></p>
-                        </sc-if>
-                        <sc-if value="{{block.isSteps}}" hint-placeholder-val="{{false}}">
-                          <ol class="help-steps">
-                            <sc-for list="{{block.steps}}" as="step" hint-placeholder-count="5">
-                              <li><sc-for list="{{step.runs}}" as="run" hint-placeholder-count="3"><sc-if value="{{run.strong}}" hint-placeholder-val="{{false}}"><strong>{{run.text}}</strong></sc-if><sc-if value="{{run.plain}}" hint-placeholder-val="{{true}}"><span>{{run.text}}</span></sc-if></sc-for></li>
-                            </sc-for>
-                          </ol>
-                        </sc-if>
-                      </sc-for>
-                      <sc-if value="{{faq.hasAction}}" hint-placeholder-val="{{false}}">
-                        <button class="help-answer-action" onClick="{{faq.action.run}}">{{faq.action.label}}</button>
-                      </sc-if>
-                    </div>
+                    </sc-for>
                   </div>
-                </sc-for>
+                </div>
               </div>
             </section>
           </sc-for>
+
+          <div class="help-article-backdrop" data-open="{{helpArticleOpen}}" aria-hidden="{{helpArticleClosed}}" inert="{{helpArticleClosed}}" onClick="{{closeHelpArticle}}">
+            <div class="help-article-dialog glass-surface-strong" ref="{{setHelpArticleDialogRef}}" onKeyDown="{{onHelpArticleDialogKeydown}}" onClick="{{stopHelpArticleClick}}" tabIndex="-1" role="dialog" aria-modal="true" aria-labelledby="help-article-title">
+              <div class="help-article-header">
+                <h2 id="help-article-title">{{helpArticleTitle}}</h2>
+                <button class="help-article-close native-symbol" onClick="{{closeHelpArticle}}" aria-label="Close Help article">✕</button>
+              </div>
+              <div class="help-article-content">
+                <sc-for list="{{helpArticleBlocks}}" as="block" hint-placeholder-count="2">
+                  <sc-if value="{{block.isPara}}" hint-placeholder-val="{{true}}">
+                    <p><sc-for list="{{block.runs}}" as="run" hint-placeholder-count="3"><sc-if value="{{run.strong}}" hint-placeholder-val="{{false}}"><strong>{{run.text}}</strong></sc-if><sc-if value="{{run.plain}}" hint-placeholder-val="{{true}}"><span>{{run.text}}</span></sc-if></sc-for></p>
+                  </sc-if>
+                  <sc-if value="{{block.isSteps}}" hint-placeholder-val="{{false}}">
+                    <ol class="help-steps">
+                      <sc-for list="{{block.steps}}" as="step" hint-placeholder-count="5">
+                        <li><sc-for list="{{step.runs}}" as="run" hint-placeholder-count="3"><sc-if value="{{run.strong}}" hint-placeholder-val="{{false}}"><strong>{{run.text}}</strong></sc-if><sc-if value="{{run.plain}}" hint-placeholder-val="{{true}}"><span>{{run.text}}</span></sc-if></sc-for></li>
+                      </sc-for>
+                    </ol>
+                  </sc-if>
+                </sc-for>
+                <sc-if value="{{helpArticleHasAction}}" hint-placeholder-val="{{false}}">
+                  <button class="help-answer-action" onClick="{{helpArticleAction.run}}">{{helpArticleAction.label}}</button>
+                </sc-if>
+              </div>
+            </div>
+          </div>
 
           <sc-if value="{{helpNoResults}}" hint-placeholder-val="{{false}}">
             <div class="help-empty glass-surface">
@@ -1267,7 +1286,7 @@ html{--accent:#3DDC97;scrollbar-gutter:stable;scrollbar-color:var(--accent) tran
 
   <sc-if value="{{lightboxOpen}}" hint-placeholder-val="{{false}}">
     <div class="lightbox-dialog" ref="{{setLightboxDialogRef}}" onKeyDown="{{onLightboxDialogKeydown}}" tabIndex="-1" role="dialog" aria-modal="true" aria-label="Chart media viewer" onClick="{{closeLightbox}}" style="position:fixed;inset:0;background:rgba(4,6,10,.86);backdrop-filter:blur(6px);z-index:130;display:flex;align-items:center;justify-content:center;padding:44px;cursor:zoom-out;animation:fadein .2s ease both">
-      <button onClick="{{closeLightbox}}" aria-label="Close chart media viewer" title="Close" style="position:absolute;top:58px;right:18px;width:34px;height:34px;border-radius:10px;border:1px solid rgba(255,255,255,.28);background:rgba(4,6,10,.7);color:#FFFFFF;font-size:15px;cursor:pointer;z-index:1">✕</button>
+      <button class="native-symbol" onClick="{{closeLightbox}}" aria-label="Close chart media viewer" title="Close" style="position:absolute;top:58px;right:18px;width:34px;height:34px;border-radius:10px;border:1px solid rgba(255,255,255,.28);background:rgba(4,6,10,.7);color:#FFFFFF;font-size:15px;cursor:pointer;z-index:1">✕</button>
       <sc-for list="{{lightboxImgs}}" as="lb" hint-placeholder-count="0">
         <div onClick="{{stopEvt}}" style="position:relative;display:inline-block;max-width:100%;max-height:100%;line-height:0;cursor:auto;border-radius:14px;overflow:hidden;box-shadow:0 30px 90px rgba(0,0,0,.7);animation:zoomin .25s ease both">
           <img ref="{{lb.setRef}}" alt="chart screenshot" style="display:block;width:auto;height:auto;max-width:100%;max-height:calc(100vh - 88px);object-fit:contain">
@@ -1290,7 +1309,7 @@ html{--accent:#3DDC97;scrollbar-gutter:stable;scrollbar-color:var(--accent) tran
       <div class="annotation-dialog" ref="{{setAnnotationDialogRef}}" onKeyDown="{{onAnnotationDialogKeydown}}" tabIndex="-1" role="dialog" aria-modal="true" aria-label="Screenshot markup">
         <div style="display:flex;align-items:center;gap:10px">
           <div style="flex:1;min-width:0"><div style="font-family:'Manrope',system-ui,sans-serif;font-size:9px;letter-spacing:1.5px;color:var(--tx-faint)">SCREENSHOT MARKUP</div><div style="font-size:15px;font-weight:700;margin-top:3px">Mark the decision, not the image</div></div>
-          <button onClick="{{cancelAnnotation}}" aria-label="Cancel screenshot markup" title="Cancel" style="width:31px;height:31px;border:1px solid var(--bd2);background:transparent;color:var(--tx-dim);border-radius:9px;cursor:pointer">✕</button>
+          <button class="native-symbol" onClick="{{cancelAnnotation}}" aria-label="Cancel screenshot markup" title="Cancel" style="width:31px;height:31px;border:1px solid var(--bd2);background:transparent;color:var(--tx-dim);border-radius:9px;cursor:pointer">✕</button>
         </div>
         <div class="annotation-stage-wrap">
           <sc-for list="{{annotationImgs}}" as="ai" hint-placeholder-count="0">
@@ -1330,12 +1349,12 @@ html{--accent:#3DDC97;scrollbar-gutter:stable;scrollbar-color:var(--accent) tran
           <div style="font-size:18px;font-weight:700;margin-top:4px">{{eTitle}}</div>
         </div>
         <div style="font-family:'Manrope',system-ui,sans-serif;font-size:13px;font-weight:600;color:{{ePnlCol}};border:1px solid var(--bd);background:var(--chip);border-radius:9px;padding:6px 11px">{{ePnlS}}</div>
-        <button onClick="{{closeEditor}}" aria-label="Close journal entry" title="Close" style="width:30px;height:30px;border-radius:9px;border:1px solid var(--bd2);background:transparent;color:var(--tx-dim);font-size:14px;cursor:pointer;transition:all .15s" style-hover="color:var(--tx);border-color:var(--bd3)">✕</button>
+        <button class="native-symbol" onClick="{{closeEditor}}" aria-label="Close journal entry" title="Close" style="width:30px;height:30px;border-radius:9px;border:1px solid var(--bd2);background:transparent;color:var(--tx-dim);font-size:14px;cursor:pointer;transition:all .15s" style-hover="color:var(--tx);border-color:var(--bd3)">✕</button>
       </div>
       <div style="font-family:'Manrope',system-ui,sans-serif;font-size:9.5px;letter-spacing:1.6px;color:var(--tx-faint);margin-top:22px">HOW DID THE DAY FEEL?</div>
       <div style="display:flex;gap:9px;margin-top:10px">
         <sc-for list="{{eEmojis}}" as="m" hint-placeholder-count="5">
-          <button onClick="{{m.set}}" style="width:46px;height:46px;font-size:22px;border-radius:13px;border:1px solid {{m.bd}};background:{{m.bg}};cursor:pointer;transition:all .15s;box-shadow:{{m.sh}};padding:0" style-hover="transform:scale(1.12)">{{m.ch}}</button>
+          <button class="native-emoji" onClick="{{m.set}}" aria-label="{{m.label}}" title="{{m.label}}" style="width:46px;height:46px;font-size:22px;border-radius:13px;border:1px solid {{m.bd}};background:{{m.bg}};cursor:pointer;transition:all .15s;box-shadow:{{m.sh}};padding:0" style-hover="transform:scale(1.12)">{{m.ch}}</button>
         </sc-for>
       </div>
       <div class="glass-surface" style="margin-top:22px;border-radius:14px;padding:16px 17px">
@@ -1348,7 +1367,7 @@ html{--accent:#3DDC97;scrollbar-gutter:stable;scrollbar-color:var(--accent) tran
         <div style="height:9px;border-radius:5px;background:var(--chip2);overflow:hidden;margin-top:11px"><div class="meter-fill" style="height:100%;border-radius:5px;width:{{discFillW}};background:linear-gradient(90deg,color-mix(in srgb,{{discCol}} 45%,transparent),{{discCol}});box-shadow:0 0 10px {{discCol}};transition:width .7s cubic-bezier(.2,.8,.2,1)"></div></div>
         <div style="display:flex;flex-direction:column;gap:7px;margin-top:13px">
           <sc-for list="{{discRows}}" as="dr" hint-placeholder-count="6">
-            <div style="display:flex;align-items:center;gap:9px"><span style="width:16px;height:16px;flex:none;border-radius:5px;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;color:{{dr.mc}};border:1px solid {{dr.mc}}">{{dr.mark}}</span><span style="font-size:12px;color:{{dr.fg}}">{{dr.label}}</span></div>
+            <div style="display:flex;align-items:center;gap:9px"><span class="native-symbol" style="width:16px;height:16px;flex:none;border-radius:5px;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;color:{{dr.mc}};border:1px solid {{dr.mc}}">{{dr.mark}}</span><span style="font-size:12px;color:{{dr.fg}}">{{dr.label}}</span></div>
           </sc-for>
         </div>
       </div>
@@ -1377,7 +1396,7 @@ html{--accent:#3DDC97;scrollbar-gutter:stable;scrollbar-color:var(--accent) tran
               <div class="plan-score-head" style="display:flex;align-items:center;gap:9px"><span style="font-family:'Manrope',system-ui,sans-serif;font-size:8.5px;letter-spacing:1.2px;color:var(--tx-faint)">PLAN VS EXECUTION</span><span style="flex:1"></span><span style="font-family:'Manrope',system-ui,sans-serif;font-size:11px;font-weight:700;color:{{accent}}">{{planExecScore}}%</span><span style="font-family:'Manrope',system-ui,sans-serif;font-size:8.5px;color:var(--tx-faint)">{{planExecSummary}}</span></div>
               <div style="display:flex;flex-direction:column;gap:6px;margin-top:9px">
                 <sc-for list="{{planExecRows}}" as="pr" hint-placeholder-count="4">
-                  <div style="display:grid;grid-template-columns:18px 1fr auto;gap:7px;align-items:center;background:{{pr.bg}};border-radius:7px;padding:6px 8px"><span style="font-family:'Manrope',system-ui,sans-serif;font-size:10px;font-weight:700;color:{{pr.col}}">{{pr.mark}}</span><span style="font-size:11px;color:var(--tx-mid)">{{pr.label}}</span><span style="font-family:'Manrope',system-ui,sans-serif;font-size:8.5px;color:{{pr.col}}">{{pr.detail}}</span></div>
+                  <div style="display:grid;grid-template-columns:18px 1fr auto;gap:7px;align-items:center;background:{{pr.bg}};border-radius:7px;padding:6px 8px"><span class="native-symbol" style="font-size:10px;font-weight:700;color:{{pr.col}}">{{pr.mark}}</span><span style="font-size:11px;color:var(--tx-mid)">{{pr.label}}</span><span style="font-family:'Manrope',system-ui,sans-serif;font-size:8.5px;color:{{pr.col}}">{{pr.detail}}</span></div>
                 </sc-for>
               </div>
             </div>
@@ -1399,7 +1418,7 @@ html{--accent:#3DDC97;scrollbar-gutter:stable;scrollbar-color:var(--accent) tran
               </select>
               <button onClick="{{t.toggleSide}}" title="Click to flip long/short" style="border:1px solid {{t.sideBd}};background:transparent;color:{{t.sideCol}};font-family:'Manrope',system-ui,sans-serif;font-size:11.5px;font-weight:700;padding:8px 0;border-radius:9px;cursor:pointer;letter-spacing:1px;transition:all .15s" style-hover="transform:scale(1.04)">{{t.side}}</button>
               <input value="{{t.qty}}" onChange="{{t.onQty}}" inputMode="numeric" title="contracts" style="background:var(--input);border:1px solid var(--bd2);border-radius:9px;color:var(--tx);font-family:'Manrope',system-ui,sans-serif;font-size:12.5px;padding:8px 9px;width:100%;box-sizing:border-box;text-align:center">
-              <button onClick="{{t.del}}" title="Delete trade" style="width:30px;height:30px;border-radius:9px;border:1px solid rgba(255,92,122,.35);background:transparent;color:var(--red);font-size:12px;cursor:pointer;transition:all .15s" style-hover="background:rgba(255,92,122,.1)">✕</button>
+              <button class="native-symbol" onClick="{{t.del}}" title="Delete trade" style="width:30px;height:30px;border-radius:9px;border:1px solid rgba(255,92,122,.35);background:transparent;color:var(--red);font-size:12px;cursor:pointer;transition:all .15s" style-hover="background:rgba(255,92,122,.1)">✕</button>
             </div>
             <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-top:9px">
               <div><div style="font-family:'Manrope',system-ui,sans-serif;font-size:8.5px;letter-spacing:1px;color:var(--tx-faint);margin-bottom:4px">ENTRY</div><input value="{{t.entry}}" onChange="{{t.onEntry}}" inputMode="decimal" style="background:var(--input);border:1px solid var(--bd2);border-radius:9px;color:var(--tx);font-family:'Manrope',system-ui,sans-serif;font-size:12.5px;padding:8px 9px;width:100%;box-sizing:border-box"></div>
@@ -1472,7 +1491,7 @@ html{--accent:#3DDC97;scrollbar-gutter:stable;scrollbar-color:var(--accent) tran
       <div style="display:flex;flex-direction:column;gap:8px;margin-top:10px">
         <sc-for list="{{eRules}}" as="ru" hint-placeholder-count="4">
           <button onClick="{{ru.tog}}" style="display:flex;align-items:center;gap:11px;border:none;background:transparent;cursor:pointer;padding:4px 2px;text-align:left">
-            <span style="width:19px;height:19px;flex:none;border-radius:6px;border:1.5px solid {{ru.bd}};background:{{ru.bg}};color:var(--on-acc);font-size:11px;font-weight:700;display:flex;align-items:center;justify-content:center;transition:all .15s">{{ru.mark}}</span>
+            <span class="native-symbol" style="width:19px;height:19px;flex:none;border-radius:6px;border:1.5px solid {{ru.bd}};background:{{ru.bg}};color:var(--on-acc);font-size:11px;font-weight:700;display:flex;align-items:center;justify-content:center;transition:all .15s">{{ru.mark}}</span>
             <span style="font-size:13px;color:{{ru.fg}}">{{ru.name}}</span>
           </button>
         </sc-for>
@@ -1496,7 +1515,7 @@ html{--accent:#3DDC97;scrollbar-gutter:stable;scrollbar-color:var(--accent) tran
           <div style="position:relative;border-radius:11px;overflow:hidden;border:1px solid var(--bd2)">
             <img ref="{{ph.setRef}}" alt="screenshot" style="width:100%;aspect-ratio:16/10;object-fit:cover;display:block">
             <button onClick="{{ph.markup}}" style="position:absolute;left:6px;bottom:6px;border:1px solid rgba(255,255,255,.2);background:rgba(4,6,10,.76);color:#FFFFFF;font-size:9.5px;font-weight:700;padding:5px 8px;border-radius:7px;cursor:pointer;backdrop-filter:blur(4px)">Mark up</button>
-            <button onClick="{{ph.del}}" title="Remove" style="position:absolute;top:6px;right:6px;width:22px;height:22px;border-radius:7px;border:none;background:rgba(4,6,10,.7);color:#FF5C7A;font-size:10px;cursor:pointer">✕</button>
+            <button class="native-symbol" onClick="{{ph.del}}" title="Remove" style="position:absolute;top:6px;right:6px;width:22px;height:22px;border-radius:7px;border:none;background:rgba(4,6,10,.7);color:#FF5C7A;font-size:10px;cursor:pointer">✕</button>
           </div>
         </sc-for>
         <sc-for list="{{eVideos}}" as="vd" hint-placeholder-count="0">
@@ -1505,7 +1524,7 @@ html{--accent:#3DDC97;scrollbar-gutter:stable;scrollbar-color:var(--accent) tran
             <div onClick="{{vd.play}}" style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;cursor:zoom-in;pointer-events:none">
               <span style="width:32px;height:32px;border-radius:50%;background:rgba(4,6,10,.65);border:1px solid rgba(255,255,255,.3);color:#FFFFFF;font-size:11px;display:flex;align-items:center;justify-content:center;padding-left:2px">▶</span>
             </div>
-            <button onClick="{{vd.del}}" title="Remove" style="position:absolute;top:6px;right:6px;width:22px;height:22px;border-radius:7px;border:none;background:rgba(4,6,10,.7);color:#FF5C7A;font-size:10px;cursor:pointer">✕</button>
+            <button class="native-symbol" onClick="{{vd.del}}" title="Remove" style="position:absolute;top:6px;right:6px;width:22px;height:22px;border-radius:7px;border:none;background:rgba(4,6,10,.7);color:#FF5C7A;font-size:10px;cursor:pointer">✕</button>
           </div>
         </sc-for>
         <label style="border:1px dashed var(--bd3);border-radius:11px;aspect-ratio:16/10;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:5px;cursor:pointer;color:var(--tx-faint);transition:all .15s" style-hover="color:var(--tx-dim);border-color:var(--tx-dim)">
@@ -1535,7 +1554,7 @@ html{--accent:#3DDC97;scrollbar-gutter:stable;scrollbar-color:var(--accent) tran
             </div>
             <sc-for list="{{obStepList}}" as="sp" hint-placeholder-count="5">
               <div style="display:flex;align-items:center;gap:10px;padding:8px 6px;border-radius:9px">
-                <span style="width:22px;height:22px;flex:none;border-radius:50%;border:1.5px solid {{sp.cbd}};background:{{sp.cbg}};color:{{sp.cfg}};font-family:'Manrope',system-ui,sans-serif;font-size:10px;font-weight:700;display:flex;align-items:center;justify-content:center;transition:all .3s">{{sp.num}}</span>
+                <span class="native-symbol" style="width:22px;height:22px;flex:none;border-radius:50%;border:1.5px solid {{sp.cbd}};background:{{sp.cbg}};color:{{sp.cfg}};font-size:10px;font-weight:700;display:flex;align-items:center;justify-content:center;transition:all .3s">{{sp.num}}</span>
                 <span style="font-size:12.5px;color:{{sp.tfg}};font-weight:{{sp.tw}};transition:all .3s">{{sp.t}}</span>
               </div>
             </sc-for>
@@ -1551,9 +1570,9 @@ html{--accent:#3DDC97;scrollbar-gutter:stable;scrollbar-color:var(--accent) tran
                 <div style="font-size:21px;font-weight:700;margin-top:4px">Welcome to Written<span style="color:{{accent}}">.</span></div>
                 <div style="font-size:13px;color:var(--tx-dim);line-height:1.65;margin-top:10px">Written is a local-first futures journal. This short setup installs it into this webview and tailors it to how you trade — nothing ever leaves this device.</div>
                 <div style="display:flex;flex-direction:column;gap:9px;margin-top:20px;font-family:'Manrope',system-ui,sans-serif;font-size:11.5px;color:var(--tx-mid)">
-                  <div style="display:flex;gap:10px;align-items:center"><span style="color:{{accent}}">●</span> installs locally, runs offline</div>
-                  <div style="display:flex;gap:10px;align-items:center"><span style="color:{{accent}}">●</span> no account, no server, no tracking</div>
-                  <div style="display:flex;gap:10px;align-items:center"><span style="color:{{accent}}">●</span> every part of it is customizable once inside</div>
+                  <div style="display:flex;gap:10px;align-items:center"><span class="native-symbol" style="color:{{accent}}">●</span> installs locally, runs offline</div>
+                  <div style="display:flex;gap:10px;align-items:center"><span class="native-symbol" style="color:{{accent}}">●</span> no account, no server, no tracking</div>
+                  <div style="display:flex;gap:10px;align-items:center"><span class="native-symbol" style="color:{{accent}}">●</span> every part of it is customizable once inside</div>
                 </div>
               </div>
             </sc-if>
@@ -1567,7 +1586,7 @@ html{--accent:#3DDC97;scrollbar-gutter:stable;scrollbar-color:var(--accent) tran
                 </div>
                 <div style="display:flex;flex-direction:column;gap:8px;margin-top:20px">
                   <sc-for list="{{obInstItems}}" as="it" hint-placeholder-count="5">
-                    <div style="display:flex;gap:10px;align-items:center;font-family:'Manrope',system-ui,sans-serif;font-size:11.5px;color:{{it.fg}};transition:color .3s"><span style="color:{{it.mc}};width:12px;transition:color .3s">{{it.mk}}</span> {{it.t}}</div>
+                    <div style="display:flex;gap:10px;align-items:center;font-family:'Manrope',system-ui,sans-serif;font-size:11.5px;color:{{it.fg}};transition:color .3s"><span class="native-symbol" style="color:{{it.mc}};width:12px;transition:color .3s">{{it.mk}}</span> {{it.t}}</div>
                   </sc-for>
                 </div>
                 <sc-if value="{{obInstDone}}" hint-placeholder-val="{{false}}">
@@ -1650,7 +1669,7 @@ html{--accent:#3DDC97;scrollbar-gutter:stable;scrollbar-color:var(--accent) tran
             </sc-if>
             <sc-if value="{{obS4}}" hint-placeholder-val="{{false}}">
               <div style="animation:rise .3s ease both;display:flex;flex-direction:column;align-items:center;text-align:center;padding-top:26px">
-                <div style="width:74px;height:74px;border-radius:50%;border:2px solid {{acc55}};background:{{acc16}};color:{{accent}};font-size:30px;display:flex;align-items:center;justify-content:center;box-shadow:0 0 40px {{acc44}}">✓</div>
+                <div class="native-symbol" style="width:74px;height:74px;border-radius:50%;border:2px solid {{acc55}};background:{{acc16}};color:{{accent}};font-size:30px;display:flex;align-items:center;justify-content:center;box-shadow:0 0 40px {{acc44}}">✓</div>
                 <div style="font-size:21px;font-weight:700;margin-top:18px">Installation complete</div>
                 <div style="font-size:13px;color:var(--tx-dim);line-height:1.6;margin-top:8px;max-width:360px">Written is installed in this webview. Your journal lives only on this device — trade the plan, then write it down.</div>
                 <div style="font-family:'Manrope',system-ui,sans-serif;font-size:9px;letter-spacing:1.6px;color:var(--tx-ghost);margin-top:16px">CLICK LAUNCH TO OPEN YOUR LEDGER</div>
@@ -1772,13 +1791,13 @@ html{--accent:#3DDC97;scrollbar-gutter:stable;scrollbar-color:var(--accent) tran
   <sc-if value="{{storageWarningOpen}}" hint-placeholder-val="{{false}}">
     <div class="storage-warning glass-surface-strong" role="alert" style="position:fixed;right:22px;bottom:22px;z-index:132;max-width:440px;display:flex;align-items:flex-start;gap:12px;border:1px solid rgba(255,180,84,.58);border-radius:13px;padding:13px 14px 13px 16px;box-shadow:0 18px 48px var(--sh)">
       <span style="font-size:12px;color:var(--tx-mid);line-height:1.5;flex:1">{{storageWarning}}</span>
-      <button onClick="{{dismissStorageWarning}}" aria-label="Dismiss storage warning" style="border:0;background:transparent;color:var(--tx-faint);font-size:13px;line-height:1;cursor:pointer;padding:2px">✕</button>
+      <button class="native-symbol" onClick="{{dismissStorageWarning}}" aria-label="Dismiss storage warning" style="border:0;background:transparent;color:var(--tx-faint);font-size:13px;line-height:1;cursor:pointer;padding:2px">✕</button>
     </div>
   </sc-if>
 
   <sc-if value="{{toastOpen}}" hint-placeholder-val="{{false}}">
     <div style="position:fixed;right:22px;bottom:22px;z-index:130;display:flex;align-items:center;gap:11px;background:var(--card-a);border:1px solid rgba(61,220,151,.55);border-radius:13px;padding:13px 18px;box-shadow:0 0 34px rgba(61,220,151,.35),0 18px 44px var(--sh);animation:slidein .35s cubic-bezier(.2,.8,.2,1) both">
-      <span style="width:22px;height:22px;flex:none;border-radius:50%;background:var(--green);color:#07130C;font-size:11px;font-weight:700;display:flex;align-items:center;justify-content:center;box-shadow:0 0 14px rgba(61,220,151,.6)">✓</span>
+      <span class="native-symbol" style="width:22px;height:22px;flex:none;border-radius:50%;background:var(--green);color:#07130C;font-size:11px;font-weight:700;display:flex;align-items:center;justify-content:center;box-shadow:0 0 14px rgba(61,220,151,.6)">✓</span>
       <div>
         <div style="font-size:13px;font-weight:700;color:var(--green)">Successful</div>
         <div style="font-size:11.5px;color:var(--tx-dim);margin-top:1px">{{toastMsg}}</div>
@@ -1816,7 +1835,7 @@ class Component extends DCLogic {
   constructor(p){
     super(p);
     const t=new Date();
-    this.state={days:{},settings:{},profileStore:{version:2,activeProfileId:null,profiles:{}},selectedProfileId:null,pendingProfileId:null,pendingSearchResult:null,profileMenuOpen:false,storageWarning:'',tab:'dash',viewY:t.getFullYear(),viewM:t.getMonth(),range:'month',chartMode:null,symFilter:'ALL',lightbox:null,hov:null,editing:null,draft:null,annotation:null,markKind:'entry',markText:'',confirm:null,booting:true,ob:null,newTag:'',newSym:'',newPv:'',obSym:'',obPv:'',liPw:'',liErr:false,obStarted:false,obStep:0,obProg:0,obDemo:true,launching:false,newMist:'',toast:null,pickH:153,pickS:.72,pickV:.86,pickerOpen:false,bootTxt:'',dashEdit:false,searchOpen:false,searchQuery:'',searchSel:0,helpQuery:'',helpOpenId:null,tourOpen:false,tourStep:0,tourSpotlight:null,tourMotionReady:false,addedTradeIndex:null,editorRangesReady:false,insightsRangesReady:false,titlebarOffset:'44px'};
+    this.state={days:{},settings:{},profileStore:{version:2,activeProfileId:null,profiles:{}},selectedProfileId:null,pendingProfileId:null,pendingSearchResult:null,profileMenuOpen:false,storageWarning:'',tab:'dash',viewY:t.getFullYear(),viewM:t.getMonth(),range:'month',chartMode:null,symFilter:'ALL',lightbox:null,hov:null,editing:null,draft:null,annotation:null,markKind:'entry',markText:'',confirm:null,booting:true,ob:null,newTag:'',newSym:'',newPv:'',obSym:'',obPv:'',liPw:'',liErr:false,obStarted:false,obStep:0,obProg:0,obDemo:true,launching:false,newMist:'',toast:null,pickH:153,pickS:.72,pickV:.86,pickerOpen:false,bootTxt:'',dashEdit:false,searchOpen:false,searchQuery:'',searchSel:0,helpQuery:'',helpOpenCategoryId:null,helpOpenArticleId:null,helpReturnCategoryId:null,tourOpen:false,tourStep:0,tourSpotlight:null,tourMotionReady:false,addedTradeIndex:null,editorRangesReady:false,insightsRangesReady:false,titlebarOffset:'44px'};
     this._onGlobalKeydown=this.handleGlobalKeydown.bind(this);
     this._onWindowScroll=this.syncTitlebarOffset.bind(this);
     this.BOOTMSGS=['loading modules…','linking market symbols…','reading your ledger…','warming up charts…'];
@@ -1854,7 +1873,6 @@ class Component extends DCLogic {
       {id:'expectancy',label:'Expectancy',minColumns:3,maxColumns:6,defaultColumns:4,minRows:4,maxRows:7,defaultRows:5},
       {id:'best',label:'Best day',...kpi},{id:'worst',label:'Worst day',...kpi},{id:'drawdown',label:'Max drawdown',...kpi},{id:'hold',label:'Avg hold time',...kpi},
       {id:'heatmap',label:'Consistency heatmap',minColumns:6,maxColumns:12,defaultColumns:10,minRows:6,maxRows:12,defaultRows:9},
-      {id:'econ',label:'Economic calendar',minColumns:4,maxColumns:8,defaultColumns:4,minRows:7,maxRows:12,defaultRows:9},
       {id:'checklist',label:'Daily checklist',minColumns:4,maxColumns:8,defaultColumns:4,minRows:7,maxRows:12,defaultRows:9},
       {id:'recent',label:'Recent trades',minColumns:6,maxColumns:12,defaultColumns:12,minRows:8,maxRows:15,defaultRows:11},
     ];
@@ -1903,6 +1921,32 @@ class Component extends DCLogic {
     }).filter(group=>group.questions.length);
     if(!normalized){matchCount=groups.reduce((sum,group)=>sum+group.questions.length,0);firstId=null}
     return{normalized,matchCount,groups,firstId};
+  }
+  helpRouteModel(count){
+    const total=Math.max(0,Math.floor(Number(count)||0));
+    if(!total)return{viewBox:'0 0 1000 220',path:'',mobileViewBox:'0 0 72 100',mobilePath:'',nodes:[]};
+    if(total===1)return{viewBox:'0 0 1000 220',path:'',mobileViewBox:'0 0 72 100',mobilePath:'',nodes:[{left:'8%',top:'50%'}]};
+    const nodes=Array.from({length:total},(_,index)=>{
+      const left=8+(84*index/(total-1));
+      const top=index%2===0?34:68;
+      return{left:left.toFixed(2).replace(/\.?0+$/,'')+'%',top:top+'%'};
+    });
+    const px=node=>({x:Number(node.left.slice(0,-1))*10,y:Number(node.top.slice(0,-1))*2.2});
+    const first=px(nodes[0]);
+    let path='M '+first.x+' '+first.y;
+    for(let index=1;index<nodes.length;index++){
+      const previous=px(nodes[index-1]),current=px(nodes[index]);
+      const middle=(previous.x+current.x)/2;
+      path+=' C '+middle+' '+previous.y+', '+middle+' '+current.y+', '+current.x+' '+current.y;
+    }
+    const mobileEnd=12+(total-1)*92;
+    return{
+      viewBox:'0 0 1000 220',
+      path,
+      mobileViewBox:'0 0 72 '+(mobileEnd+12),
+      mobilePath:'M 36 12 V '+mobileEnd,
+      nodes,
+    };
   }
   helpFaqData(){
     if(this._helpFaq)return this._helpFaq;
@@ -2315,7 +2359,12 @@ class Component extends DCLogic {
   scheduleAfterCommit(callback){if(typeof callback!=='function')return false;this.cancelScheduledFocusRestore();const token=this._focusRestoreToken,run=()=>{if(token!==this._focusRestoreToken)return;this._focusRestoreTimer=null;this._focusRestoreFrame=null;callback()};if(typeof requestAnimationFrame==='function')this._focusRestoreFrame=requestAnimationFrame(run);else this._focusRestoreTimer=setTimeout(run,0);return true}
   setStateAfterCommit(patch,callback){if(typeof callback!=='function'){this.setState(patch);return true}if(typeof this.setState==='function'&&this.setState.length>=2){this.cancelScheduledFocusRestore();const token=this._focusRestoreToken;this.setState(patch,()=>{if(token===this._focusRestoreToken)callback()})}else{this.setState(patch);this.scheduleAfterCommit(callback)}return true}
   setTab(tab,extra=null){
-    this.setState(Object.assign({},extra&&typeof extra==='object'?extra:{},{tab,helpQuery:'',helpOpenId:null}));
+    if(tab!=='help'&&this.state.helpOpenArticleId)this.takeSurfaceFocus('helpArticle');
+    this.setState(Object.assign(
+      {},
+      extra&&typeof extra==='object'?extra:{},
+      {tab,helpQuery:'',helpOpenCategoryId:null,helpOpenArticleId:null,helpReturnCategoryId:null}
+    ));
     if(tab==='insights')this.armInsightsRanges();
     return true;
   }
@@ -2335,18 +2384,50 @@ class Component extends DCLogic {
     return true;
   }
   setHelpSearchRef(element){this._helpSearchInput=element||null}
-  setHelpQuery(rawQuery){
-    const helpQuery=String(rawQuery==null?'':rawQuery),result=this.filterHelpFaq(this.helpFaqData(),helpQuery);
-    this.setState({helpQuery,helpOpenId:result.normalized?result.firstId:null});
-    return result;
+  helpCategoryForArticle(articleId){
+    const group=this.helpFaqData().find(item=>item.questions.some(question=>question.id===articleId));
+    return group?group.key:null;
   }
-  toggleHelpFaq(id){
-    if(typeof id!=='string'||!id)return false;
-    this.setState({helpOpenId:this.state.helpOpenId===id?null:id});
+  toggleHelpCategory(categoryId){
+    if(typeof categoryId!=='string'||!this.helpFaqData().some(group=>group.key===categoryId))return false;
+    if(this.state.helpOpenArticleId)this.takeSurfaceFocus('helpArticle');
+    this.setState({
+      helpOpenCategoryId:this.state.helpOpenCategoryId===categoryId?null:categoryId,
+      helpOpenArticleId:null,
+    });
     return true;
   }
+  openHelpArticle(articleId,opener){
+    const categoryId=this.helpCategoryForArticle(articleId);
+    if(!categoryId)return false;
+    this.rememberSurfaceFocus('helpArticle',opener);
+    this.setState({helpOpenCategoryId:categoryId,helpOpenArticleId:articleId});
+    return true;
+  }
+  closeHelpArticle(restore=true){
+    return this.setStateAndRestoreSurface({helpOpenArticleId:null},'helpArticle',restore);
+  }
+  setHelpQuery(rawQuery){
+    const helpQuery=String(rawQuery==null?'':rawQuery);
+    const result=this.filterHelpFaq(this.helpFaqData(),helpQuery);
+    const entering=!this.normalizeHelpText(this.state.helpQuery)&&!!result.normalized;
+    const returnId=entering?this.state.helpOpenCategoryId:this.state.helpReturnCategoryId;
+    const validReturn=this.helpFaqData().some(group=>group.key===returnId);
+    const openId=result.normalized
+      ?(result.groups[0]?result.groups[0].key:null)
+      :(validReturn?returnId:(result.groups[0]?result.groups[0].key:null));
+    if(this.state.helpOpenArticleId)this.takeSurfaceFocus('helpArticle');
+    this.setState({
+      helpQuery,
+      helpOpenCategoryId:openId,
+      helpOpenArticleId:null,
+      helpReturnCategoryId:result.normalized?returnId:null,
+    });
+    return result;
+  }
   clearHelpSearch(){
-    return this.setStateAfterCommit({helpQuery:'',helpOpenId:null},()=>{
+    this.setHelpQuery('');
+    return this.setStateAfterCommit({},()=>{
       if(this._helpSearchInput&&typeof this._helpSearchInput.focus==='function')this._helpSearchInput.focus();
     });
   }
@@ -3687,7 +3768,7 @@ class Component extends DCLogic {
       const dPnl=dr.trades.reduce((a,t)=>{const pnl=this.finiteNumber(t.pnl);return a+(pnl==null?0:pnl)},0);
       const p=(ed||'').split('-');
       eV={eTitle:this.MO[+p[1]-1]+' '+(+p[2])+', '+p[0],ePnlS:this.fk(dPnl),ePnlCol:this.col(dPnl),setEditorDialogRef:el=>this.captureSurfaceDialog('editor',el),onEditorDialogKeydown:e=>this.handleSurfaceDialogKeydown('editor',e,()=>this.closeEditor()),
-        eEmojis:this.EMO.map(ch=>({ch,bg:dr.emoji===ch?acc+'22':'var(--chip)',bd:dr.emoji===ch?acc+'88':'var(--bd)',sh:dr.emoji===ch?'0 0 18px '+acc+'33':'none',set:()=>this.setEmoji(ch)})),
+        eEmojis:this.EMO.map((ch,i)=>({ch,label:'Set mood to '+(['happy','content','neutral','sad','angry'][i]||'custom'),bg:dr.emoji===ch?acc+'22':'var(--chip)',bd:dr.emoji===ch?acc+'88':'var(--bd)',sh:dr.emoji===ch?'0 0 18px '+acc+'33':'none',set:()=>this.setEmoji(ch)})),
         eTrades:dr.trades.map((t,i)=>{const guide=this.riskGuideForTrade(t),riskShow=!guide.reason&&guide.qty>0,entering=i===S.addedTradeIndex;return {key:ed+'-'+i,sym:t.sym,side:t.side,qty:t.qty,time:t.time||'',entry:t.entry,stop:t.stop,tp:t.tp,exit:t.exit,pnl:t.pnl,dur:t.dur,
           sideCol:t.side==='LONG'?'var(--green)':'var(--red)',sideBd:t.side==='LONG'?'rgba(61,220,151,.4)':'rgba(255,92,122,.4)',
           calc:(()=>{const pts=this.tpts(t),r2=this.tr(t);if(pts==null)return'';let s2=(pts>=0?'+':'')+(Math.round(pts*100)/100)+' pts';if(r2!=null)s2+=' · '+r2.toFixed(1)+'R';return s2})(),
@@ -3843,27 +3924,40 @@ class Component extends DCLogic {
         })):[],
       };
     };
-    const helpGroups=helpFiltered.groups.map(group=>({
-      key:group.key,
-      categoryId:'help-faq-category-'+group.key,
-      label:group.label,
-      questions:group.questions.map(question=>{
-        const expanded=S.helpOpenId===question.id,action=question.action;
-        return{
+    const helpGroups=helpFiltered.groups.map(group=>{
+      const open=S.helpOpenCategoryId===group.key;
+      const route=this.helpRouteModel(group.questions.length);
+      return{
+        key:group.key,
+        label:group.label,
+        buttonId:'help-category-button-'+group.key,
+        panelId:'help-category-panel-'+group.key,
+        open,
+        collapsed:!open,
+        caretTransform:open?'rotate(180deg)':'none',
+        toggle:()=>this.toggleHelpCategory(group.key),
+        routeViewBox:route.viewBox,
+        routePath:route.path,
+        mobileRouteViewBox:route.mobileViewBox,
+        mobileRoutePath:route.mobilePath,
+        questions:group.questions.map((question,index)=>({
           id:question.id,
+          number:String(index+1),
           question:question.question,
-          questionId:'help-faq-q-'+question.id,
-          answerId:'help-faq-a-'+question.id,
-          expanded,
-          hidden:!expanded,
-          caretTransform:expanded?'rotate(180deg)':'none',
-          toggle:()=>this.toggleHelpFaq(question.id),
+          left:route.nodes[index].left,
+          top:route.nodes[index].top,
+          open:event=>this.openHelpArticle(question.id,event),
           blocks:question.blocks.map(helpBlock),
-          hasAction:!!action,
-          action:action?{label:action.label,run:action.id==='tour'?replayTour:()=>false}:{label:'',run:()=>false},
-        };
-      }),
-    }));
+          hasAction:!!question.action,
+          action:question.action
+            ?{label:question.action.label,run:question.action.id==='tour'?replayTour:()=>false}
+            :{label:'',run:()=>false},
+        })),
+      };
+    });
+    const selectedHelpArticle=this.helpFaqData()
+      .flatMap(group=>group.questions)
+      .find(question=>question.id===S.helpOpenArticleId)||null;
     const helpMatchCount=helpFiltered.matchCount;
     const helpResultStatus=helpFiltered.normalized
       ?helpMatchCount+' '+(helpMatchCount===1?'result':'results')
@@ -3875,6 +3969,18 @@ class Component extends DCLogic {
       helpResultStatus,
       helpNoResults:helpMatchCount===0,
       helpClearDisabled:!helpFiltered.normalized,
+      helpArticleOpen:!!selectedHelpArticle,
+      helpArticleClosed:!selectedHelpArticle,
+      helpArticleTitle:selectedHelpArticle?selectedHelpArticle.question:'',
+      helpArticleBlocks:selectedHelpArticle?selectedHelpArticle.blocks.map(helpBlock):[],
+      helpArticleHasAction:!!(selectedHelpArticle&&selectedHelpArticle.action),
+      helpArticleAction:selectedHelpArticle&&selectedHelpArticle.action
+        ?{label:selectedHelpArticle.action.label,run:selectedHelpArticle.action.id==='tour'?replayTour:()=>false}
+        :{label:'',run:()=>false},
+      closeHelpArticle:()=>this.closeHelpArticle(),
+      setHelpArticleDialogRef:element=>this.captureSurfaceDialog('helpArticle',element),
+      onHelpArticleDialogKeydown:event=>this.handleSurfaceDialogKeydown('helpArticle',event,()=>this.closeHelpArticle()),
+      stopHelpArticleClick:event=>event.stopPropagation(),
       setHelpSearchRef:element=>this.setHelpSearchRef(element),
       onHelpQuery:event=>this.setHelpQuery(event&&event.target?event.target.value:''),
       clearHelpSearch:()=>this.clearHelpSearch(),
@@ -4003,7 +4109,6 @@ class Component extends DCLogic {
       glowOpts:[['off','Off'],['soft','Soft'],['medium','Medium'],['strong','Strong']].map(o=>{const on=(st.glow||'soft')===o[0];return{label:o[1],bg:on?acc+'22':'transparent',fg:on?acc:'var(--tx-dim)',bd:on?acc+'55':'var(--bd2)',set:()=>this.setSetting('glow',o[0])}}),
       surfaceBg:surfaceVars.surfaceBg,surfaceBgStrong:surfaceVars.surfaceBgStrong,surfaceFx:surfaceVars.surfaceFx,surfaceFxStrong:surfaceVars.surfaceFxStrong,
       glassOpts:[['off','Off'],['subtle','Subtle'],['frosted','Frosted']].map(o=>{const on=(st.glass||'frosted')===o[0];return{label:o[1],bg:on?acc+'22':'transparent',fg:on?acc:'var(--tx-dim)',bd:on?acc+'55':'var(--bd2)',set:()=>this.setSetting('glass',o[0])}}),
-      perfAvailable:typeof window!=='undefined'&&!!window.desktopPrefs,
       perfHint:({full:'every effect on — the drifting glow and pulses keep the GPU busy',reduced:'stops the perpetual background motion; frosted glass stays',max:'also drops the blur — smoothest, flattest'})[S.perfMode||'full'],
       perfOpts:[['full','Full effects'],['reduced','Reduced motion'],['max','Maximum performance']].map(o=>{const on=(S.perfMode||'full')===o[0];return{label:o[1],bg:on?acc+'22':'transparent',fg:on?acc:'var(--tx-dim)',bd:on?acc+'55':'var(--bd2)',set:()=>this.setPerfMode(o[0])}}),
       tagList:this.tags().map(name=>({name,del:()=>this.setSetting('tags',this.tags().filter(x=>x!==name))})),

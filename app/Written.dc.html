@@ -53,8 +53,12 @@ button:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-vis
 .annotation-stage-wrap{min-height:0;flex:1;display:flex;align-items:center;justify-content:center;overflow:hidden}
 .color-picker-sv,.color-picker-hue{border:1px solid var(--bd3);box-sizing:border-box}
 .help-faq{display:flex;flex-direction:column;gap:18px;max-width:1000px;animation:page-enter .4s ease both}
-.help-search-panel{border-radius:16px;padding:20px 22px}.help-search-panel label{display:block;font-size:15px;font-weight:700}.help-search-row{display:flex;gap:9px;margin-top:12px}.help-search-row input{flex:1;min-width:0;background:var(--input);border:1px solid var(--bd2);border-radius:10px;color:var(--tx);font-size:13px;padding:10px 12px}.help-search-row button,.help-empty button{border:1px solid var(--bd2);background:var(--chip);color:var(--tx-dim);border-radius:10px;padding:9px 13px;font-size:12px;font-weight:700;cursor:pointer}.help-search-row button:disabled{color:var(--tx-ghost);cursor:default}.help-result-status{font-size:11px;color:var(--tx-faint);margin-top:8px}.help-category h2{font-size:12px;letter-spacing:.9px;color:var(--tx-dim);margin:0 0 8px}.help-accordion{border-radius:16px;overflow:hidden}.help-item+.help-item{border-top:1px solid var(--grid)}.help-item h3{margin:0}.help-question{width:100%;min-height:48px;display:flex;align-items:center;justify-content:space-between;gap:14px;border:0;background:transparent;color:var(--tx);padding:13px 18px;text-align:left;font-size:13px;font-weight:700;cursor:pointer}.help-question:hover{background:var(--chip2)}.help-caret{flex:none;color:var(--tx-faint);transition:transform .18s ease}.help-answer{padding:10px 18px 18px;color:var(--tx-mid);font-size:12.5px;line-height:1.65}.help-answer[hidden]{display:none}.help-answer p{margin:0}.help-answer p+p,.help-answer p+.help-steps,.help-steps+p{margin-top:10px}.help-steps{margin:0;padding-left:24px}.help-steps li+li{margin-top:8px}.help-answer-action{margin-top:14px;border:1px solid var(--accent);background:var(--accent-soft);color:var(--accent);font-size:12.5px;font-weight:700;padding:10px 15px;border-radius:10px;cursor:pointer}.help-empty{border-radius:16px;padding:24px;text-align:center;color:var(--tx-dim);font-size:12.5px}.help-empty button{margin-top:12px}
-@media(max-width:760px){.app-main{padding:20px 12px 56px!important}.app-titlebar{grid-template-columns:52px minmax(0,1fr) 52px;padding:0 10px}.titlebar-status span:not(.local-status-dot){display:none}.insights-grid{grid-template-columns:1fr!important}.help-faq{gap:14px}.help-search-panel{padding:16px}.help-search-row{align-items:stretch}.help-question{min-height:44px;padding:12px 14px}.help-answer{padding:9px 14px 16px}.help-question span{min-width:0;white-space:normal}.insights-full{grid-column:1}.time-edge-row{grid-template-areas:"label count net" "bar bar win";grid-template-columns:52px 1fr auto!important}.time-edge-label{grid-area:label}.time-edge-bar{grid-area:bar}.time-edge-count{grid-area:count}.time-edge-net{grid-area:net}.time-edge-win{grid-area:win}.journal-drawer{width:100%!important;max-width:none!important;padding:18px 14px 28px!important}.trade-detail-grid{grid-template-columns:repeat(2,minmax(0,1fr))!important}.annotation-overlay{padding:10px}.annotation-dialog{width:calc(100vw - 20px);max-height:calc(100vh - 64px);border-radius:14px;padding:10px}.annotation-toolbar{align-items:stretch!important}.annotation-actions{width:100%;flex-wrap:wrap}.plan-fields{grid-template-columns:1fr!important}.plan-score-head,.risk-guide-head{flex-wrap:wrap}.risk-settings-grid{grid-template-columns:1fr!important}.risk-guide-grid{grid-template-columns:repeat(2,minmax(0,1fr))!important}}
+.help-search-panel{border-radius:16px;padding:20px 22px}.help-search-panel label{display:block;font-size:15px;font-weight:700}.help-search-row{display:flex;gap:9px;margin-top:12px}.help-search-row input{flex:1;min-width:0;background:var(--input);border:1px solid var(--bd2);border-radius:10px;color:var(--tx);font-size:13px;padding:10px 12px}.help-search-row button,.help-empty button{border:1px solid var(--bd2);background:var(--chip);color:var(--tx-dim);border-radius:10px;padding:9px 13px;font-size:12px;font-weight:700;cursor:pointer}.help-search-row button:disabled{color:var(--tx-ghost);cursor:default}.help-result-status{font-size:11px;color:var(--tx-faint);margin-top:8px}
+.help-category{border-radius:16px;overflow:hidden}.help-category h2{margin:0}.help-category-toggle{width:100%;min-height:58px;display:flex;align-items:center;justify-content:space-between;gap:14px;border:0;background:transparent;color:var(--tx);padding:16px 20px;text-align:left;font-size:14px;font-weight:750;cursor:pointer;transition:background .16s ease,color .16s ease}.help-category-toggle:hover{background:var(--chip2);color:var(--accent)}.help-category-toggle:focus-visible,.help-route-node:focus-visible,.help-article-close:focus-visible{outline:2px solid var(--accent);outline-offset:-3px}.help-caret{flex:none;color:var(--tx-faint);transition:transform .18s ease}
+.help-category-panel{display:grid;grid-template-rows:0fr;opacity:0;transform:translateY(-6px);transition:grid-template-rows .26s cubic-bezier(.2,.8,.2,1),opacity .2s ease,transform .26s cubic-bezier(.2,.8,.2,1)}.help-category-panel[data-open="true"]{grid-template-rows:1fr;opacity:1;transform:none}.help-category-panel-inner{min-height:0;overflow:hidden}
+.help-route{position:relative;min-height:250px;margin:0 20px 20px}.help-route-svg{position:absolute;inset:0;width:100%;height:100%;overflow:visible;pointer-events:none}.help-route-svg path{fill:none;stroke:var(--bd3);stroke-width:3;stroke-linecap:round;stroke-dasharray:4 10;transition:stroke .18s ease,filter .18s ease}.help-route:has(.help-route-node:hover) .help-route-svg path,.help-route:has(.help-route-node:focus-visible) .help-route-svg path{stroke:var(--accent);filter:drop-shadow(0 0 5px var(--accent-soft))}.help-route-node{position:absolute;transform:translate(-50%,-50%);width:min(190px,22%);border:0;background:transparent;color:var(--tx);padding:0;cursor:pointer;text-align:center;transition:transform .16s cubic-bezier(.2,.8,.2,1),filter .16s ease,color .16s ease}.help-route-node:hover,.help-route-node:focus-visible{transform:translate(-50%,-56%) scale(1.035);color:var(--accent);filter:drop-shadow(0 10px 16px var(--sh))}.help-route-number{width:42px;height:42px;margin:0 auto 9px;border:2px solid currentColor;border-radius:50%;display:grid;place-items:center;background:var(--surface-strong);font-size:15px;font-weight:800;box-shadow:0 0 0 5px var(--accent-soft)}.help-route-label{display:block;font-size:12px;font-weight:700;line-height:1.4}.help-route-svg-mobile{display:none}
+.help-article-backdrop{position:fixed;inset:var(--titlebar-offset) 0 0;z-index:125;display:grid;place-items:center;padding:20px;background:var(--ovl);backdrop-filter:blur(7px);visibility:hidden;opacity:0;pointer-events:none;transition:visibility 0s linear .2s,opacity .2s ease}.help-article-backdrop[data-open="true"]{visibility:visible;opacity:1;pointer-events:auto;transition-delay:0s}.help-article-dialog{width:min(680px,calc(100vw - 32px));max-height:min(720px,calc(100vh - var(--titlebar-offset) - 40px));overflow:auto;border-radius:18px;box-shadow:0 30px 90px var(--sh);transform:translateY(10px) scale(.975);opacity:0;transition:transform .2s cubic-bezier(.2,.8,.2,1),opacity .18s ease}.help-article-backdrop[data-open="true"] .help-article-dialog{transform:none;opacity:1}.help-article-header{position:sticky;top:0;display:flex;align-items:center;justify-content:space-between;gap:18px;padding:20px 22px;border-bottom:1px solid var(--bd);background:var(--surface-strong);z-index:1}.help-article-header h2{margin:0;font-size:17px}.help-article-close{width:34px;height:34px;flex:none;border:1px solid var(--bd2);border-radius:10px;background:var(--chip);color:var(--tx-dim);cursor:pointer}.help-article-content{padding:20px 22px 24px;color:var(--tx-mid);font-size:12.5px;line-height:1.7}.help-article-content p{margin:0}.help-article-content p+p,.help-article-content p+.help-steps,.help-steps+p{margin-top:10px}.help-steps{margin:0;padding-left:24px}.help-steps li+li{margin-top:8px}.help-answer-action{margin-top:14px;border:1px solid var(--accent);background:var(--accent-soft);color:var(--accent);font-size:12.5px;font-weight:700;padding:10px 15px;border-radius:10px;cursor:pointer}.help-empty{border-radius:16px;padding:24px;text-align:center;color:var(--tx-dim);font-size:12.5px}.help-empty button{margin-top:12px}body:has(.help-article-backdrop[data-open="true"]){overflow:hidden}
+@media(max-width:760px){.app-main{padding:20px 12px 56px!important}.app-titlebar{grid-template-columns:52px minmax(0,1fr) 52px;padding:0 10px}.titlebar-status span:not(.local-status-dot){display:none}.insights-grid{grid-template-columns:1fr!important}.help-faq{gap:14px}.help-search-panel{padding:16px}.help-search-row{align-items:stretch}.help-route{min-height:0;margin:0 14px 18px;padding:14px 0}.help-route-svg-wide{display:none}.help-route-svg-mobile{display:block;left:0;width:72px;height:100%}.help-route-node{position:relative;left:auto!important;top:auto!important;transform:none;width:100%;min-height:76px;display:grid;grid-template-columns:54px minmax(0,1fr);align-items:center;text-align:left}.help-route-node:hover,.help-route-node:focus-visible{transform:translateX(4px)}.help-route-number{margin:0}.insights-full{grid-column:1}.time-edge-row{grid-template-areas:"label count net" "bar bar win";grid-template-columns:52px 1fr auto!important}.time-edge-label{grid-area:label}.time-edge-bar{grid-area:bar}.time-edge-count{grid-area:count}.time-edge-net{grid-area:net}.time-edge-win{grid-area:win}.journal-drawer{width:100%!important;max-width:none!important;padding:18px 14px 28px!important}.trade-detail-grid{grid-template-columns:repeat(2,minmax(0,1fr))!important}.annotation-overlay{padding:10px}.annotation-dialog{width:calc(100vw - 20px);max-height:calc(100vh - 64px);border-radius:14px;padding:10px}.annotation-toolbar{align-items:stretch!important}.annotation-actions{width:100%;flex-wrap:wrap}.plan-fields{grid-template-columns:1fr!important}.plan-score-head,.risk-guide-head{flex-wrap:wrap}.risk-settings-grid{grid-template-columns:1fr!important}.risk-guide-grid{grid-template-columns:repeat(2,minmax(0,1fr))!important}}
 html{--accent:#3DDC97;scrollbar-gutter:stable;scrollbar-color:var(--accent) transparent;scrollbar-width:thin}
 ::-webkit-scrollbar{width:12px;height:12px}::-webkit-scrollbar-thumb{background:var(--accent);border:3px solid transparent;background-clip:padding-box;border-radius:999px}::-webkit-scrollbar-thumb:hover{background:var(--accent);background-clip:padding-box}::-webkit-scrollbar-track{background:transparent}
 @keyframes rise{0%{opacity:0;transform:translateY(20px) scale(.97)}70%{opacity:1}100%{opacity:1;transform:none}}
@@ -98,7 +102,7 @@ html{--accent:#3DDC97;scrollbar-gutter:stable;scrollbar-color:var(--accent) tran
 .range-control:focus-within .range-thumb,.range-control:hover .range-thumb{box-shadow:0 0 0 4px var(--accent-soft),0 0 20px var(--accent-glow)}
 .trade-card{border:1px solid var(--bd);background:var(--chip);border-radius:13px;padding:11px}
 .trade-card.trade-enter{animation:trade-enter .36s cubic-bezier(.2,.8,.2,1) both}
-@media (prefers-reduced-motion: reduce){*,*::before,*::after{animation-duration:.01ms!important;animation-iteration-count:1!important;scroll-behavior:auto!important;transition-duration:.01ms!important}.tour-spotlight.is-actionable{animation:none!important;border-width:3px}}
+@media (prefers-reduced-motion:reduce){.help-category-panel,.help-route-node,.help-route-svg path,.help-article-backdrop,.help-article-dialog,.help-caret{transition-duration:.01ms!important}.help-route-node,.help-route-node:hover,.help-route-node:focus-visible,.help-article-dialog,.help-article-backdrop[data-open="true"] .help-article-dialog{transform:none!important}*,*::before,*::after{animation-duration:.01ms!important;animation-iteration-count:1!important;scroll-behavior:auto!important;transition-duration:.01ms!important}.tour-spotlight.is-actionable{animation:none!important;border-width:3px}}
 .calendar-scroll{min-height:0;overflow:auto;overscroll-behavior:contain}
 .calendar-grid{min-width:760px;display:flex;flex-direction:column;min-height:100%}
 .calendar-weeks{display:flex;flex-direction:column;gap:9px;margin-top:2px;padding:7px 3px 3px;flex:1;min-height:0;overflow:auto;overscroll-behavior:contain}
@@ -124,7 +128,7 @@ html{--accent:#3DDC97;scrollbar-gutter:stable;scrollbar-color:var(--accent) tran
 @container widget (max-width:360px){.widget-secondary{display:none}.score-components{margin-top:4px}.widget-toolbar{flex-wrap:wrap}}
 </style>
 </helmet>
-<div style="display:flex;flex-direction:column;min-height:100vh;font-family:'Manrope',system-ui,sans-serif;color:var(--tx);background:linear-gradient(160deg,var(--card-b) 0%,var(--bg) 46%,var(--panel-b) 100%);--surface-bg:{{surfaceBg}};--surface-bg-strong:{{surfaceBgStrong}};--surface-fx:{{surfaceFx}};--surface-fx-strong:{{surfaceFxStrong}};--accent:{{accent}};--accent-ink:{{accentInk}};--on-acc:{{accentInk}};--accent-glow:{{accentGlow}};--accent-soft:{{accentSoft}};--titlebar-offset:{{titlebarOffset}}">
+<div style="display:flex;flex-direction:column;min-height:100vh;font-family:'Manrope',system-ui,sans-serif;color:var(--tx);background:linear-gradient(160deg,var(--card-b) 0%,var(--bg) 46%,var(--panel-b) 100%);--surface-bg:{{surfaceBg}};--surface-bg-strong:{{surfaceBgStrong}};--surface-strong:{{surfaceBgStrong}};--surface-fx:{{surfaceFx}};--surface-fx-strong:{{surfaceFxStrong}};--accent:{{accent}};--accent-ink:{{accentInk}};--on-acc:{{accentInk}};--accent-glow:{{accentGlow}};--accent-soft:{{accentSoft}};--titlebar-offset:{{titlebarOffset}}">
   <div class="bg-aurora {{glowOffClass}}" style="position:fixed;inset:-25%;pointer-events:none;z-index:0;overflow:hidden">
     <div style="position:absolute;top:0;left:0;width:70%;height:75%;border-radius:50%;filter:blur(30px);opacity:{{auroraOp}};background:radial-gradient(circle at 30% 30%,{{glowA}},transparent 66%);animation:aurora 28s ease-in-out infinite,glowpulse 9s ease-in-out infinite"></div>
     <div style="position:absolute;top:-10%;right:-5%;width:65%;height:70%;border-radius:50%;filter:blur(30px);opacity:{{auroraOp}};background:radial-gradient(circle at 60% 40%,{{glowC}},transparent 64%);animation:auroraB 34s ease-in-out infinite,glowpulse 11s ease-in-out infinite"></div>
@@ -1177,39 +1181,55 @@ html{--accent:#3DDC97;scrollbar-gutter:stable;scrollbar-color:var(--accent) tran
           </div>
 
           <sc-for list="{{helpGroups}}" as="category" hint-placeholder-count="6">
-            <section class="help-category" aria-labelledby="{{category.categoryId}}">
-              <h2 id="{{category.categoryId}}">{{category.label}}</h2>
-              <div class="help-accordion glass-surface">
-                <sc-for list="{{category.questions}}" as="faq" hint-placeholder-count="4">
-                  <div class="help-item">
-                    <h3>
-                      <button id="{{faq.questionId}}" class="help-question" onClick="{{faq.toggle}}" aria-expanded="{{faq.expanded}}" aria-controls="{{faq.answerId}}">
-                        <span>{{faq.question}}</span>
-                        <svg class="help-caret" aria-hidden="true" width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" style="transform:{{faq.caretTransform}}"><path d="M4 6.5 8 10.5 12 6.5"></path></svg>
+            <section class="help-category glass-surface">
+              <h2>
+                <button id="{{category.buttonId}}" class="help-category-toggle" onClick="{{category.toggle}}" aria-expanded="{{category.open}}" aria-controls="{{category.panelId}}">
+                  <span>{{category.label}}</span>
+                  <svg class="help-caret" aria-hidden="true" width="18" height="18" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" style="transform:{{category.caretTransform}}"><path d="M4 6.5 8 10.5 12 6.5"></path></svg>
+                </button>
+              </h2>
+              <div id="{{category.panelId}}" class="help-category-panel" data-open="{{category.open}}" aria-labelledby="{{category.buttonId}}" aria-hidden="{{category.collapsed}}" inert="{{category.collapsed}}">
+                <div class="help-category-panel-inner">
+                  <div class="help-route">
+                    <svg class="help-route-svg help-route-svg-wide" aria-hidden="true" viewBox="{{category.routeViewBox}}" preserveAspectRatio="none"><path d="{{category.routePath}}"></path></svg>
+                    <svg class="help-route-svg help-route-svg-mobile" aria-hidden="true" viewBox="{{category.mobileRouteViewBox}}" preserveAspectRatio="none"><path d="{{category.mobileRoutePath}}"></path></svg>
+                    <sc-for list="{{category.questions}}" as="faq" hint-placeholder-count="4">
+                      <button class="help-route-node" style="left:{{faq.left}};top:{{faq.top}}" onClick="{{faq.open}}" aria-haspopup="dialog">
+                        <span class="help-route-number native-symbol" aria-hidden="true">{{faq.number}}</span>
+                        <span class="help-route-label">{{faq.question}}</span>
                       </button>
-                    </h3>
-                    <div id="{{faq.answerId}}" class="help-answer" hidden="{{faq.hidden}}" role="region" aria-labelledby="{{faq.questionId}}">
-                      <sc-for list="{{faq.blocks}}" as="block" hint-placeholder-count="2">
-                        <sc-if value="{{block.isPara}}" hint-placeholder-val="{{true}}">
-                          <p><sc-for list="{{block.runs}}" as="run" hint-placeholder-count="3"><sc-if value="{{run.strong}}" hint-placeholder-val="{{false}}"><strong>{{run.text}}</strong></sc-if><sc-if value="{{run.plain}}" hint-placeholder-val="{{true}}"><span>{{run.text}}</span></sc-if></sc-for></p>
-                        </sc-if>
-                        <sc-if value="{{block.isSteps}}" hint-placeholder-val="{{false}}">
-                          <ol class="help-steps">
-                            <sc-for list="{{block.steps}}" as="step" hint-placeholder-count="5">
-                              <li><sc-for list="{{step.runs}}" as="run" hint-placeholder-count="3"><sc-if value="{{run.strong}}" hint-placeholder-val="{{false}}"><strong>{{run.text}}</strong></sc-if><sc-if value="{{run.plain}}" hint-placeholder-val="{{true}}"><span>{{run.text}}</span></sc-if></sc-for></li>
-                            </sc-for>
-                          </ol>
-                        </sc-if>
-                      </sc-for>
-                      <sc-if value="{{faq.hasAction}}" hint-placeholder-val="{{false}}">
-                        <button class="help-answer-action" onClick="{{faq.action.run}}">{{faq.action.label}}</button>
-                      </sc-if>
-                    </div>
+                    </sc-for>
                   </div>
-                </sc-for>
+                </div>
               </div>
             </section>
           </sc-for>
+
+          <div class="help-article-backdrop" data-open="{{helpArticleOpen}}" aria-hidden="{{helpArticleClosed}}" inert="{{helpArticleClosed}}" onClick="{{closeHelpArticle}}">
+            <div class="help-article-dialog glass-surface-strong" ref="{{setHelpArticleDialogRef}}" onKeyDown="{{onHelpArticleDialogKeydown}}" onClick="{{stopHelpArticleClick}}" tabIndex="-1" role="dialog" aria-modal="true" aria-labelledby="help-article-title">
+              <div class="help-article-header">
+                <h2 id="help-article-title">{{helpArticleTitle}}</h2>
+                <button class="help-article-close native-symbol" onClick="{{closeHelpArticle}}" aria-label="Close Help article">✕</button>
+              </div>
+              <div class="help-article-content">
+                <sc-for list="{{helpArticleBlocks}}" as="block" hint-placeholder-count="2">
+                  <sc-if value="{{block.isPara}}" hint-placeholder-val="{{true}}">
+                    <p><sc-for list="{{block.runs}}" as="run" hint-placeholder-count="3"><sc-if value="{{run.strong}}" hint-placeholder-val="{{false}}"><strong>{{run.text}}</strong></sc-if><sc-if value="{{run.plain}}" hint-placeholder-val="{{true}}"><span>{{run.text}}</span></sc-if></sc-for></p>
+                  </sc-if>
+                  <sc-if value="{{block.isSteps}}" hint-placeholder-val="{{false}}">
+                    <ol class="help-steps">
+                      <sc-for list="{{block.steps}}" as="step" hint-placeholder-count="5">
+                        <li><sc-for list="{{step.runs}}" as="run" hint-placeholder-count="3"><sc-if value="{{run.strong}}" hint-placeholder-val="{{false}}"><strong>{{run.text}}</strong></sc-if><sc-if value="{{run.plain}}" hint-placeholder-val="{{true}}"><span>{{run.text}}</span></sc-if></sc-for></li>
+                      </sc-for>
+                    </ol>
+                  </sc-if>
+                </sc-for>
+                <sc-if value="{{helpArticleHasAction}}" hint-placeholder-val="{{false}}">
+                  <button class="help-answer-action" onClick="{{helpArticleAction.run}}">{{helpArticleAction.label}}</button>
+                </sc-if>
+              </div>
+            </div>
+          </div>
 
           <sc-if value="{{helpNoResults}}" hint-placeholder-val="{{false}}">
             <div class="help-empty glass-surface">
@@ -1895,6 +1915,32 @@ class Component extends DCLogic {
     }).filter(group=>group.questions.length);
     if(!normalized){matchCount=groups.reduce((sum,group)=>sum+group.questions.length,0);firstId=null}
     return{normalized,matchCount,groups,firstId};
+  }
+  helpRouteModel(count){
+    const total=Math.max(0,Math.floor(Number(count)||0));
+    if(!total)return{viewBox:'0 0 1000 220',path:'',mobileViewBox:'0 0 72 100',mobilePath:'',nodes:[]};
+    if(total===1)return{viewBox:'0 0 1000 220',path:'',mobileViewBox:'0 0 72 100',mobilePath:'',nodes:[{left:'8%',top:'50%'}]};
+    const nodes=Array.from({length:total},(_,index)=>{
+      const left=8+(84*index/(total-1));
+      const top=index%2===0?34:68;
+      return{left:left.toFixed(2).replace(/\.?0+$/,'')+'%',top:top+'%'};
+    });
+    const px=node=>({x:Number(node.left.slice(0,-1))*10,y:Number(node.top.slice(0,-1))*2.2});
+    const first=px(nodes[0]);
+    let path='M '+first.x+' '+first.y;
+    for(let index=1;index<nodes.length;index++){
+      const previous=px(nodes[index-1]),current=px(nodes[index]);
+      const middle=(previous.x+current.x)/2;
+      path+=' C '+middle+' '+previous.y+', '+middle+' '+current.y+', '+current.x+' '+current.y;
+    }
+    const mobileEnd=12+(total-1)*92;
+    return{
+      viewBox:'0 0 1000 220',
+      path,
+      mobileViewBox:'0 0 72 '+(mobileEnd+12),
+      mobilePath:'M 36 12 V '+mobileEnd,
+      nodes,
+    };
   }
   helpFaqData(){
     if(this._helpFaq)return this._helpFaq;
@@ -3874,6 +3920,7 @@ class Component extends DCLogic {
     };
     const helpGroups=helpFiltered.groups.map(group=>{
       const open=S.helpOpenCategoryId===group.key;
+      const route=this.helpRouteModel(group.questions.length);
       return{
         key:group.key,
         label:group.label,
@@ -3883,10 +3930,16 @@ class Component extends DCLogic {
         collapsed:!open,
         caretTransform:open?'rotate(180deg)':'none',
         toggle:()=>this.toggleHelpCategory(group.key),
+        routeViewBox:route.viewBox,
+        routePath:route.path,
+        mobileRouteViewBox:route.mobileViewBox,
+        mobileRoutePath:route.mobilePath,
         questions:group.questions.map((question,index)=>({
           id:question.id,
           number:String(index+1),
           question:question.question,
+          left:route.nodes[index].left,
+          top:route.nodes[index].top,
           open:event=>this.openHelpArticle(question.id,event),
           blocks:question.blocks.map(helpBlock),
           hasAction:!!question.action,

@@ -2635,12 +2635,14 @@ test('the daily loss limit passes exactly at the configured boundary', () => {
   assert.equal(row.pass, true);
 });
 
-test('narrow screens use the FAQ column rules and retain trade detail behavior', () => {
+test('narrow screens use the Help route flow and retain trade detail behavior', () => {
   const html = fs.readFileSync(htmlPath, 'utf8');
   const mobile = html.match(/@media\(max-width:760px\)\{([\s\S]*?)\}\nhtml\{/);
   assert.ok(mobile, 'the narrow-screen CSS block is present');
   assert.match(mobile[1], /\.help-faq\{gap:14px\}/);
-  assert.match(mobile[1], /\.help-question\{[^}]*min-height:44px/);
+  assert.match(mobile[1], /\.help-route-svg-wide\{display:none\}/);
+  assert.match(mobile[1], /\.help-route-svg-mobile\{[^}]*display:block/);
+  assert.match(mobile[1], /\.help-route-node\{[^}]*position:relative[^}]*min-height:76px/);
   assert.match(html, /\.help-search-panel\{[^}]*padding:/);
   assert.match(html, /\.trade-detail-grid\{grid-template-columns:repeat\(2,minmax\(0,1fr\)\)!important\}/);
   assert.doesNotMatch(html, /\.help-grid\{grid-template-columns:1fr!important\}/);
@@ -2655,7 +2657,7 @@ test('glass, calendar, typography, tags, icon, and reduced-motion contracts are 
   assert.match(html,/\.calendar-cell\{[^}]*box-sizing:border-box/);
   assert.match(html,/\.calendar-grid\{[^}]*min-width:/);
   assert.match(html,/\.sidebar-section\{[^}]*font-family:'Manrope'/);
-  assert.match(html,/@media \(prefers-reduced-motion: reduce\)/);
+  assert.match(html,/@media \(prefers-reduced-motion:reduce\)\{[^}]*\.help-category-panel/);
   assert.match(html,/value="\{\{eTagsVisible\}\}"/);
   assert.match(html,/class="no-profile-book"/);
   assert.doesNotMatch(html,/glowC:\(\(\)=>/);
@@ -3447,6 +3449,46 @@ test('Help interactions remain transient and never write profile settings', () =
   assert.deepEqual(plain(component.state.settings), { name: 'Unchanged' });
 });
 
+test('Help route model orders nodes and handles one-node categories', () => {
+  const component = loadComponent();
+  assert.deepEqual(plain(component.helpRouteModel(1)), {
+    viewBox: '0 0 1000 220',
+    path: '',
+    mobileViewBox: '0 0 72 100',
+    mobilePath: '',
+    nodes: [{ left: '8%', top: '50%' }],
+  });
+  const route = component.helpRouteModel(4);
+  assert.equal(route.nodes.length, 4);
+  assert.match(route.path, /^M /);
+  assert.match(route.path, / C /);
+  assert.equal(route.mobilePath, 'M 36 12 V 288');
+});
+
+test('Help markup exposes exclusive category controls and an accessible article modal', () => {
+  const html = fs.readFileSync(htmlPath, 'utf8');
+  assert.match(html, /class="help-category-toggle"[^>]+aria-expanded="\{\{category\.open\}\}"[^>]+aria-controls="\{\{category\.panelId\}\}"/);
+  assert.match(html, /id="\{\{category\.panelId\}\}"[^>]+aria-labelledby="\{\{category\.buttonId\}\}"[^>]+inert="\{\{category\.collapsed\}\}"/);
+  assert.match(html, /class="help-route-node[^"]*"[^>]+onClick="\{\{faq\.open\}\}"/);
+  assert.match(html, /class="help-route-svg help-route-svg-wide"/);
+  assert.match(html, /class="help-route-svg help-route-svg-mobile"/);
+  assert.match(html, /class="help-article-dialog[^"]*"[^>]+role="dialog"[^>]+aria-modal="true"[^>]+aria-labelledby="help-article-title"/);
+  assert.match(html, /ref="\{\{setHelpArticleDialogRef\}\}"[^>]+onKeyDown="\{\{onHelpArticleDialogKeydown\}\}"/);
+});
+
+test('Help CSS defines tweened dropdowns, treasure-map hover, modal exit, and reduced motion', () => {
+  const html = fs.readFileSync(htmlPath, 'utf8');
+  assert.match(html, /\.help-category-panel\{[^}]*grid-template-rows:0fr[^}]*transition:/);
+  assert.match(html, /\.help-category-panel\[data-open="true"\]\{[^}]*grid-template-rows:1fr/);
+  assert.match(html, /\.help-route-node:hover/);
+  assert.match(html, /\.help-route-node:focus-visible/);
+  assert.match(html, /\.help-article-backdrop\{[^}]*visibility:hidden[^}]*opacity:0[^}]*transition:/);
+  assert.match(html, /\.help-article-backdrop\[data-open="true"\]\{[^}]*visibility:visible[^}]*opacity:1/);
+  assert.match(html, /body:has\(\.help-article-backdrop\[data-open="true"\]\)\{overflow:hidden\}/);
+  assert.match(html, /@media \(prefers-reduced-motion:reduce\)\{[^}]*\.help-category-panel/);
+  assert.match(html, /--surface-strong:\{\{surfaceBgStrong\}\}/);
+});
+
 test('every current tab assignment routes through setTab without direct tab state writes', () => {
   const html = fs.readFileSync(htmlPath, 'utf8');
   assert.match(html, /setTab\(tab,extra=null\)/);
@@ -3488,12 +3530,18 @@ test('Help render bindings expose a complete recursive view model', () => {
     assert.equal(group.collapsed, true);
     assert.equal(group.caretTransform, 'none');
     assert.equal(typeof group.toggle, 'function');
+    assert.equal(group.routeViewBox, '0 0 1000 220');
+    assert.equal(typeof group.routePath, 'string');
+    assert.match(group.mobileRouteViewBox, /^0 0 72 \d+$/);
+    assert.equal(typeof group.mobileRoutePath, 'string');
     assert.ok(Array.isArray(group.questions));
     for (const question of group.questions) {
       questionCount++;
       for (const key of [
-        'id','number','question','open','blocks','hasAction','action',
+        'id','number','question','left','top','open','blocks','hasAction','action',
       ]) assert.notEqual(question[key], undefined, `question field ${key} exists`);
+      assert.match(question.left, /^\d+(?:\.\d+)?%$/);
+      assert.match(question.top, /^\d+%$/);
       assert.equal(typeof question.open, 'function');
       for (const block of question.blocks) {
         assert.equal(typeof block.isPara, 'boolean');
@@ -3534,19 +3582,12 @@ test('Help render bindings expose a complete recursive view model', () => {
   assert.ok(modalValues.helpArticleBlocks.length > 0);
 });
 
-test('Help FAQ markup keeps answer IDREFs mounted and exposes search accessibility', () => {
+test('Help FAQ markup exposes search accessibility without duplicating article copy', () => {
   const html = fs.readFileSync(htmlPath, 'utf8');
   assert.match(html, /class="help-faq"/);
   assert.match(html, /<label[^>]+for="help-faq-search"[^>]*>Search Help<\/label>/);
   assert.match(html, /id="help-faq-search"[^>]+ref="\{\{setHelpSearchRef\}\}"/);
   assert.match(html, /aria-live="polite"/);
-  assert.match(html, /aria-expanded="\{\{faq\.expanded\}\}"/);
-  assert.match(html, /aria-controls="\{\{faq\.answerId\}\}"/);
-  assert.match(html, /id="\{\{faq\.answerId\}\}"[^>]+hidden="\{\{faq\.hidden\}\}"[^>]+role="region"[^>]+aria-labelledby="\{\{faq\.questionId\}\}"/);
-  assert.doesNotMatch(html, /<sc-if value="\{\{faq\.expanded\}\}"[^>]*>[\s\S]*id="\{\{faq\.answerId\}\}"/);
-  assert.match(html, /<section class="help-category" aria-labelledby="\{\{category\.categoryId\}\}">/);
-  assert.match(html, /<h2 id="\{\{category\.categoryId\}\}">\{\{category\.label\}\}<\/h2>/);
-  assert.match(html, /onClick="\{\{faq\.action\.run\}\}">\{\{faq\.action\.label\}\}<\/button>/);
   assert.doesNotMatch(html, /it covers search, journaling a day, shaping the dashboard/i);
 });
 
