@@ -14,7 +14,7 @@ const STORE_KEY = 'written-profiles-v2';
 // would flag these; anything NOT on this list must fit inside its card.
 const INTENTIONAL_SCROLLERS = new Set(['recent', 'econ', 'checklist']);
 
-function profileFixture({ widgets } = {}) {
+function profileFixture({ widgets, extraSettings } = {}) {
   const settings = {
     onboarded: true,
     loggedOut: false,
@@ -25,6 +25,7 @@ function profileFixture({ widgets } = {}) {
     tourCompleted: true,
   };
   if (widgets) settings.widgets = widgets;
+  if (extraSettings) Object.assign(settings, extraSettings);
   return {
     version: 2,
     activeProfileId: 'smoke',
@@ -120,6 +121,62 @@ test.describe('built renderer', () => {
       return getComputedStyle(root).getPropertyValue('--accent').trim();
     });
     expect(accent, '--accent is bound on the app root').toBe('#3DDC97');
+  });
+
+  test('background glow off leaves no aurora on screen', async ({ page }) => {
+    // MUST run in perf mode "full". perf.css blanket-kills animation-name in reduced/max,
+    // and reduced is both the shipped default AND what perf.js falls back to over file://
+    // where there is no desktopPrefs bridge. Under that fallback every assertion here
+    // passes whether or not the fix exists — which is exactly how this bug survived: it
+    // only ever manifests for users who switch View -> Performance Mode -> Full.
+    const bootFull = async settings => {
+      await page.addInitScript(() => {
+        window.desktopPrefs = {
+          validModes: ['full', 'reduced', 'max'],
+          defaultMode: 'full',
+          getPerfMode: () => 'full',
+        };
+      });
+      await boot(page, profileFixture({ extraSettings: settings }));
+      expect(await page.getAttribute('html', 'data-perf'), 'running in full perf mode').toBe('full');
+    };
+
+    // This has to be a RENDERED check. The binding said opacity:0 the whole time the bug
+    // was live — glowpulse animates opacity, and a running animation's computed value
+    // beats an inline author style, so only getComputedStyle sees the truth.
+    const read = () => page.evaluate(() => {
+      const container = document.querySelector('.bg-aurora');
+      if (!container) return null;
+      return [...container.children].map(el => {
+        const cs = getComputedStyle(el);
+        return { opacity: cs.opacity, animationName: cs.animationName };
+      });
+    });
+
+    await bootFull({ glow: 'off' });
+    // Sample well into the 9-13s glowpulse cycle: at t=0 the keyframe happens to sit at
+    // .85, so an immediate read could pass against a still-animating element.
+    await page.waitForTimeout(800);
+
+    const off = await read();
+    expect(off, '.bg-aurora container is present').not.toBeNull();
+    expect(off.length, 'three aurora blobs').toBe(3);
+    for (const layer of off) {
+      expect(layer.opacity, 'aurora blob is fully transparent').toBe('0');
+      expect(layer.animationName, 'aurora blob is not animating').toBe('none');
+    }
+
+    // Positive control — without it this test would still pass if the layers vanished
+    // entirely, if the selector silently matched nothing, or if animations were globally
+    // disabled by the environment (which is what happened the first time it was written).
+    await bootFull({ glow: 'soft' });
+    await page.waitForTimeout(800);
+    const on = await read();
+    expect(on.length).toBe(3);
+    for (const layer of on) {
+      expect(Number(layer.opacity), 'aurora blob is visible when glow is on').toBeGreaterThan(0);
+      expect(layer.animationName).toContain('glowpulse');
+    }
   });
 
   test('command palette owns focus and restores its titlebar trigger', async ({ page }) => {

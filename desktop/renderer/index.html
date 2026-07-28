@@ -72,6 +72,11 @@ html{scrollbar-gutter:stable;scrollbar-color:var(--accent) transparent;scrollbar
 @keyframes aurora{0%{transform:translate3d(-4%,-3%,0) rotate(0deg) scale(1.05)}50%{transform:translate3d(5%,4%,0) rotate(10deg) scale(1.18)}100%{transform:translate3d(-4%,-3%,0) rotate(0deg) scale(1.05)}}
 @keyframes auroraB{0%{transform:translate3d(4%,3%,0) rotate(0deg) scale(1.1)}50%{transform:translate3d(-6%,-5%,0) rotate(-12deg) scale(1.25)}100%{transform:translate3d(4%,3%,0) rotate(0deg) scale(1.1)}}
 @keyframes glowpulse{0%,100%{opacity:.85}50%{opacity:1}}
+/* Background glow = off. The aurora blobs carry an inline opacity, but glowpulse animates
+   opacity too, and a running animation's computed value beats an inline author style — so
+   setting auroraOp to '0' on its own left the glow fully visible. The animation has to go
+   as well. Same mechanism perf.css uses to drop these layers in reduced/max perf mode. */
+.bg-aurora.glow-off>div{animation-name:none!important;opacity:0!important}
 .glass-surface{background:var(--surface-bg);border:1px solid var(--bd);backdrop-filter:var(--surface-fx);-webkit-backdrop-filter:var(--surface-fx)}
 .glass-surface-strong{background:var(--surface-bg-strong);border:1px solid var(--bd2);backdrop-filter:var(--surface-fx-strong);-webkit-backdrop-filter:var(--surface-fx-strong)}
 .sidebar-section{font-family:'Manrope',system-ui,sans-serif;font-size:10px;font-weight:700;letter-spacing:1.2px;text-transform:uppercase;color:var(--tx-ghost)}
@@ -120,7 +125,7 @@ html{scrollbar-gutter:stable;scrollbar-color:var(--accent) transparent;scrollbar
 </style>
 </helmet>
 <div style="display:flex;flex-direction:column;min-height:100vh;font-family:'Manrope',system-ui,sans-serif;color:var(--tx);background:linear-gradient(160deg,var(--card-b) 0%,var(--bg) 46%,var(--panel-b) 100%);--surface-bg:{{surfaceBg}};--surface-bg-strong:{{surfaceBgStrong}};--surface-fx:{{surfaceFx}};--surface-fx-strong:{{surfaceFxStrong}};--accent:{{accent}};--accent-ink:{{accentInk}};--on-acc:{{accentInk}};--accent-glow:{{accentGlow}};--accent-soft:{{accentSoft}};--titlebar-offset:{{titlebarOffset}}">
-  <div style="position:fixed;inset:-25%;pointer-events:none;z-index:0;overflow:hidden">
+  <div class="bg-aurora {{glowOffClass}}" style="position:fixed;inset:-25%;pointer-events:none;z-index:0;overflow:hidden">
     <div style="position:absolute;top:0;left:0;width:70%;height:75%;border-radius:50%;filter:blur(30px);opacity:{{auroraOp}};background:radial-gradient(circle at 30% 30%,{{glowA}},transparent 66%);animation:aurora 28s ease-in-out infinite,glowpulse 9s ease-in-out infinite"></div>
     <div style="position:absolute;top:-10%;right:-5%;width:65%;height:70%;border-radius:50%;filter:blur(30px);opacity:{{auroraOp}};background:radial-gradient(circle at 60% 40%,{{glowC}},transparent 64%);animation:auroraB 34s ease-in-out infinite,glowpulse 11s ease-in-out infinite"></div>
     <div style="position:absolute;bottom:-12%;left:20%;width:70%;height:70%;border-radius:50%;filter:blur(30px);opacity:{{auroraOp}};background:radial-gradient(circle at 50% 60%,{{glowB}},transparent 66%);animation:aurora 40s ease-in-out infinite reverse,glowpulse 13s ease-in-out infinite"></div>
@@ -3842,6 +3847,9 @@ class Component extends DCLogic {
       accent:acc,accentInk,acc44:acc+'44',acc55:acc+'55',acc16:acc+'16',
       glowOp:({off:'0',soft:'0.55',medium:'0.8',strong:'1'})[st.glow||'soft']||'0.55',
       auroraOp:({off:'0',soft:'0.85',medium:'1',strong:'1'})[st.glow||'soft']||'0.85',
+      // Opacity alone cannot turn the aurora off — glowpulse animates opacity and wins
+      // over the inline style. This class kills the animation too (see .bg-aurora.glow-off).
+      glowOffClass:(st.glow||'soft')==='off'?'glow-off':'',
       glowA:acc+'2E',glowB:acc+'1C',glowC:acc+'22',accentGlow:acc+'44',accentSoft:acc+'22',
       booting:S.booting,appVersion:'v1.0.0',searchHint:this.searchHintKey(),titlebarOffset:S.titlebarOffset||'44px',
       setProfileMenuRef:el=>this.setDismissRef('profileMenu',el),

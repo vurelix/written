@@ -2665,6 +2665,48 @@ test('accent-glow and accent-soft custom properties track the current accent', (
   assert.match(html,/--accent-soft:\{\{accentSoft\}\}/);
 });
 
+test('background glow off kills the aurora animation, not just its opacity', () => {
+  const component = loadComponent();
+  const at = glow => { component.state.settings = { glow }; return component.renderVals(); };
+
+  // Opacity still has to zero out...
+  assert.equal(at('off').auroraOp, '0');
+  assert.equal(at('off').glowOp, '0');
+  // ...but on its own it did nothing, because glowpulse animates opacity and a running
+  // animation beats an inline author style. The class is what actually turns the glow off.
+  assert.equal(at('off').glowOffClass, 'glow-off');
+
+  for (const level of ['soft', 'medium', 'strong']) {
+    assert.equal(at(level).glowOffClass, '', `${level} must not carry the off class`);
+    assert.notEqual(at(level).auroraOp, '0');
+  }
+  // Unset falls back to 'soft', so a fresh profile keeps its glow.
+  component.state.settings = {};
+  assert.equal(component.renderVals().glowOffClass, '');
+
+  const html = fs.readFileSync(htmlPath, 'utf8');
+  assert.match(html, /<div class="bg-aurora \{\{glowOffClass\}\}"/);
+  assert.match(html, /\.bg-aurora\.glow-off>div\{animation-name:none!important;opacity:0!important\}/);
+
+  // Every pulsing BACKGROUND layer must sit inside the container the class lands on,
+  // otherwise the off switch silently stops covering one of them. The pan layer
+  // ({{glowOp}}) closes the background region and is fine unclassed: bgpan animates
+  // background-position, never opacity.
+  //
+  // glowpulse is also used once far downstream, on the ring around the login screen's
+  // no-profile illustration. That one is a focal accent on an empty state, not background
+  // glow, and is deliberately not governed by this setting.
+  const start = html.indexOf('<div class="bg-aurora');
+  const end = html.indexOf('{{glowOp}}');
+  assert.ok(start > 0 && end > start);
+  const pulsing = [...html.matchAll(/animation:[^"]*glowpulse/g)].map(m => m.index);
+  const background = pulsing.filter(i => i < end);
+  assert.equal(background.length, 3, 'expected exactly the three aurora blobs to pulse');
+  for (const i of background) {
+    assert.ok(i > start, 'a background glowpulse layer escaped the .bg-aurora container');
+  }
+});
+
 test('accentInk chooses the higher-contrast foreground using numeric sRGB', () => {
   const component = loadComponent();
   assert.equal(component.accentInk('#3DDC97'), '#07130C');
