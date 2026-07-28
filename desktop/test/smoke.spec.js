@@ -568,7 +568,12 @@ test.describe('built renderer', () => {
     const dialog = page.getByRole('dialog', { name: 'How do I journal a trading day?' });
     await expect(dialog).toBeVisible();
     await expect(page.locator('body')).toHaveCSS('overflow', 'hidden');
-    await expect(dialog.getByRole('button', { name: 'Close Help article' })).toBeFocused();
+    const closeButton = dialog.getByRole('button', { name: 'Close Help article' });
+    await expect(closeButton).toBeFocused();
+    await page.keyboard.press('Tab');
+    await expect(closeButton).toBeFocused();
+    await page.keyboard.press('Shift+Tab');
+    await expect(closeButton).toBeFocused();
     await dialog.press('Escape');
     await expect(dialog).toBeHidden();
     await expect(articleNode).toBeFocused();
