@@ -2742,6 +2742,35 @@ test('document-level accent tokens mirror the active accent for root-owned contr
   assert.match(html, /componentWillUnmount\(\)\{[\s\S]*this\.clearDocumentAccentTokens\(\)/);
 });
 
+test('note tabs only carry a status dot when the tab has content', () => {
+  // Reported as "right-side padding shifts the text". Padding is symmetric (6px 12px);
+  // the 5px dot stayed in flow when empty — only its background went transparent — so
+  // dot + 6px gap pushed every label 11px right of centre.
+  const component = loadComponent();
+  const today = component.dk(new Date());
+  seedActiveProfile(component, { onboarded: true, loggedOut: false, quickPresets: [], accent: '#3DDC97' }, {});
+  const draft = component.draftForDay(today);
+  draft.noteSet = { psychology: 'sized down after two losers', lessons: '   ' };
+  component.state = Object.assign({}, component.state, { booting: false, editing: today, draft });
+
+  const tabs = component.renderVals().noteTabs;
+  const byLabel = Object.fromEntries(tabs.map(t => [t.label, t]));
+  assert.equal(tabs.length, 6);
+
+  assert.equal(byLabel.Psychology.filled, true);
+  assert.equal(byLabel.Psychology.dot, '#3DDC97');
+  // Whitespace-only is not content.
+  assert.equal(byLabel.Lessons.filled, false);
+  for (const name of ['Market', 'Homework', 'Ideas', 'Research']) {
+    assert.equal(byLabel[name].filled, false, `${name} is empty`);
+  }
+
+  const html = fs.readFileSync(htmlPath, 'utf8');
+  // The dot must be conditionally RENDERED, not merely made transparent — a transparent
+  // dot still occupies its 5px plus the flex gap.
+  assert.match(html, /<sc-if value="\{\{nt\.filled\}\}"[^>]*><span style="width:5px;height:5px;border-radius:50%;background:\{\{nt\.dot\}\}"><\/span><\/sc-if>\{\{nt\.label\}\}/);
+});
+
 test('every displayed version derives from one constant that matches package.json', () => {
   const component = loadComponent();
   assert.match(component.VERSION, /^\d+\.\d+\.\d+$/);

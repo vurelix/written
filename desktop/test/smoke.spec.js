@@ -268,6 +268,47 @@ test.describe('built renderer', () => {
     expect(inApp.color, 'in-app focus ring tracks the accent').toBe(EXPECTED);
   });
 
+  test('note tab labels sit centred whether or not the tab has content', async ({ page }) => {
+    // Reported as "right-side padding shifts the text". The padding is actually
+    // symmetric (6px 12px) — the culprit was the 5px status dot, which stayed in flow
+    // even when empty (only its background went transparent). Dot + 6px gap pushed every
+    // label 11px right of centre, which reads exactly like extra padding on the right.
+    await boot(page, profileFixture());
+    await page.getByRole('button', { name: 'Calendar', exact: true }).click();
+    await page.waitForSelector('.calendar-cell', { timeout: 15000 });
+    await page.locator('.calendar-cell').filter({ hasText: /\S/ }).first().click();
+    await page.waitForSelector('button:has-text("Psychology")', { timeout: 15000 });
+
+    const offsets = await page.evaluate(() => {
+      const names = ['Market', 'Lessons', 'Psychology', 'Homework', 'Ideas', 'Research'];
+      return names.map(name => {
+        const btn = [...document.querySelectorAll('button')]
+          .find(b => b.textContent.trim() === name && getComputedStyle(b).borderRadius === '999px');
+        if (!btn) return { name, missing: true };
+        // The dc-runtime wraps the interpolated label in its own span, so the label is
+        // an element, and a filled tab has the dot span in front of it.
+        const spans = [...btn.querySelectorAll('span')];
+        const label = spans[spans.length - 1];
+        const box = btn.getBoundingClientRect();
+        const text = label.getBoundingClientRect();
+        return {
+          name,
+          spans: spans.length,
+          // Positive means the label sits right of the button's centre.
+          offset: ((text.left + text.right) / 2) - ((box.left + box.right) / 2),
+        };
+      });
+    });
+
+    expect(offsets.filter(o => o.missing), 'every note tab was found').toEqual([]);
+    // A day with no notes: no tab is filled, so no tab carries a dot and every label is
+    // genuinely centred. Before the fix each one sat ~5.5px right of centre.
+    for (const tab of offsets) {
+      expect(tab.spans, `${tab.name} has no dot when empty`).toBe(1);
+      expect(Math.abs(tab.offset), `${tab.name} label is centred`).toBeLessThanOrEqual(1);
+    }
+  });
+
   test('command palette owns focus and restores its titlebar trigger', async ({ page }) => {
     await boot(page, profileFixture());
     const trigger = page.getByRole('button', { name: 'Search this journal' });
