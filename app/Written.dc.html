@@ -39,7 +39,7 @@ button:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-vis
 .risk-setting-field{display:flex;flex-direction:column}.risk-setting-help{flex:1}
 .app-titlebar{position:sticky;top:calc(var(--titlebar-offset) - 44px);z-index:95;height:44px;display:grid;grid-template-columns:minmax(120px,1fr) minmax(260px,520px) minmax(120px,1fr);align-items:center;padding:0 16px;border-bottom:1px solid var(--bd);background:var(--topbar);backdrop-filter:var(--glass-blur,blur(18px));box-sizing:border-box;transition:top .18s ease}
 .titlebar-traffic{display:flex;gap:8px;align-items:center}.traffic-dot{width:12px;height:12px;border-radius:50%;display:inline-block}.traffic-close{background:#FF5F57}.traffic-minimize{background:#FEBC2E}.traffic-zoom{background:#28C840}
-.global-search-wrap{min-width:0}.global-search-trigger{width:100%;height:32px;box-sizing:border-box;display:flex;align-items:center;gap:9px;border:1px solid var(--bd2);border-radius:10px;background:var(--search-bg);color:var(--tx-faint);padding:0 8px 0 11px;font-size:12px;cursor:pointer;text-align:left}.global-search-trigger .search-icon{flex:none}.global-search-trigger .search-placeholder{flex:1;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.global-search-trigger kbd{font-family:'Manrope',system-ui,sans-serif;font-size:8px;color:var(--tx-faint);border:1px solid var(--bd2);border-radius:5px;padding:3px 5px}.command-palette-backdrop{position:fixed;inset:var(--titlebar-offset) 0 0;z-index:120;background:var(--ovl);backdrop-filter:blur(6px);display:flex;align-items:flex-start;justify-content:center;padding:7vh 16px 16px;box-sizing:border-box;animation:fadein .18s ease both;transition:inset .18s ease}.command-palette-dialog{width:min(680px,100%);max-height:min(640px,calc(93vh - 60px));border-radius:16px;display:flex;flex-direction:column;overflow:hidden;box-shadow:0 28px 90px var(--sh);animation:rise .22s ease both}.command-palette-input-wrap{position:relative;padding:14px;border-bottom:1px solid var(--bd)}.command-palette-input-wrap .search-icon{position:absolute;left:27px;top:50%;transform:translateY(-50%);color:var(--tx-faint);pointer-events:none}.command-palette-input-wrap input{width:100%;height:42px;box-sizing:border-box;border:1px solid var(--bd2);border-radius:11px;background:var(--input);color:var(--tx);padding:0 15px 0 39px;font-size:13px}.search-popover{min-height:0;overflow:auto;padding:7px}.search-group-label{font-family:'Manrope',system-ui,sans-serif;font-size:8.5px;letter-spacing:1.1px;color:var(--tx-faint);padding:9px 8px 4px}.search-result{width:100%;display:grid;grid-template-columns:minmax(0,1fr) auto;gap:12px;align-items:center;border:1px solid var(--bd);color:var(--tx);border-radius:9px;padding:9px 10px;margin-top:3px;cursor:pointer;text-align:left}.search-result-copy{min-width:0}.search-result-copy b,.search-result-copy small{display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.search-result-copy b{font-size:12px}.search-result-copy small{font-family:'Manrope',system-ui,sans-serif;font-size:8.5px;letter-spacing:.4px;color:inherit;opacity:.72;margin-top:3px}.search-result-hint{font-family:'Manrope',system-ui,sans-serif;font-size:8.5px;color:inherit;opacity:.62}.search-empty{padding:25px 12px;text-align:center;color:var(--tx-faint);font-size:12px}.titlebar-status{display:flex;justify-content:flex-end;align-items:center;gap:6px;font-family:'Manrope',system-ui,sans-serif;font-size:9px;letter-spacing:1px;color:var(--tx-faint)}.local-status-dot{width:7px;height:7px;border-radius:50%;background:var(--green);box-shadow:0 0 8px var(--green);animation:pulse 2.6s ease infinite}
+.global-search-wrap{min-width:0}.global-search-trigger{width:100%;height:32px;box-sizing:border-box;display:flex;align-items:center;gap:9px;border:1px solid var(--bd2);border-radius:10px;background:var(--search-bg);color:var(--tx-faint);padding:0 8px 0 11px;font-size:12px;cursor:pointer;text-align:left}.global-search-trigger .search-icon{flex:none}.global-search-trigger .search-placeholder{flex:1;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.global-search-trigger kbd{font-size:8px;color:var(--tx-faint);border:1px solid var(--bd2);border-radius:5px;padding:3px 5px}.command-palette-backdrop{position:fixed;inset:var(--titlebar-offset) 0 0;z-index:120;background:var(--ovl);backdrop-filter:blur(6px);display:flex;align-items:flex-start;justify-content:center;padding:7vh 16px 16px;box-sizing:border-box;animation:fadein .18s ease both;transition:inset .18s ease}.command-palette-dialog{width:min(680px,100%);max-height:min(640px,calc(93vh - 60px));border-radius:16px;display:flex;flex-direction:column;overflow:hidden;box-shadow:0 28px 90px var(--sh);animation:rise .22s ease both}.command-palette-input-wrap{position:relative;padding:14px;border-bottom:1px solid var(--bd)}.command-palette-input-wrap .search-icon{position:absolute;left:27px;top:50%;transform:translateY(-50%);color:var(--tx-faint);pointer-events:none}.command-palette-input-wrap input{width:100%;height:42px;box-sizing:border-box;border:1px solid var(--bd2);border-radius:11px;background:var(--input);color:var(--tx);padding:0 15px 0 39px;font-size:13px}.search-popover{min-height:0;overflow:auto;padding:7px}.search-group-label{font-family:'Manrope',system-ui,sans-serif;font-size:8.5px;letter-spacing:1.1px;color:var(--tx-faint);padding:9px 8px 4px}.search-result{width:100%;display:grid;grid-template-columns:minmax(0,1fr) auto;gap:12px;align-items:center;border:1px solid var(--bd);color:var(--tx);border-radius:9px;padding:9px 10px;margin-top:3px;cursor:pointer;text-align:left}.search-result-copy{min-width:0}.search-result-copy b,.search-result-copy small{display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.search-result-copy b{font-size:12px}.search-result-copy small{font-family:'Manrope',system-ui,sans-serif;font-size:8.5px;letter-spacing:.4px;color:inherit;opacity:.72;margin-top:3px}.search-result-hint{font-family:'Manrope',system-ui,sans-serif;font-size:8.5px;color:inherit;opacity:.62}.search-empty{padding:25px 12px;text-align:center;color:var(--tx-faint);font-size:12px}.titlebar-status{display:flex;justify-content:flex-end;align-items:center;gap:6px;font-family:'Manrope',system-ui,sans-serif;font-size:9px;letter-spacing:1px;color:var(--tx-faint)}.local-status-dot{width:7px;height:7px;border-radius:50%;background:var(--green);box-shadow:0 0 8px var(--green);animation:pulse 2.6s ease infinite}
 .annotation-overlay{position:fixed;inset:44px 0 0;background:rgba(4,6,10,.88);backdrop-filter:blur(9px);z-index:125;display:flex;align-items:center;justify-content:center;padding:24px;box-sizing:border-box;animation:fadein .18s ease both}
 .annotation-dialog{width:min(1100px,100%);max-height:calc(100vh - 92px);display:flex;flex-direction:column;gap:13px;background:var(--surface-bg-strong);backdrop-filter:var(--surface-fx-strong);-webkit-backdrop-filter:var(--surface-fx-strong);border:1px solid var(--bd3);border-radius:18px;padding:15px;box-sizing:border-box;box-shadow:0 30px 100px rgba(0,0,0,.72);animation:zoomin .2s ease both}
 .tour-overlay{position:fixed;inset:0;z-index:129;overflow:hidden;pointer-events:auto;transition:background .18s ease}
@@ -57,7 +57,7 @@ button:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-vis
 .help-category{border-radius:16px;overflow:hidden}.help-category h2{margin:0}.help-category-toggle{width:100%;min-height:58px;display:flex;align-items:center;justify-content:space-between;gap:14px;border:0;background:transparent;color:var(--tx);padding:16px 20px;text-align:left;font-size:14px;font-weight:750;cursor:pointer;transition:background .16s ease,color .16s ease}.help-category-toggle:hover{background:var(--chip2);color:var(--accent)}.help-category-toggle:focus-visible,.help-route-node:focus-visible,.help-article-close:focus-visible{outline:2px solid var(--accent);outline-offset:-3px}.help-caret{flex:none;color:var(--tx-faint);transition:transform .18s ease}
 .help-category-panel{display:grid;grid-template-rows:0fr;opacity:0;transform:translateY(-6px);transition:grid-template-rows .26s cubic-bezier(.2,.8,.2,1),opacity .2s ease,transform .26s cubic-bezier(.2,.8,.2,1)}.help-category-panel[data-open="true"]{grid-template-rows:1fr;opacity:1;transform:none}.help-category-panel-inner{min-height:0;overflow:hidden}
 .help-route{position:relative;min-height:250px;margin:0 20px 20px}.help-route-svg{position:absolute;inset:0;width:100%;height:100%;overflow:visible;pointer-events:none}.help-route-svg path{fill:none;stroke:var(--bd3);stroke-width:3;stroke-linecap:round;stroke-dasharray:4 10;transition:stroke .18s ease,filter .18s ease}.help-route:has(.help-route-node:hover) .help-route-svg path,.help-route:has(.help-route-node:focus-visible) .help-route-svg path{stroke:var(--accent);filter:drop-shadow(0 0 5px var(--accent-soft))}.help-route-node{position:absolute;transform:translate(-50%,-50%);width:min(190px,22%);border:0;background:transparent;color:var(--tx);padding:0;cursor:pointer;text-align:center;transition:transform .16s cubic-bezier(.2,.8,.2,1),filter .16s ease,color .16s ease}.help-route-node:hover,.help-route-node:focus-visible{transform:translate(-50%,-56%) scale(1.035);color:var(--accent);filter:drop-shadow(0 10px 16px var(--sh))}.help-route-number{width:42px;height:42px;margin:0 auto 9px;border:2px solid currentColor;border-radius:50%;display:grid;place-items:center;background:var(--surface-strong);font-size:15px;font-weight:800;box-shadow:0 0 0 5px var(--accent-soft)}.help-route-label{display:block;font-size:12px;font-weight:700;line-height:1.4}.help-route-svg-mobile{display:none}
-.help-article-backdrop{position:fixed;inset:var(--titlebar-offset) 0 0;z-index:125;display:grid;place-items:center;padding:20px;background:var(--ovl);backdrop-filter:blur(7px);visibility:hidden;opacity:0;pointer-events:none;transition:visibility 0s linear .2s,opacity .2s ease}.help-article-backdrop[data-open="true"]{visibility:visible;opacity:1;pointer-events:auto;transition-delay:0s}.help-article-dialog{width:min(680px,calc(100vw - 32px));max-height:min(720px,calc(100vh - var(--titlebar-offset) - 40px));overflow:auto;border-radius:18px;box-shadow:0 30px 90px var(--sh);transform:translateY(10px) scale(.975);opacity:0;transition:transform .2s cubic-bezier(.2,.8,.2,1),opacity .18s ease}.help-article-backdrop[data-open="true"] .help-article-dialog{transform:none;opacity:1}.help-article-header{position:sticky;top:0;display:flex;align-items:center;justify-content:space-between;gap:18px;padding:20px 22px;border-bottom:1px solid var(--bd);background:var(--surface-strong);z-index:1}.help-article-header h2{margin:0;font-size:17px}.help-article-close{width:34px;height:34px;flex:none;border:1px solid var(--bd2);border-radius:10px;background:var(--chip);color:var(--tx-dim);cursor:pointer}.help-article-content{padding:20px 22px 24px;color:var(--tx-mid);font-size:12.5px;line-height:1.7}.help-article-content p{margin:0}.help-article-content p+p,.help-article-content p+.help-steps,.help-steps+p{margin-top:10px}.help-steps{margin:0;padding-left:24px}.help-steps li+li{margin-top:8px}.help-answer-action{margin-top:14px;border:1px solid var(--accent);background:var(--accent-soft);color:var(--accent);font-size:12.5px;font-weight:700;padding:10px 15px;border-radius:10px;cursor:pointer}.help-empty{border-radius:16px;padding:24px;text-align:center;color:var(--tx-dim);font-size:12.5px}.help-empty button{margin-top:12px}body:has(.help-article-backdrop[data-open="true"]){overflow:hidden}
+.help-article-backdrop{position:fixed;inset:0;z-index:125;display:grid;place-items:center;padding:20px;background:var(--ovl);backdrop-filter:blur(7px);visibility:hidden;opacity:0;pointer-events:none;transition:visibility 0s linear .2s,opacity .2s ease}.help-article-backdrop[data-open="true"]{visibility:visible;opacity:1;pointer-events:auto;transition-delay:0s}.help-article-dialog{width:min(680px,calc(100vw - 32px));max-height:min(720px,calc(100vh - 40px));overflow:auto;border-radius:18px;box-shadow:0 30px 90px var(--sh);transform:translateY(10px) scale(.975);opacity:0;transition:transform .2s cubic-bezier(.2,.8,.2,1),opacity .18s ease}.help-article-backdrop[data-open="true"] .help-article-dialog{transform:none;opacity:1}.help-article-header{position:sticky;top:0;display:flex;align-items:center;justify-content:space-between;gap:18px;padding:20px 22px;border-bottom:1px solid var(--bd);background:var(--surface-strong);z-index:1}.help-article-header h2{margin:0;font-size:17px}.help-article-close{width:34px;height:34px;flex:none;border:1px solid var(--bd2);border-radius:10px;background:var(--chip);color:var(--tx-dim);cursor:pointer}.help-article-content{padding:20px 22px 24px;color:var(--tx-mid);font-size:12.5px;line-height:1.7}.help-article-content p{margin:0}.help-article-content p+p,.help-article-content p+.help-steps,.help-steps+p{margin-top:10px}.help-steps{margin:0;padding-left:24px}.help-steps li+li{margin-top:8px}.help-answer-action{margin-top:14px;border:1px solid var(--accent);background:var(--accent-soft);color:var(--accent);font-size:12.5px;font-weight:700;padding:10px 15px;border-radius:10px;cursor:pointer}.help-empty{border-radius:16px;padding:24px;text-align:center;color:var(--tx-dim);font-size:12.5px}.help-empty button{margin-top:12px}body:has(.help-article-backdrop[data-open="true"]){overflow:hidden}
 @media(max-width:760px){.app-main{padding:20px 12px 56px!important}.app-titlebar{grid-template-columns:52px minmax(0,1fr) 52px;padding:0 10px}.titlebar-status span:not(.local-status-dot){display:none}.insights-grid{grid-template-columns:1fr!important}.help-faq{gap:14px}.help-search-panel{padding:16px}.help-search-row{align-items:stretch}.help-route{min-height:0;margin:0 14px 18px;padding:14px 0}.help-route-svg-wide{display:none}.help-route-svg-mobile{display:block;left:0;width:72px;height:100%}.help-route-node{position:relative;left:auto!important;top:auto!important;transform:none;width:100%;min-height:76px;display:grid;grid-template-columns:54px minmax(0,1fr);align-items:center;text-align:left}.help-route-node:hover,.help-route-node:focus-visible{transform:translateX(4px)}.help-route-number{margin:0}.insights-full{grid-column:1}.time-edge-row{grid-template-areas:"label count net" "bar bar win";grid-template-columns:52px 1fr auto!important}.time-edge-label{grid-area:label}.time-edge-bar{grid-area:bar}.time-edge-count{grid-area:count}.time-edge-net{grid-area:net}.time-edge-win{grid-area:win}.journal-drawer{width:100%!important;max-width:none!important;padding:18px 14px 28px!important}.trade-detail-grid{grid-template-columns:repeat(2,minmax(0,1fr))!important}.annotation-overlay{padding:10px}.annotation-dialog{width:calc(100vw - 20px);max-height:calc(100vh - 64px);border-radius:14px;padding:10px}.annotation-toolbar{align-items:stretch!important}.annotation-actions{width:100%;flex-wrap:wrap}.plan-fields{grid-template-columns:1fr!important}.plan-score-head,.risk-guide-head{flex-wrap:wrap}.risk-settings-grid{grid-template-columns:1fr!important}.risk-guide-grid{grid-template-columns:repeat(2,minmax(0,1fr))!important}}
 html{--accent:#3DDC97;scrollbar-gutter:stable;scrollbar-color:var(--accent) transparent;scrollbar-width:thin}
 ::-webkit-scrollbar{width:12px;height:12px}::-webkit-scrollbar-thumb{background:var(--accent);border:3px solid transparent;background-clip:padding-box;border-radius:999px}::-webkit-scrollbar-thumb:hover{background:var(--accent);background-clip:padding-box}::-webkit-scrollbar-track{background:transparent}
@@ -136,7 +136,7 @@ html{--accent:#3DDC97;scrollbar-gutter:stable;scrollbar-color:var(--accent) tran
   </div>
   <div style="position:fixed;inset:0;pointer-events:none;z-index:0;opacity:{{glowOp}};transition:opacity .5s;background:linear-gradient(118deg,{{glowB}} 0%,transparent 32%,transparent 55%,{{glowC}} 82%,transparent 100%);background-size:240% 240%;animation:bgpan 26s ease-in-out infinite alternate"></div>
 
-  <div data-screen-label="Titlebar" class="app-titlebar glass-surface">
+  <div data-screen-label="Titlebar" class="app-titlebar glass-surface" inert="{{titlebarInert}}" aria-hidden="{{helpArticleOpen}}">
     <div class="titlebar-traffic" aria-hidden="true"><span class="traffic-dot traffic-close"></span><span class="traffic-dot traffic-minimize"></span><span class="traffic-dot traffic-zoom"></span></div>
     <div class="global-search-wrap">
       <button class="global-search-trigger" onClick="{{openSearch}}" aria-label="Search this journal" aria-haspopup="dialog" aria-expanded="{{searchOpen}}">
@@ -162,7 +162,7 @@ html{--accent:#3DDC97;scrollbar-gutter:stable;scrollbar-color:var(--accent) tran
     </div>
   </sc-if>
   <sc-if value="{{appVisible}}" hint-placeholder-val="{{true}}">
-  <div inert="{{appInert}}" aria-hidden="{{appInert}}" style="display:flex;flex:1;align-items:stretch;min-height:0">
+  <div inert="{{appShellInert}}" aria-hidden="{{appInert}}" style="display:flex;flex:1;align-items:stretch;min-height:0">
 
   <div data-screen-label="Sidebar" class="glass-surface" style="width:222px;flex:none;border:none;border-right:1px solid var(--bd);padding:20px 14px 12px;display:flex;flex-direction:column;position:sticky;top:var(--titlebar-offset);height:calc(100vh - var(--titlebar-offset));box-sizing:border-box;z-index:1;overflow-y:auto;overscroll-behavior:contain;transition:top .18s ease,height .18s ease">
     <div style="display:flex;align-items:center;gap:11px;padding:0 12px">
@@ -1205,32 +1205,6 @@ html{--accent:#3DDC97;scrollbar-gutter:stable;scrollbar-color:var(--accent) tran
             </section>
           </sc-for>
 
-          <div class="help-article-backdrop" data-open="{{helpArticleOpen}}" aria-hidden="{{helpArticleClosed}}" inert="{{helpArticleInert}}" onClick="{{closeHelpArticle}}">
-            <div class="help-article-dialog glass-surface-strong" ref="{{setHelpArticleDialogRef}}" onKeyDown="{{onHelpArticleDialogKeydown}}" onClick="{{stopHelpArticleClick}}" tabIndex="-1" role="dialog" aria-modal="true" aria-labelledby="help-article-title">
-              <div class="help-article-header">
-                <h2 id="help-article-title">{{helpArticleTitle}}</h2>
-                <button class="help-article-close native-symbol" onClick="{{closeHelpArticle}}" aria-label="Close Help article">✕</button>
-              </div>
-              <div class="help-article-content">
-                <sc-for list="{{helpArticleBlocks}}" as="block" hint-placeholder-count="2">
-                  <sc-if value="{{block.isPara}}" hint-placeholder-val="{{true}}">
-                    <p><sc-for list="{{block.runs}}" as="run" hint-placeholder-count="3"><sc-if value="{{run.strong}}" hint-placeholder-val="{{false}}"><strong>{{run.text}}</strong></sc-if><sc-if value="{{run.plain}}" hint-placeholder-val="{{true}}"><span>{{run.text}}</span></sc-if></sc-for></p>
-                  </sc-if>
-                  <sc-if value="{{block.isSteps}}" hint-placeholder-val="{{false}}">
-                    <ol class="help-steps">
-                      <sc-for list="{{block.steps}}" as="step" hint-placeholder-count="5">
-                        <li><sc-for list="{{step.runs}}" as="run" hint-placeholder-count="3"><sc-if value="{{run.strong}}" hint-placeholder-val="{{false}}"><strong>{{run.text}}</strong></sc-if><sc-if value="{{run.plain}}" hint-placeholder-val="{{true}}"><span>{{run.text}}</span></sc-if></sc-for></li>
-                      </sc-for>
-                    </ol>
-                  </sc-if>
-                </sc-for>
-                <sc-if value="{{helpArticleHasAction}}" hint-placeholder-val="{{false}}">
-                  <button class="help-answer-action" onClick="{{helpArticleAction.run}}">{{helpArticleAction.label}}</button>
-                </sc-if>
-              </div>
-            </div>
-          </div>
-
           <sc-if value="{{helpNoResults}}" hint-placeholder-val="{{false}}">
             <div class="help-empty glass-surface">
               <div>No Help answers match that search.</div>
@@ -1277,6 +1251,32 @@ html{--accent:#3DDC97;scrollbar-gutter:stable;scrollbar-color:var(--accent) tran
   </div>
   </div>
   </sc-if>
+
+  <div class="help-article-backdrop" data-open="{{helpArticleOpen}}" aria-hidden="{{helpArticleClosed}}" inert="{{helpArticleInert}}" onClick="{{closeHelpArticle}}">
+    <div class="help-article-dialog glass-surface-strong" ref="{{setHelpArticleDialogRef}}" onKeyDown="{{onHelpArticleDialogKeydown}}" onClick="{{stopHelpArticleClick}}" tabIndex="-1" role="dialog" aria-modal="true" aria-labelledby="help-article-title">
+      <div class="help-article-header">
+        <h2 id="help-article-title">{{helpArticleTitle}}</h2>
+        <button class="help-article-close native-symbol" onClick="{{closeHelpArticle}}" aria-label="Close Help article">✕</button>
+      </div>
+      <div class="help-article-content">
+        <sc-for list="{{helpArticleBlocks}}" as="block" hint-placeholder-count="2">
+          <sc-if value="{{block.isPara}}" hint-placeholder-val="{{true}}">
+            <p><sc-for list="{{block.runs}}" as="run" hint-placeholder-count="3"><sc-if value="{{run.strong}}" hint-placeholder-val="{{false}}"><strong>{{run.text}}</strong></sc-if><sc-if value="{{run.plain}}" hint-placeholder-val="{{true}}"><span>{{run.text}}</span></sc-if></sc-for></p>
+          </sc-if>
+          <sc-if value="{{block.isSteps}}" hint-placeholder-val="{{false}}">
+            <ol class="help-steps">
+              <sc-for list="{{block.steps}}" as="step" hint-placeholder-count="5">
+                <li><sc-for list="{{step.runs}}" as="run" hint-placeholder-count="3"><sc-if value="{{run.strong}}" hint-placeholder-val="{{false}}"><strong>{{run.text}}</strong></sc-if><sc-if value="{{run.plain}}" hint-placeholder-val="{{true}}"><span>{{run.text}}</span></sc-if></sc-for></li>
+              </sc-for>
+            </ol>
+          </sc-if>
+        </sc-for>
+        <sc-if value="{{helpArticleHasAction}}" hint-placeholder-val="{{false}}">
+          <button class="help-answer-action" onClick="{{helpArticleAction.run}}">{{helpArticleAction.label}}</button>
+        </sc-if>
+      </div>
+    </div>
+  </div>
 
   <sc-if value="{{lightboxOpen}}" hint-placeholder-val="{{false}}">
     <div class="lightbox-dialog" ref="{{setLightboxDialogRef}}" onKeyDown="{{onLightboxDialogKeydown}}" tabIndex="-1" role="dialog" aria-modal="true" aria-label="Chart media viewer" onClick="{{closeLightbox}}" style="position:fixed;inset:0;background:rgba(4,6,10,.86);backdrop-filter:blur(6px);z-index:130;display:flex;align-items:center;justify-content:center;padding:44px;cursor:zoom-out;animation:fadein .2s ease both">
@@ -2347,7 +2347,7 @@ class Component extends DCLogic {
     return typeof target.closest==='function'&&!!target.closest('input,select,textarea,[contenteditable=""],[contenteditable="true"]');
   }
   canUsePrivateUI(){const S=this.state,settings=S.settings||{};return !S.booting&&!S.launching&&!settings.loggedOut&&!!settings.onboarded&&!S.obStarted}
-  canUseSearch(){const S=this.state;return this.canUsePrivateUI()&&!S.annotation&&!S.lightbox&&!S.tourOpen&&!S.confirm}
+  canUseSearch(){const S=this.state;return this.canUsePrivateUI()&&!S.annotation&&!S.lightbox&&!S.tourOpen&&!S.confirm&&!S.helpOpenArticleId}
   surfaceOpener(candidate){const target=candidate&&candidate.currentTarget?candidate.currentTarget:candidate;if(target&&typeof target.focus==='function')return target;if(typeof document!=='undefined'&&document.activeElement&&typeof document.activeElement.focus==='function')return document.activeElement;return null}
   cancelScheduledFocusRestore(){this._focusRestoreToken=(this._focusRestoreToken||0)+1;if(this._focusRestoreTimer!=null){clearTimeout(this._focusRestoreTimer);this._focusRestoreTimer=null}if(this._focusRestoreFrame!=null&&typeof cancelAnimationFrame==='function'){cancelAnimationFrame(this._focusRestoreFrame);this._focusRestoreFrame=null}return true}
   scheduleAfterCommit(callback){if(typeof callback!=='function')return false;this.cancelScheduledFocusRestore();const token=this._focusRestoreToken,run=()=>{if(token!==this._focusRestoreToken)return;this._focusRestoreTimer=null;this._focusRestoreFrame=null;callback()};if(typeof requestAnimationFrame==='function')this._focusRestoreFrame=requestAnimationFrame(run);else this._focusRestoreTimer=setTimeout(run,0);return true}
@@ -2404,7 +2404,12 @@ class Component extends DCLogic {
   setHelpQuery(rawQuery){
     const helpQuery=String(rawQuery==null?'':rawQuery);
     const result=this.filterHelpFaq(this.helpFaqData(),helpQuery);
-    const entering=!this.normalizeHelpText(this.state.helpQuery)&&!!result.normalized;
+    const previousNormalized=this.normalizeHelpText(this.state.helpQuery);
+    if(!previousNormalized&&!result.normalized){
+      this.setState({helpQuery});
+      return result;
+    }
+    const entering=!previousNormalized&&!!result.normalized;
     const returnId=entering?this.state.helpOpenCategoryId:this.state.helpReturnCategoryId;
     const validReturn=this.helpFaqData().some(group=>group.key===returnId);
     const openId=result.normalized
@@ -3957,6 +3962,7 @@ class Component extends DCLogic {
     const helpResultStatus=helpFiltered.normalized
       ?helpMatchCount+' '+(helpMatchCount===1?'result':'results')
       :helpMatchCount+' questions';
+    const appInert=!!selectedHelpArticle||!!S.searchOpen||!!S.editing||!!S.lightbox||!!S.tourOpen||(S.confirm==='switch-profile'&&!!S.pendingProfileId)||(S.confirm==='search-leave'&&!!S.pendingSearchResult);
     const helpV={
       helpQuery:S.helpQuery||'',
       helpGroups,
@@ -3967,6 +3973,7 @@ class Component extends DCLogic {
       helpArticleOpen:!!selectedHelpArticle,
       helpArticleClosed:!selectedHelpArticle,
       helpArticleInert:selectedHelpArticle?undefined:'',
+      titlebarInert:selectedHelpArticle?'':undefined,
       helpArticleTitle:selectedHelpArticle?selectedHelpArticle.question:'',
       helpArticleBlocks:selectedHelpArticle?selectedHelpArticle.blocks.map(helpBlock):[],
       helpArticleHasAction:!!(selectedHelpArticle&&selectedHelpArticle.action),
@@ -4092,7 +4099,7 @@ class Component extends DCLogic {
       quickPresetsEmpty:!(Array.isArray(st.quickPresets)&&st.quickPresets.length),
       accSwatches:this.ACCENTS.map(c=>({c,bd:acc.toLowerCase()===c.toLowerCase()?'var(--tx)':'var(--bd2)',sh:acc.toLowerCase()===c.toLowerCase()?'0 0 18px '+c+'66':'none',set:()=>{this.setAccent(c);this.setState({pickerOpen:false})}})),
       hexVal:acc.toUpperCase(),wordTxt:S.wordTxt||'',
-      appVisible:!S.booting&&!S.launching&&!loginOpenV&&!obOpenV,appInert:!!S.searchOpen||!!S.editing||!!S.lightbox||!!S.tourOpen||(S.confirm==='switch-profile'&&!!S.pendingProfileId)||(S.confirm==='search-leave'&&!!S.pendingSearchResult),drawerInert:!!S.searchOpen||!!annotation||!!S.lightbox||(S.confirm==='search-leave'&&!!S.pendingSearchResult),
+      appVisible:!S.booting&&!S.launching&&!loginOpenV&&!obOpenV,appInert,appShellInert:appInert?'':undefined,drawerInert:!!S.searchOpen||!!annotation||!!S.lightbox||(S.confirm==='search-leave'&&!!S.pendingSearchResult),
       pickerOpen:S.pickerOpen,togPicker:()=>this.setState({pickerOpen:!S.pickerOpen}),
       pickerBd:this.ACCENTS.some(c=>c.toLowerCase()===acc.toLowerCase())?(S.pickerOpen?'var(--tx-dim)':'var(--bd2)'):'var(--tx)',
       pickerSh:this.ACCENTS.some(c=>c.toLowerCase()===acc.toLowerCase())?'none':'0 0 18px '+acc+'66',

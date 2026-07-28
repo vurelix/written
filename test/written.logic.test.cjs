@@ -1484,9 +1484,10 @@ test('search interaction guard blocks every unavailable private surface and clos
     { booting: false, launching: false, obStarted: false, settings: { onboarded: true, loggedOut: false }, lightbox: { t: 'i' } },
     { booting: false, launching: false, obStarted: false, settings: { onboarded: true, loggedOut: false }, tourOpen: true },
     { booting: false, launching: false, obStarted: false, settings: { onboarded: true, loggedOut: false }, confirm: 'switch-profile' },
+    { booting: false, launching: false, obStarted: false, settings: { onboarded: true, loggedOut: false }, helpOpenArticleId: 'journal-day' },
   ];
   for (const state of blocked) {
-    component.state = Object.assign({}, component.state, { annotation: null, lightbox: null, tourOpen: false, confirm: null }, state, { searchOpen: false });
+    component.state = Object.assign({}, component.state, { annotation: null, lightbox: null, tourOpen: false, confirm: null, helpOpenArticleId: null }, state, { searchOpen: false });
     assert.equal(component.canUseSearch(), false);
     assert.equal(component.openSearch(), false);
     assert.equal(component.state.searchOpen, false);
@@ -1495,7 +1496,7 @@ test('search interaction guard blocks every unavailable private surface and clos
     assert.equal(shortcut.prevented, false);
   }
 
-  component.state = Object.assign({}, component.state, { booting: false, launching: false, obStarted: false, annotation: null, lightbox: null, tourOpen: false, confirm: null, editing: '2026-07-22', draft: {}, settings: { onboarded: true, loggedOut: false } });
+  component.state = Object.assign({}, component.state, { booting: false, launching: false, obStarted: false, annotation: null, lightbox: null, tourOpen: false, confirm: null, helpOpenArticleId: null, editing: '2026-07-22', draft: {}, settings: { onboarded: true, loggedOut: false } });
   assert.equal(component.canUseSearch(), true, 'search remains available while editing');
   component.state = Object.assign({}, component.state, { searchOpen: true, searchQuery: 'export', searchSel: 2, pendingSearchResult: { id: 'day:old', type: 'day' } });
   assert.equal(component.renderVals().appInert, true, 'editor and palette both keep the app inert');
@@ -2603,7 +2604,7 @@ test('the single accent is bound on the app root so range fills and score meter 
 
 test('modal focus and inert source contracts cover app, editor, and keyboard media', () => {
   const html = fs.readFileSync(htmlPath, 'utf8');
-  assert.match(html, /inert="{{appInert}}"[^>]+aria-hidden="{{appInert}}"/);
+  assert.match(html, /inert="{{appShellInert}}"[^>]+aria-hidden="{{appInert}}"/);
   assert.match(html, /class="command-palette-dialog glass-surface-strong"[^>]+role="dialog"[^>]+aria-modal="true"/);
   assert.match(html, /class="search-popover"[^>]+id="global-search-results"[^>]+role="listbox"/);
   assert.doesNotMatch(html, /aria-modal="true"[^>]+aria-label="Quick add"/);
@@ -3364,6 +3365,34 @@ test('Help search opens only the first matching category and never a modal', () 
   assert.equal(component.state.helpReturnCategoryId, null);
 });
 
+test('Help whitespace preserves the return category through a later search and clear', () => {
+  let focused = 0;
+  const component = loadComponent();
+  component.setState = function setState(patch, callback) {
+    this.state = Object.assign({}, this.state, patch);
+    if (callback) callback();
+  };
+  component.state.helpQuery = '';
+  component.state.helpOpenCategoryId = 'dashboard-insights';
+  component.state.helpOpenArticleId = null;
+  component.state.helpReturnCategoryId = null;
+  component.setHelpSearchRef({ focus() { focused++; } });
+
+  component.setHelpQuery('   ');
+  assert.equal(component.state.helpOpenCategoryId, 'dashboard-insights');
+  assert.equal(component.state.helpReturnCategoryId, null);
+
+  const result = component.setHelpQuery('active only in memory');
+  assert.equal(result.groups[0].key, 'data-troubleshooting');
+  assert.equal(component.state.helpOpenCategoryId, 'data-troubleshooting');
+  assert.equal(component.state.helpReturnCategoryId, 'dashboard-insights');
+
+  assert.equal(component.clearHelpSearch(), true);
+  assert.equal(component.state.helpOpenCategoryId, 'dashboard-insights');
+  assert.equal(component.state.helpReturnCategoryId, null);
+  assert.equal(focused, 1);
+});
+
 test('Help article modal reuses shared focus containment and restoration', () => {
   let focused = '';
   const component = loadComponent();
@@ -3590,6 +3619,8 @@ test('Help inert bindings emit string attributes only while mounted surfaces are
 
   const closedValues = component.renderVals();
   assert.equal(closedValues.helpArticleInert, '');
+  assert.equal(closedValues.titlebarInert, undefined);
+  assert.equal(closedValues.appShellInert, undefined);
   for (const group of closedValues.helpGroups) {
     assert.equal(group.panelInert, '');
   }
@@ -3604,6 +3635,9 @@ test('Help inert bindings emit string attributes only while mounted surfaces are
   component.openHelpArticle('journal-day', { focus() {} });
   const articleValues = component.renderVals();
   assert.equal(articleValues.helpArticleInert, undefined);
+  assert.equal(articleValues.appInert, true);
+  assert.equal(articleValues.appShellInert, '');
+  assert.equal(articleValues.titlebarInert, '');
 
   const html = fs.readFileSync(htmlPath, 'utf8');
   assert.match(html, /class="help-category-panel"[^>]+inert="\{\{category\.panelInert\}\}"/);

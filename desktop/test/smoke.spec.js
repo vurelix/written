@@ -9,6 +9,7 @@ const { test, expect } = require('@playwright/test');
 
 const RENDERER = 'file://' + path.resolve(__dirname, '..', 'renderer', 'index.html');
 const STORE_KEY = 'written-profiles-v2';
+const SEARCH_SHORTCUT = process.platform === 'darwin' ? 'Meta+K' : 'Control+K';
 
 // Widgets that scroll their own content on purpose. A blanket clipping assertion
 // would flag these; anything NOT on this list must fit inside its card.
@@ -367,6 +368,18 @@ test.describe('built renderer', () => {
     await expect(trigger).toBeFocused();
   });
 
+  test('titlebar search shortcut computes the native symbol font stack', async ({ page }) => {
+    await boot(page, profileFixture());
+    const fontFamily = await page.locator('.global-search-trigger kbd').evaluate(element =>
+      getComputedStyle(element).fontFamily
+    );
+    expect(fontFamily).toContain('Apple Color Emoji');
+    expect(fontFamily).toContain('Segoe UI Emoji');
+    expect(fontFamily).toContain('Segoe UI Symbol');
+    expect(fontFamily).toContain('system-ui');
+    expect(fontFamily).not.toContain('Manrope');
+  });
+
   test('Windows scroll hides the titlebar and the command palette follows its offset', async ({ page }) => {
     await page.addInitScript(() => {
       Object.defineProperty(window, 'desktopPlatform', { value: 'win32', configurable: true });
@@ -570,6 +583,21 @@ test.describe('built renderer', () => {
     await expect(page.locator('body')).toHaveCSS('overflow', 'hidden');
     const closeButton = dialog.getByRole('button', { name: 'Close Help article' });
     await expect(closeButton).toBeFocused();
+    const backdrop = page.locator('.help-article-backdrop');
+    const titlebar = page.locator('[data-screen-label="Titlebar"]');
+    const appShell = page.locator('[data-screen-label="Sidebar"]').locator('..');
+    await expect.poll(() => backdrop.evaluate(element => element.getBoundingClientRect().top)).toBe(0);
+    await expect(titlebar).toHaveAttribute('inert', '');
+    await expect(titlebar).toHaveAttribute('aria-hidden', 'true');
+    await expect(appShell).toHaveAttribute('inert', '');
+    await expect(appShell).toHaveAttribute('aria-hidden', 'true');
+    expect(await dialog.evaluate(element => !!element.closest('[inert]'))).toBe(false);
+
+    await page.keyboard.press(SEARCH_SHORTCUT);
+    await expect(page.getByRole('dialog', { name: 'Command palette' })).toHaveCount(0);
+    await expect(dialog).toBeVisible();
+    await expect(closeButton).toBeFocused();
+
     await page.keyboard.press('Tab');
     await expect(closeButton).toBeFocused();
     await page.keyboard.press('Shift+Tab');
@@ -579,6 +607,8 @@ test.describe('built renderer', () => {
     await expect(articleNode).toBeFocused();
     await expect(page.locator('body')).not.toHaveCSS('overflow', 'hidden');
     await expect(gettingStarted).toHaveAttribute('aria-expanded', 'true');
+    await expect(titlebar).not.toHaveAttribute('inert', '');
+    await expect(appShell).not.toHaveAttribute('inert', '');
 
     await articleNode.click();
     await dialog.getByRole('button', { name: 'Close Help article' }).click();
