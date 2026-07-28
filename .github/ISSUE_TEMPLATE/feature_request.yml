@@ -1,0 +1,31 @@
+name: Feature request
+description: Suggest something Written should do
+labels: ["enhancement"]
+body:
+  - type: textarea
+    id: problem
+    attributes:
+      label: What's the problem?
+      description: |
+        What are you trying to do that Written makes hard today? Describe the situation rather
+        than the solution — it usually leads somewhere better.
+    validations:
+      required: true
+
+  - type: textarea
+    id: idea
+    attributes:
+      label: What would you like instead?
+    validations:
+      required: false
+
+  - type: checkboxes
+    id: constraints
+    attributes:
+      label: Does this fit Written?
+      description: |
+        Written is deliberately local-first: no account, no server, no telemetry, and zero network
+        requests at boot. Requests that need a backend or phone home generally won't be taken.
+      options:
+        - label: This works without an account, a server, or a network connection
+          required: false

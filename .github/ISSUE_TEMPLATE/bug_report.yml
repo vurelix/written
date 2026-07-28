@@ -1,0 +1,70 @@
+name: Bug report
+description: Something in Written behaves incorrectly
+labels: ["bug"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Found a security vulnerability? Don't file it here — use
+        [private reporting](https://github.com/vurelix/written/security/advisories/new) instead.
+
+  - type: textarea
+    id: what-happened
+    attributes:
+      label: What happened?
+      description: What you expected, and what you got instead.
+    validations:
+      required: true
+
+  - type: textarea
+    id: steps
+    attributes:
+      label: Steps to reproduce
+      placeholder: |
+        1. Open Calendar
+        2. ...
+        3. ...
+    validations:
+      required: true
+
+  - type: input
+    id: version
+    attributes:
+      label: Written version
+      description: Shown under About. e.g. v1.0.1
+    validations:
+      required: true
+
+  - type: dropdown
+    id: os
+    attributes:
+      label: Operating system
+      options:
+        - macOS (Apple Silicon)
+        - macOS (Intel)
+        - Windows
+    validations:
+      required: true
+
+  - type: dropdown
+    id: perf-mode
+    attributes:
+      label: Performance Mode
+      description: Settings → Performance. Relevant for anything visual.
+      options:
+        - "Reduced motion (default)"
+        - Full effects
+        - Maximum performance
+        - Not sure
+    validations:
+      required: false
+
+  - type: textarea
+    id: extra
+    attributes:
+      label: Screenshots or notes
+      description: |
+        Optional. Please redact anything you'd rather not publish — screenshots of your journal
+        contain your trading data, and issues here are public.
+    validations:
+      required: false

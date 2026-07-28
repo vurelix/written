@@ -1,0 +1,8 @@
+blank_issues_enabled: false
+contact_links:
+  - name: Report a security vulnerability
+    url: https://github.com/vurelix/written/security/advisories/new
+    about: Please report privately rather than opening a public issue.
+  - name: How do I …?
+    url: https://github.com/vurelix/written/discussions
+    about: Usage questions belong in Discussions. Written also documents every feature in-app under Help.
