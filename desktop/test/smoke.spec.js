@@ -721,6 +721,10 @@ test.describe('built renderer', () => {
     await page.getByRole('button', { name: 'Replay walkthrough' }).click();
 
     const dialog = page.getByRole('dialog', { name: 'Written walkthrough' });
+    await expect(page.locator('.tour-spotlight')).toBeVisible();
+    await page.locator('.tour-spotlight').evaluate(el => {
+      window.__initialTourSpotlight = el;
+    });
     const assertStep = async ({ title, screen, target }) => {
       await expect(dialog).toContainText(title);
       await expect(page.locator(`[data-screen-label="${screen}"]`)).toBeVisible();
@@ -739,6 +743,9 @@ test.describe('built renderer', () => {
           && !!subject.closest('[aria-hidden="true"]')
           && getComputedStyle(overlay).pointerEvents === 'auto';
       }, target), `spotlight covers ${target} without enabling the app`).toBe(true);
+      expect(await page.evaluate(() =>
+        document.querySelector('.tour-spotlight') === window.__initialTourSpotlight
+      ), 'the same spotlight node stays mounted across steps').toBe(true);
     };
 
     await assertStep({
@@ -746,12 +753,38 @@ test.describe('built renderer', () => {
       screen: 'Dashboard',
       target: '[data-screen-label="Dashboard"] .dashboard-widget',
     });
+    await page.evaluate(() => {
+      window.__tourMoveSamples = [];
+      const capture = () => {
+        const el = document.querySelector('.tour-spotlight');
+        if (el) {
+          const box = el.getBoundingClientRect();
+          window.__tourMoveSamples.push({
+            left: Math.round(box.left * 10) / 10,
+            top: Math.round(box.top * 10) / 10,
+            width: Math.round(box.width * 10) / 10,
+            height: Math.round(box.height * 10) / 10,
+          });
+        }
+        window.__tourMoveRaf = requestAnimationFrame(capture);
+      };
+      capture();
+    });
     await dialog.getByRole('button', { name: 'Next' }).click();
     await assertStep({
       title: 'Log the trading day',
       screen: 'Calendar',
       target: '[data-screen-label="Calendar"] .calendar-scroll',
     });
+    const moveSamples = await page.evaluate(() => {
+      cancelAnimationFrame(window.__tourMoveRaf);
+      return window.__tourMoveSamples;
+    });
+    const uniqueMoveFrames = new Set(moveSamples.map(sample =>
+      [sample.left, sample.top, sample.width, sample.height].join(':')
+    ));
+    expect(uniqueMoveFrames.size, 'spotlight movement interpolates over multiple frames').toBeGreaterThanOrEqual(3);
+    await expect(page.locator('.tour-spotlight')).toHaveClass(/is-actionable/);
     await dialog.getByRole('button', { name: 'Next' }).click();
     await assertStep({
       title: 'Find repeated patterns',
@@ -773,6 +806,27 @@ test.describe('built renderer', () => {
       return store.profiles[store.activeProfileId].settings.tourCompleted;
     }, STORE_KEY);
     expect(completed).toBe(true);
+  });
+
+  test('walkthrough action glow becomes a static affordance under reduced motion', async ({ page }) => {
+    await page.emulateMedia({ reducedMotion: 'reduce' });
+    await page.setViewportSize({ width: 1280, height: 800 });
+    await boot(page, profileFixture());
+    await page.getByRole('button', { name: 'Help', exact: true }).click();
+    await page.getByRole('button', { name: 'What does the interactive walkthrough cover?' }).click();
+    await page.getByRole('button', { name: 'Replay walkthrough' }).click();
+
+    const dialog = page.getByRole('dialog', { name: 'Written walkthrough' });
+    await dialog.getByRole('button', { name: 'Next' }).click();
+    const spotlight = page.locator('.tour-spotlight');
+    await expect(spotlight).toHaveClass(/is-actionable/);
+    await expect.poll(async () => spotlight.evaluate(el => {
+      const style = getComputedStyle(el);
+      return {
+        animationName: style.animationName,
+        borderWidth: parseFloat(style.borderTopWidth),
+      };
+    })).toEqual({ animationName: 'none', borderWidth: 3 });
   });
 
   test('the Electron persistence banner surfaces a failed disk write', async ({ page }) => {

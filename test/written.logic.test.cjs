@@ -2948,14 +2948,15 @@ test('the walkthrough coachmark is hidden until it has a measured position', () 
   component.state = Object.assign({}, component.state, { tourOpen: true, tourStep: 0, tourSpotlight: null });
 
   // Unpositioned: the centring fallback is still what the panel would render at, so it
-  // must not be visible or clickable, and it must hide with no transition — a fade-out
-  // would spend its whole duration painting the panel at dead-centre.
+  // must not be visible or clickable. Geometry transitions arm only after the first
+  // measured placement, preventing an initial flight out of the centre.
   const pending = component.renderVals();
   assert.equal(pending.tourPanelTransform, 'translate(-50%,-50%)');
   assert.equal(pending.tourPanelOpacity, '0');
   assert.equal(pending.tourPanelEvents, 'none');
   assert.equal(pending.tourPanelTransition, 'none');
   assert.equal(pending.tourSpotlightReady, false);
+  assert.equal(pending.tourMotionClass, '');
 
   component.state = Object.assign({}, component.state, {
     tourSpotlight: { top: 40, left: 60, width: 200, height: 120, panelTop: 180, panelLeft: 300 },
@@ -2971,7 +2972,7 @@ test('the walkthrough coachmark is hidden until it has a measured position', () 
   const html = fs.readFileSync(htmlPath, 'utf8');
   // Bound on the element, and NOT behind sc-if: unmounting the dialog between steps
   // would drop tour focus, so it stays mounted and merely invisible.
-  assert.match(html, /class="tour-coachmark[^"]*"[^>]*opacity:\{\{tourPanelOpacity\}\};pointer-events:\{\{tourPanelEvents\}\};transition:\{\{tourPanelTransition\}\}/);
+  assert.match(html, /class="tour-coachmark[^"]*\{\{tourMotionClass\}\}"[^>]*opacity:\{\{tourPanelOpacity\}\};pointer-events:\{\{tourPanelEvents\}\}"/);
   // `rise` animates opacity, which would have overridden the inline binding outright
   // (the same cascade trap as the background glow). It has to stay off this element.
   assert.doesNotMatch(html, /class="tour-coachmark[^"]*"[^>]*animation:rise/);
@@ -3159,7 +3160,7 @@ test('walkthrough geometry waits for animation and two stable in-viewport frames
   )),{left:264,top:100});
 });
 
-test('walkthrough step changes cancel stale measurement and switch tabs before targeting', () => {
+test('walkthrough step changes cancel stale measurement, retain geometry, and expose actionable steps', () => {
   let cancelledFrame=null,clearedTimer=null;
   const component=loadComponent({
     cancelAnimationFrame:id=>{cancelledFrame=id},
@@ -3174,10 +3175,16 @@ test('walkthrough step changes cancel stale measurement and switch tabs before t
   assert.equal(component.goTourStep(1),true);
   assert.equal(component.state.tourStep,1);
   assert.equal(component.state.tab,'cal');
-  assert.equal(component.state.tourSpotlight,null);
+  assert.deepEqual(component.state.tourSpotlight,{top:1});
+  assert.equal(component.state.tourMotionReady,true);
   assert.equal(component._tourMeasureToken,token+1);
   assert.equal(cancelledFrame,17);
   assert.equal(clearedTimer,23);
+  assert.deepEqual(
+    plain(component.tourSteps().filter(step=>step.actionable).map(step=>step.id)),
+    ['calendar'],
+  );
+  assert.equal(component.renderVals().tourSpotlightClass,'is-actionable motion-ready');
 });
 
 test('walkthrough markup is modal, focus-managed, and replayable from Help', () => {
@@ -3186,7 +3193,7 @@ test('walkthrough markup is modal, focus-managed, and replayable from Help', () 
   assert.match(html,/aria-modal="true"/);
   assert.match(html,/Replay walkthrough/);
   assert.match(html,/tourProgressDots/);
-  assert.match(html,/class="tour-spotlight"/);
+  assert.match(html,/class="tour-spotlight \{\{tourSpotlightClass\}\}"/);
   assert.match(html,/scrollIntoView\(\{block:'center',inline:'nearest',behavior:'auto'\}\)/);
   assert.match(html,/waitForStableTourRect/);
   assert.match(html,/>Skip</);
@@ -3373,8 +3380,8 @@ test('every current tab assignment routes through setTab without direct tab stat
   const html = fs.readFileSync(htmlPath, 'utf8');
   assert.match(html, /setTab\(tab,extra=null\)/);
   assert.match(html, /descriptor\.type==='nav'[^\n}]*this\.setTab\(descriptor\.tab\)/);
-  assert.match(html, /this\.setTab\(step\.tab,\{tourStep:next,tourSpotlight:null\}\);return true/);
-  assert.match(html, /this\.setTab\(step\.tab,\{tourOpen:true,tourStep:0,tourSpotlight:null,tourReplay:!!replay,searchOpen:false\}\);return true/);
+  assert.match(html, /this\.setTab\(step\.tab,\{tourStep:next,tourMotionReady:true\}\);return true/);
+  assert.match(html, /this\.setTab\(step\.tab,\{tourOpen:true,tourStep:0,tourSpotlight:null,tourMotionReady:false,tourReplay:!!replay,searchOpen:false\}\);return true/);
   assert.match(html, /logout\(\)\{const durable=[^\n]*this\.setTab\('dash',[^\n]*return durable\}/);
   assert.match(html, /const mkNav=o=>[^\n]*go:\(\)=>this\.setTab\(o\[0\]\)/);
   assert.match(html, /goProfile:\(\)=>this\.setTab\('profile'\)/);

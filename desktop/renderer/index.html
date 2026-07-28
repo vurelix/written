@@ -48,8 +48,12 @@ button:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-vis
 .annotation-overlay{position:fixed;inset:44px 0 0;background:rgba(4,6,10,.88);backdrop-filter:blur(9px);z-index:125;display:flex;align-items:center;justify-content:center;padding:24px;box-sizing:border-box;animation:fadein .18s ease both}
 .annotation-dialog{width:min(1100px,100%);max-height:calc(100vh - 92px);display:flex;flex-direction:column;gap:13px;background:var(--surface-bg-strong);backdrop-filter:var(--surface-fx-strong);-webkit-backdrop-filter:var(--surface-fx-strong);border:1px solid var(--bd3);border-radius:18px;padding:15px;box-sizing:border-box;box-shadow:0 30px 100px rgba(0,0,0,.72);animation:zoomin .2s ease both}
 .tour-overlay{position:fixed;inset:0;z-index:129;overflow:hidden;pointer-events:auto;transition:background .18s ease}
-.tour-spotlight{position:fixed;z-index:1;border:2px solid var(--accent);border-radius:16px;box-sizing:border-box;box-shadow:0 0 0 9999px var(--ovl),0 0 28px var(--accent-glow);pointer-events:none;transition:top .18s ease,left .18s ease,width .18s ease,height .18s ease}
-.tour-coachmark{position:fixed;z-index:2;width:400px;max-width:calc(100vw - 32px);box-sizing:border-box}
+.tour-spotlight{position:fixed;z-index:1;border:2px solid var(--accent);border-radius:16px;box-sizing:border-box;box-shadow:0 0 0 9999px var(--ovl),0 0 28px var(--accent-glow);pointer-events:none;transition:opacity .18s ease}
+.tour-spotlight.motion-ready{transition:top .18s ease,left .18s ease,width .18s ease,height .18s ease,opacity .18s ease}
+.tour-spotlight.is-actionable{animation:tourpulse 1.6s ease-in-out infinite}
+.tour-coachmark{position:fixed;z-index:2;width:400px;max-width:calc(100vw - 32px);box-sizing:border-box;transition:opacity .18s ease}
+.tour-coachmark.motion-ready{transition:top .22s cubic-bezier(.2,.8,.2,1),left .22s cubic-bezier(.2,.8,.2,1),opacity .18s ease}
+.tour-coachmark-step>*{animation:rise .24s cubic-bezier(.2,.8,.2,1) both}.tour-coachmark-step>*:nth-child(2){animation-delay:.04s}.tour-coachmark-step>*:nth-child(3){animation-delay:.08s}
 .journal-drawer{background:var(--surface-bg);backdrop-filter:var(--surface-fx);-webkit-backdrop-filter:var(--surface-fx)}
 .annotation-stage-wrap{min-height:0;flex:1;display:flex;align-items:center;justify-content:center;overflow:hidden}
 .color-picker-sv,.color-picker-hue{border:1px solid var(--bd3);box-sizing:border-box}
@@ -72,6 +76,7 @@ html{--accent:#3DDC97;scrollbar-gutter:stable;scrollbar-color:var(--accent) tran
 @keyframes aurora{0%{transform:translate3d(-4%,-3%,0) rotate(0deg) scale(1.05)}50%{transform:translate3d(5%,4%,0) rotate(10deg) scale(1.18)}100%{transform:translate3d(-4%,-3%,0) rotate(0deg) scale(1.05)}}
 @keyframes auroraB{0%{transform:translate3d(4%,3%,0) rotate(0deg) scale(1.1)}50%{transform:translate3d(-6%,-5%,0) rotate(-12deg) scale(1.25)}100%{transform:translate3d(4%,3%,0) rotate(0deg) scale(1.1)}}
 @keyframes glowpulse{0%,100%{opacity:.85}50%{opacity:1}}
+@keyframes tourpulse{0%,100%{box-shadow:0 0 0 9999px var(--ovl),0 0 28px var(--accent-glow)}50%{box-shadow:0 0 0 9999px var(--ovl),0 0 44px var(--accent)}}
 /* Background glow = off. The aurora blobs carry an inline opacity, but glowpulse animates
    opacity too, and a running animation's computed value beats an inline author style — so
    setting auroraOp to '0' on its own left the glow fully visible. The animation has to go
@@ -98,7 +103,7 @@ html{--accent:#3DDC97;scrollbar-gutter:stable;scrollbar-color:var(--accent) tran
 .range-control:focus-within .range-thumb,.range-control:hover .range-thumb{box-shadow:0 0 0 4px var(--accent-soft),0 0 20px var(--accent-glow)}
 .trade-card{border:1px solid var(--bd);background:var(--chip);border-radius:13px;padding:11px}
 .trade-card.trade-enter{animation:trade-enter .36s cubic-bezier(.2,.8,.2,1) both}
-@media (prefers-reduced-motion: reduce){*,*::before,*::after{animation-duration:.01ms!important;animation-iteration-count:1!important;scroll-behavior:auto!important;transition-duration:.01ms!important}}
+@media (prefers-reduced-motion: reduce){*,*::before,*::after{animation-duration:.01ms!important;animation-iteration-count:1!important;scroll-behavior:auto!important;transition-duration:.01ms!important}.tour-spotlight.is-actionable{animation:none!important;border-width:3px}}
 .calendar-scroll{min-height:0;overflow:auto;overscroll-behavior:contain}
 .calendar-grid{min-width:760px;display:flex;flex-direction:column;min-height:100%}
 .calendar-weeks{display:flex;flex-direction:column;gap:9px;margin-top:2px;padding:7px 3px 3px;flex:1;min-height:0;overflow:auto;overscroll-behavior:contain}
@@ -1739,15 +1744,15 @@ html{--accent:#3DDC97;scrollbar-gutter:stable;scrollbar-color:var(--accent) tran
 
   <sc-if value="{{tourOpen}}" hint-placeholder-val="{{false}}">
     <div class="tour-overlay" style="background:{{tourOverlayBg}}">
-      <sc-if value="{{tourSpotlightReady}}" hint-placeholder-val="{{false}}">
-        <div class="tour-spotlight" aria-hidden="true" style="top:{{tourSpotlightTop}};left:{{tourSpotlightLeft}};width:{{tourSpotlightWidth}};height:{{tourSpotlightHeight}}"></div>
-      </sc-if>
-      <div ref="{{setTourDialogRef}}" onKeyDown="{{onTourDialogKeydown}}" tabIndex="-1" role="dialog" aria-modal="true" aria-label="Written walkthrough" class="tour-coachmark glass-surface-strong" style="top:{{tourPanelTop}};left:{{tourPanelLeft}};transform:{{tourPanelTransform}};border-radius:18px;padding:26px;box-shadow:0 28px 80px var(--sh);text-align:center;opacity:{{tourPanelOpacity}};pointer-events:{{tourPanelEvents}};transition:{{tourPanelTransition}}">
-        <div style="width:44px;height:44px;margin:0 auto;border-radius:50%;background:{{acc16}};color:{{accent}};display:flex;align-items:center;justify-content:center">
-          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20V4H6.5A2.5 2.5 0 0 0 4 6.5v13z"></path><path d="M4 19.5A2.5 2.5 0 0 0 6.5 22H20v-5"></path><path d="M15.5 7.5l1.8 1.8-5.3 5.3-2.5.7.7-2.5 5.3-5.3z"></path></svg>
+      <div class="tour-spotlight {{tourSpotlightClass}}" aria-hidden="true" style="top:{{tourSpotlightTop}};left:{{tourSpotlightLeft}};width:{{tourSpotlightWidth}};height:{{tourSpotlightHeight}};opacity:{{tourSpotlightOpacity}}"></div>
+      <div ref="{{setTourDialogRef}}" onKeyDown="{{onTourDialogKeydown}}" tabIndex="-1" role="dialog" aria-modal="true" aria-label="Written walkthrough" class="tour-coachmark glass-surface-strong {{tourMotionClass}}" style="top:{{tourPanelTop}};left:{{tourPanelLeft}};transform:{{tourPanelTransform}};border-radius:18px;padding:26px;box-shadow:0 28px 80px var(--sh);text-align:center;opacity:{{tourPanelOpacity}};pointer-events:{{tourPanelEvents}}">
+        <div key="{{tourStepKey}}" class="tour-coachmark-step">
+          <div style="width:44px;height:44px;margin:0 auto;border-radius:50%;background:{{acc16}};color:{{accent}};display:flex;align-items:center;justify-content:center">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20V4H6.5A2.5 2.5 0 0 0 4 6.5v13z"></path><path d="M4 19.5A2.5 2.5 0 0 0 6.5 22H20v-5"></path><path d="M15.5 7.5l1.8 1.8-5.3 5.3-2.5.7.7-2.5 5.3-5.3z"></path></svg>
+          </div>
+          <div style="font-size:17px;font-weight:700;margin-top:16px">{{tourStepTitle}}</div>
+          <div style="font-size:12.5px;color:var(--tx-dim);line-height:1.55;margin-top:8px">{{tourStepBody}}</div>
         </div>
-        <div style="font-size:17px;font-weight:700;margin-top:16px">{{tourStepTitle}}</div>
-        <div style="font-size:12.5px;color:var(--tx-dim);line-height:1.55;margin-top:8px">{{tourStepBody}}</div>
         <div style="display:flex;align-items:center;justify-content:center;gap:7px;margin-top:20px">
           <sc-for list="{{tourProgressDots}}" as="dot" hint-placeholder-count="4">
             <span style="width:{{dot.w}};height:6px;border-radius:999px;background:{{dot.bg}};transition:all .2s"></span>
@@ -1811,7 +1816,7 @@ class Component extends DCLogic {
   constructor(p){
     super(p);
     const t=new Date();
-    this.state={days:{},settings:{},profileStore:{version:2,activeProfileId:null,profiles:{}},selectedProfileId:null,pendingProfileId:null,pendingSearchResult:null,profileMenuOpen:false,storageWarning:'',tab:'dash',viewY:t.getFullYear(),viewM:t.getMonth(),range:'month',chartMode:null,symFilter:'ALL',lightbox:null,hov:null,editing:null,draft:null,annotation:null,markKind:'entry',markText:'',confirm:null,booting:true,ob:null,newTag:'',newSym:'',newPv:'',obSym:'',obPv:'',liPw:'',liErr:false,obStarted:false,obStep:0,obProg:0,obDemo:true,launching:false,newMist:'',toast:null,pickH:153,pickS:.72,pickV:.86,pickerOpen:false,bootTxt:'',dashEdit:false,searchOpen:false,searchQuery:'',searchSel:0,helpQuery:'',helpOpenId:null,tourOpen:false,tourStep:0,tourSpotlight:null,addedTradeIndex:null,editorRangesReady:false,insightsRangesReady:false,titlebarOffset:'44px'};
+    this.state={days:{},settings:{},profileStore:{version:2,activeProfileId:null,profiles:{}},selectedProfileId:null,pendingProfileId:null,pendingSearchResult:null,profileMenuOpen:false,storageWarning:'',tab:'dash',viewY:t.getFullYear(),viewM:t.getMonth(),range:'month',chartMode:null,symFilter:'ALL',lightbox:null,hov:null,editing:null,draft:null,annotation:null,markKind:'entry',markText:'',confirm:null,booting:true,ob:null,newTag:'',newSym:'',newPv:'',obSym:'',obPv:'',liPw:'',liErr:false,obStarted:false,obStep:0,obProg:0,obDemo:true,launching:false,newMist:'',toast:null,pickH:153,pickS:.72,pickV:.86,pickerOpen:false,bootTxt:'',dashEdit:false,searchOpen:false,searchQuery:'',searchSel:0,helpQuery:'',helpOpenId:null,tourOpen:false,tourStep:0,tourSpotlight:null,tourMotionReady:false,addedTradeIndex:null,editorRangesReady:false,insightsRangesReady:false,titlebarOffset:'44px'};
     this._onGlobalKeydown=this.handleGlobalKeydown.bind(this);
     this._onWindowScroll=this.syncTitlebarOffset.bind(this);
     this.BOOTMSGS=['loading modules…','linking market symbols…','reading your ledger…','warming up charts…'];
@@ -2608,7 +2613,7 @@ class Component extends DCLogic {
   }
   tourSteps(){return[
     {id:'dashboard',tab:'dash',target:'[data-screen-label="Dashboard"] .dashboard-widget',title:'Read the dashboard',body:'Use the score and journal widgets to see process quality before focusing on individual trades.'},
-    {id:'calendar',tab:'cal',target:'[data-screen-label="Calendar"] .calendar-scroll',title:'Log the trading day',body:'Open a calendar day to record executions, context, mindset, and the review.'},
+    {id:'calendar',tab:'cal',target:'[data-screen-label="Calendar"] .calendar-scroll',actionable:true,title:'Log the trading day',body:'Open a calendar day to record executions, context, mindset, and the review.'},
     {id:'insights',tab:'insights',target:'[data-screen-label="Insights"] .insights-full',title:'Find repeated patterns',body:'Use full-width analysis to compare outcomes and identify patterns worth acting on.'},
     {id:'playbook',tab:'playbook',target:'[data-screen-label="Playbook"]',title:'Grade each setup',body:'Use the Playbook to compare setup quality, sample size, and net performance.'},
   ]}
@@ -2682,24 +2687,31 @@ class Component extends DCLogic {
       const pad=8,left=Math.max(pad,rect.left-pad),top=Math.max(pad,rect.top-pad);
       const right=Math.min(viewportWidth-pad,rect.right+pad),bottom=Math.min(viewportHeight-pad,rect.bottom+pad);
       const panel=this.tourPanelPosition({left,top,right,bottom,width:right-left,height:bottom-top},viewportWidth,viewportHeight);
-      this.setState({tourSpotlight:{left,top,width:right-left,height:bottom-top,panelLeft:panel.left,panelTop:panel.top}});
+      const firstPlacement=!this.state.tourSpotlight;
+      this.setState({tourSpotlight:{left,top,width:right-left,height:bottom-top,panelLeft:panel.left,panelTop:panel.top}},()=>{
+        if(!firstPlacement||this.state.tourMotionReady)return;
+        this.scheduleTourFrame(()=>{
+          this._tourMeasureFrame=null;
+          if(token===this._tourMeasureToken&&this.state.tourOpen)this.setState({tourMotionReady:true});
+        });
+      });
     });
     return true;
   }
   goTourStep(index){
     if(!this.state.tourOpen)return false;
     const steps=this.tourSteps(),next=Math.max(0,Math.min(steps.length-1,Math.floor(Number(index)||0))),step=steps[next];
-    this.cancelTourMeasurement();this.setTab(step.tab,{tourStep:next,tourSpotlight:null});return true;
+    this.cancelTourMeasurement();this.setTab(step.tab,{tourStep:next,tourMotionReady:true});return true;
   }
   openTour(replay=false,opener=null){
     if(!this.canUsePrivateUI())return false;
     const step=this.tourSteps()[0];this.cancelTourMeasurement();this.rememberSurfaceFocus('tour',opener);
-    this.setTab(step.tab,{tourOpen:true,tourStep:0,tourSpotlight:null,tourReplay:!!replay,searchOpen:false});return true;
+    this.setTab(step.tab,{tourOpen:true,tourStep:0,tourSpotlight:null,tourMotionReady:false,tourReplay:!!replay,searchOpen:false});return true;
   }
   closeTour(markComplete=true){
     this.cancelTourMeasurement();
     if(markComplete&&!this.state.settings.tourCompleted)this.setSetting('tourCompleted',true);
-    return this.setStateAndRestoreSurface({tourOpen:false,tourStep:0,tourSpotlight:null},'tour');
+    return this.setStateAndRestoreSurface({tourOpen:false,tourStep:0,tourSpotlight:null,tourMotionReady:false},'tour');
   }
   previousTour(){return this.goTourStep(this.state.tourStep-1)}
   nextTour(){
@@ -3894,18 +3906,15 @@ class Component extends DCLogic {
       activeProfile,profileOptions,loginProfiles,profileMenuOpen:!!S.profileMenuOpen,toggleProfileMenu:()=>this.setState({profileMenuOpen:!S.profileMenuOpen}),closeProfileMenu:()=>this.setState({profileMenuOpen:false}),createProfile:()=>this.beginProfileSetup(),lockJournal:()=>this.logout(),
       switchConfirmOpen:S.confirm==='switch-profile'&&!!S.pendingProfileId,confirmProfileSwitch:()=>this.confirmProfileSwitch(),cancelProfileSwitch:()=>this.cancelProfileSwitch(),setSwitchProfileDialogRef:el=>this.captureSurfaceDialog('switchProfile',el),onSwitchProfileDialogKeydown:e=>this.handleSurfaceDialogKeydown('switchProfile',e,()=>this.cancelProfileSwitch()),
       searchLeaveConfirmOpen:S.confirm==='search-leave'&&!!S.pendingSearchResult,confirmPendingSearchResult:()=>this.confirmPendingSearchResult(),cancelPendingSearchResult:()=>this.cancelPendingSearchResult(),setSearchLeaveDialogRef:el=>this.captureSurfaceDialog('searchLeave',el),onSearchLeaveDialogKeydown:e=>this.handleSurfaceDialogKeydown('searchLeave',e,()=>this.cancelPendingSearchResult()),
-      tourOpen:!!S.tourOpen,tourStepTitle:tourStepData.title,tourStepBody:tourStepData.body,
+      tourOpen:!!S.tourOpen,tourStepKey:tourStepData.id,tourStepTitle:tourStepData.title,tourStepBody:tourStepData.body,
       tourSpotlightReady:!!tourSpotlight,tourOverlayBg:tourSpotlight?'transparent':'var(--ovl)',
+      tourSpotlightClass:[tourStepData.actionable?'is-actionable':'',S.tourMotionReady?'motion-ready':''].filter(Boolean).join(' '),tourSpotlightOpacity:tourSpotlight?'1':'0',tourMotionClass:S.tourMotionReady?'motion-ready':'',
       tourSpotlightTop:tourSpotlight?tourSpotlight.top+'px':'0px',tourSpotlightLeft:tourSpotlight?tourSpotlight.left+'px':'0px',tourSpotlightWidth:tourSpotlight?tourSpotlight.width+'px':'0px',tourSpotlightHeight:tourSpotlight?tourSpotlight.height+'px':'0px',
       tourPanelTop:tourSpotlight?tourSpotlight.panelTop+'px':'50%',tourPanelLeft:tourSpotlight?tourSpotlight.panelLeft+'px':'50%',tourPanelTransform:tourSpotlight?'none':'translate(-50%,-50%)',
-      // The coachmark is nulled out on open AND on every step change, then re-measured
-      // asynchronously (target polling, scrollIntoView, animation settling). It used to
-      // paint at the 50%/50% fallback for that whole window and then jump into place.
-      // Hide it until it has a real position instead. Kept MOUNTED rather than gated
-      // behind sc-if so it does not lose dialog focus between steps.
-      // Fade IN once positioned, but hide INSTANTLY. transform snaps back to the centring
-      // fallback the moment the step changes, so a fade-out would spend its whole duration
-      // painting the panel at dead-centre — the very teleport this is meant to remove.
+      // The first coachmark measurement is asynchronous (target polling, scrollIntoView,
+      // animation settling), so keep it invisible until a real position exists. Later
+      // steps retain the previous geometry while the new target settles, allowing the
+      // mounted spotlight and coachmark to interpolate without losing dialog focus.
       tourPanelOpacity:tourSpotlight?'1':'0',tourPanelEvents:tourSpotlight?'auto':'none',
       tourPanelTransition:tourSpotlight?'opacity .18s ease':'none',
       tourProgressDots:tourStepsList.map((step,i)=>({active:i===tourIdx,current:i===tourIdx,w:i===tourIdx?'18px':'6px',bg:i===tourIdx?acc:'var(--chip2)'})),
